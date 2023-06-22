@@ -71,6 +71,20 @@
                     'type' => 'input',
                     'inputClass' => 'col-md-6',
                 ],
+                [
+                    'label' => 'Anular',
+                    'onClick' => 'fallo()',
+                    'class' => 'danger',
+                    'type' => 'button',
+                    'inputClass' => 'col-md-6',
+                ],
+                [
+                    'label' => 'Guardar',
+                    'onClick' => 'exito()',
+                    'class' => 'success',
+                    'type' => 'button',
+                    'inputClass' => 'col-md-6',
+                ],
             ]" />
         </div>
     </div>

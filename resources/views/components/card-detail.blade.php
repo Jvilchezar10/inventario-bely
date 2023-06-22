@@ -1,4 +1,4 @@
-@props(['formId', 'fields', 'title'])
+@props(['formId', 'fields', 'title', 'onClick'])
 
 @php
     $label_class = 'text-lightblue';
@@ -11,7 +11,7 @@
             @foreach ($fields as $field)
                 @if ($field['type'] === 'select')
                     {{-- Need  name, placeholder, options, --}}
-                    <div class="{{$field['inputClass']}}">
+                    <div class="{{ $field['inputClass'] }}">
                         <x-adminlte-select2 name="{{ $field['name'] }}" igroup-size="lg" label-class="{{ $label_class }}"
                             data-placeholder="">
                             <x-slot name="prependSlot">
@@ -24,7 +24,7 @@
                     </div>
                 @elseif ($field['type'] === 'select2_with_search')
                     {{-- Need: name, label, placeholder, options, --}}
-                    <div class="{{$field['inputClass']}}">
+                    <div class="{{ $field['inputClass'] }}">
                         <x-adminlte-select2 id="{{ $field['name'] }}" name="{{ $field['name'] }}"
                             label="{{ $field['label'] }}" label-class="{{ $label_class }}" igroup-size="sm"
                             data-placeholder="{{ $field['placeholder'] }}">
@@ -37,7 +37,7 @@
                     </div>
                 @elseif ($field['type'] === 'radio')
                     {{-- Need  name, value, label, --}}
-                    <div class="{{$field['inputClass']}}">
+                    <div class="{{ $field['inputClass'] }}">
                         <div class="form-group">
                             <label class="control-label">{{ $field['label'] }}:</label>
                             @foreach ($field['options'] as $option)
@@ -58,7 +58,7 @@
                         }
                     @endphp
                     {{-- Need  name, placeholder, label, --}}
-                    <div class="{{$field['inputClass']}}">
+                    <div class="{{ $field['inputClass'] }}">
                         @if (isset($field['required']))
                             <x-adminlte-input name="{{ $field['name'] }}" label="{{ $field['label'] }}"
                                 placeholder="{{ $field['placeholder'] }}" label-class="{{ $label_class }}"
@@ -77,7 +77,7 @@
                         $configDatetime = ['only_date' => ['format' => 'DD/MM/YYYY'], 'only_hour' => ['format' => 'HH:mm'], 'date_hour' => ['format' => 'DD/MM/YYYY HH:mm']];
                         $configDatetime = $configDatetime[$field['config']];
                     @endphp
-                    <div class="{{$field['inputClass']}}">
+                    <div class="{{ $field['inputClass'] }}">
                         <x-adminlte-input-date name="{{ $field['name'] }}" :config="$configDatetime"
                             placeholder="{{ $field['placeholder'] }}" label="{{ $field['label'] }}"
                             label-class="{{ $label_class }}">
@@ -88,7 +88,7 @@
                         </x-adminlte-input-date>
                     </div>
                 @elseif ($field['type'] === 'number')
-                    <div class="{{$field['inputClass']}}">
+                    <div class="{{ $field['inputClass'] }}">
                         <x-adminlte-input name="{{ $field['name'] }}" label="{{ $field['label'] }}"
                             placeholder="{{ $field['placeholder'] }}" type="number" igroup-size="sm" min=0 max=500
                             step="0.01" label-class="{{ $label_class }}" autofocus
@@ -101,7 +101,7 @@
                         </x-adminlte-input>
                     </div>
                 @elseif ($field['type'] === 'long_text')
-                    <div class="{{$field['inputClass']}}">
+                    <div class="{{ $field['inputClass'] }}">
                         <x-adminlte-textarea name="{{ $field['name'] }}" label="{{ $field['label'] }}" rows=4
                             label-class="{{ $label_class }}" igroup-size="sm"
                             placeholder="{{ $field['placeholder'] }}" autofocus autocomplete="{{ $field['name'] }}">
@@ -111,6 +111,19 @@
                                 </div>
                             </x-slot>
                         </x-adminlte-textarea>
+                    </div>
+                @endif
+            @endforeach
+        </div>
+        <br/>
+        <div class="row">
+            @foreach ($fields as $field)
+                @if ($field['type'] === 'button')
+                    <div class="{{ $field['inputClass'] }}">
+                        <div class="float-right">
+                            <x-adminlte-button theme="{{ $field['class'] }}" label="{{ $field['label'] }}"
+                                onclick="{{ $field['onClick'] }}" id="{{ $field['label'] }}" />
+                        </div>
                     </div>
                 @endif
             @endforeach

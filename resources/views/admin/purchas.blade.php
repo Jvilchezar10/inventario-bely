@@ -75,6 +75,20 @@
                     'type' => 'select2_with_search',
                     'inputClass' => 'col-md-6',
                 ],
+                [
+                    'label' => 'Anular',
+                    'onClick' => 'fallo()',
+                    'class' => 'danger',
+                    'type' => 'button',
+                    'inputClass' => 'col-md-6',
+                ],
+                [
+                    'label' => 'Guardar',
+                    'onClick' => 'exito()',
+                    'class' => 'success',
+                    'type' => 'button',
+                    'inputClass' => 'col-md-6',
+                ],
             ]" />
         </div>
     </div>
@@ -93,6 +107,33 @@
     </script>
     <script src="{{ asset('js/toast.js') }}"></script>
     <script>
+
+        //funciones de prueba
+        function exito() {
+            showCustomToast({
+                title: 'Registro exitoso',
+                body: 'Producto registrado con éxito.',
+                class: 'bg-success',
+                icon: 'fas fa-check-circle',
+                close: false,
+                autohide: true,
+                delay: 5000
+            });
+        }
+
+        //funciones de prueba
+        function fallo() {
+            showCustomToast({
+                title: 'Registro fallo',
+                body: ':(',
+                class: 'bg-danger',
+                icon: 'fas fa-check-circle',
+                close: false,
+                autohide: true,
+                delay: 5000
+            });
+        }
+
         $(document).ready(function() {
             // Inicializar tabla de productos
             var productsTable = $('#productsTable').DataTable({
