@@ -13,14 +13,13 @@
     @endif
 
     @php
-        $columnsProducts = ['id', 'producto', 'precio', 'cantidad', 'subtotal', 'total'];
+        $columnsProducts = ['id', 'producto', 'precio', 'cantidad', 'subtotal', ''];
         $dataProducts = [];
     @endphp
 
     <div class="row">
         <div class="col-md-7">
-            <x-adminlte-card title="Productos seleccionados" theme="pink" icon="fas fa-tshirt" class="elevation-3"
-                maximizable>
+            <x-adminlte-card title="Detalle de compras" theme="pink" icon="fas fa-tshirt" class="elevation-3" maximizable>
                 <x-adminlte-select2 id="search_product" name="search_product" label="Buscar Producto"
                     label-class="'text-lightblue'" igroup-size="sm" data-placeholder="ingrese el producto">
                     <x-slot name="prependSlot">
@@ -34,10 +33,13 @@
                         <x-datatable :columns="$columnsProducts" :data="$dataProducts" id="productsTable" />
                     </div>
                 </div>
+                <div class="text-right mt-3">
+                    <strong>Total: $<span id="totalAmount">0</span></strong>
+                </div>
             </x-adminlte-card>
         </div>
         <div class="col-md-5">
-            <x-card-detail title="Detalle de compra" formId="form_saledateil" :fields="[
+            <x-card-detail title="Datos" formId="form_saledateil" :fields="[
                 [
                     'name' => 'i_selectEmployee',
                     'label' => 'Empleado',
@@ -50,7 +52,7 @@
                     'label' => 'Fecha de compra',
                     'placeholder' => '2002/06/10',
                     'title' => 'Fecha compra',
-                    'config' => 'date_hour',
+                    'config' => 'only_date',
                     'type' => 'datetime',
                     'inputClass' => 'col-md-6',
                 ],
@@ -97,7 +99,6 @@
 
 @section('js')
     <script>
-        var purchaseId = 0;
         var purchasesDataRoute = '{{ route('purchases.data') }}';
         var productsDataRoute = '{{ route('products.search') }}';
         var employeesDataRoute = '{{ route('employees.search') }}';
@@ -107,7 +108,6 @@
     </script>
     <script src="{{ asset('js/toast.js') }}"></script>
     <script>
-
         //funciones de prueba
         function exito() {
             showCustomToast({
@@ -127,7 +127,7 @@
                 title: 'Registro fallo',
                 body: ':(',
                 class: 'bg-danger',
-                icon: 'fas fa-check-circle',
+                icon: 'fas fa-exclamation-triangle',
                 close: false,
                 autohide: true,
                 delay: 5000
@@ -141,14 +141,93 @@
                     null, // ID
                     null, // Producto
                     null, // Precio
-                    { // Columna editable
+                    {
                         className: 'editable-column',
                         defaultContent: '',
+                        render: function(data, type, row, meta) {
+                            if (type === 'display') {
+                                if (data === '') {
+                                    return '<input type="text" class="form-control" inputmode="numeric">';
+                                } else {
+                                    return data;
+                                }
+                            }
+                            return data;
+                        },
+                        createdCell: function(cell, cellData, rowData, rowIndex, colIndex) {
+                            $(cell).on('click', function() {
+                                if ($(this).hasClass('editing')) {
+                                    return;
+                                }
+                                $(this).addClass('editing');
+                                var input = $(
+                                    '<input type="number" class="form-control" inputmode="numeric">'
+                                ).val(cellData);
+                                $(this).html(input);
+                                input.focus();
+                            });
+
+                            $(cell).on('blur', 'input', function() {
+                                var value = $(this).val();
+                                productsTable.cell(cell).data(value).draw();
+
+                                if ($(cell).parent().length) {
+                                    $(cell).removeClass('editing');
+                                }
+                            });
+
+                            $(cell).on('input', 'input', function() {
+                                var value = parseFloat($(this).val());
+
+                                // Validar que el valor sea un número válido
+                                if (!isNaN(value)) {
+                                    var rowIndex = productsTable.cell(cell).index().row;
+                                    var precio = parseFloat(productsTable.cell(rowIndex, 2)
+                                        .data());
+
+                                    if (!isNaN(precio)) {
+                                        var subtotal = (precio * value).toFixed(2);
+                                        var targetCell = productsTable.cell(rowIndex, 4);
+
+                                        if (!isNaN(subtotal)) {
+                                            targetCell.data(subtotal);
+                                            updateTotal();
+                                        }
+                                    }
+                                }
+                            });
+
+                            // Escuchar el evento 'keypress' para permitir solo números enteros
+                            $(cell).on('keypress', 'input', function(event) {
+                                var keyCode = event.which ? event.which : event.keyCode;
+                                var isValid = keyCode >= 48 && keyCode <=
+                                    57; // Rango de códigos ASCII para números enteros
+
+                                return isValid;
+                            });
+                        },
                     },
-                    null,
+                    null, // subtotal
                     null,
                 ],
             });
+            // Función para actualizar el total
+            function updateTotal() {
+                var total = 0;
+                var subtotals = productsTable.column(4).data().toArray();
+
+                for (var i = 0; i < subtotals.length; i++) {
+                    var subtotal = parseFloat(subtotals[i]);
+                    if (!isNaN(subtotal)) {
+                        total += subtotal;
+                    }
+                }
+
+                $('#totalAmount').text(total.toFixed(2));
+            }
+
+            // Llamar a la función updateTotal al cargar la página para mostrar el total inicial
+            updateTotal();
 
             function initializeSelect2(selector, dataRoute, paramName) {
                 $(selector).select2({
