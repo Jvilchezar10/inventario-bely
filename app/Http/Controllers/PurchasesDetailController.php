@@ -30,7 +30,7 @@ class PurchasesDetailController extends Controller
         try {
             if ($request->ajax()) {
                 $purchasesdetail = PurchasesDetail::all();
-                $data = $this->transformPurchas($purchasesdetail);
+                $data = $this->transformPurchasesDetail($purchasesdetail);
                 return response()->json(['data' => $data], Response::HTTP_OK);
             } else {
                 throw new \Exception('Invalid request.');

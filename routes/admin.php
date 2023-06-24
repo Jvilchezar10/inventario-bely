@@ -52,8 +52,8 @@ Route::middleware([
 
     Route::get('/productos', [ProductController::class, 'index'])->name('products');
     Route::post('/productos/data', [ProductController::class, 'getData'])->name('products.data');
-    Route::post('/productos/data/product', [ProductController::class, 'getProductOnlyNamePrice'])->name('products.data.nameprice');
     Route::post('/productos/search', [ProductController::class, 'search'])->name('products.search');
+    Route::post('/productos/searchsales', [ProductController::class, 'searchSales'])->name('products.searchSales');
     Route::post('/productos/import', [ProductController::class, 'import'])->name('products.import');
     Route::post('/productos', [ProductController::class, 'store'])->name('products.store');
     Route::put('/productos/{id}', [ProductController::class, 'update'])->name('products.update');

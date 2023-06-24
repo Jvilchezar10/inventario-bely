@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SalesDetail;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class SalesDetailController extends Controller
 {
@@ -11,16 +13,11 @@ class SalesDetailController extends Controller
         $saledetailId = 0;
         $columns = [
             'id',
+            'sales_id',
             'quantity',
             'price',
             'subtotal',
-            'total',
-            'sales_id',
-            'product_id',
-            'created_at',
-            'updated_at',
-            'created_at',
-            'updated_at',
+            'subtotal',
             'actions'
         ];
         $data = [];
@@ -31,8 +28,8 @@ class SalesDetailController extends Controller
     {
         try {
             if ($request->ajax()) {
-                $proofofpayment = Sale::all();
-                $data = $this->transformPOPayment($proofofpayments);
+                $salesdetail = SalesDetail::all();
+                $data = $this->transformSalesDetail($salesdetail);
                 return response()->json(['data' => $data], Response::HTTP_OK);
             } else {
                 throw new \Exception('Invalid request.');
@@ -42,7 +39,7 @@ class SalesDetailController extends Controller
         }
     }
 
-    private function transformPOPayment($sales)
+    private function transformSalesDetail($sales)
     {
         return $sales->map(function ($sale) {
             return [

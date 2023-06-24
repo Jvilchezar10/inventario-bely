@@ -106,11 +106,12 @@
             event.preventDefault(); // Detiene el envío del formulario predeterminado
         });
 
+
         function registerEmployee() {
             // Obtener los datos del formulario
             var formData = $('#registerEmployeeModal form').serialize();
             // Evitar que se envíe el formulario y se actualice la página
-            event.preventDefault();
+            //event.preventDefault();
             // Realizar la petición AJAX para el registro de el empleado
             $.ajax({
                 url: '{{ route('employees.store') }}',
@@ -141,6 +142,10 @@
                     console.log('Error al registrar el empleado: ' + error);
                 }
             });
+
+            $('#registerEmployeeModal').on('hidden.bs.modal', function() {
+                $('#registerEmployeeModal form')[0].reset();
+            });
         }
 
         function updateEmployee() {
@@ -158,6 +163,7 @@
                     'X-CSRF-TOKEN': csrfToken
                 },
                 success: function(response) {
+                    generateCode()
                     // Mostrar mensaje de éxito o realizar acciones adicionales si es necesario
                     console.log('Empleado actualizado con éxito.');
                     // Cerrar el modal después de la operación exitosa
@@ -226,7 +232,7 @@
             var employee = JSON.parse(button.getAttribute('data-employee')); // Analizar la cadena JSON en un objeto
 
             employeeId = employee.id;
-            $('#editEmployeeModal input[name="e_cod_producto"]').val(employee['cod emp']);
+            $('#editEmployeeModal input[name="e_cod_emp"]').val(employee['cod emp']);
             $('#editEmployeeModal input[name="e_name"]').val(employee.nombre);
             $('#editEmployeeModal input[name="e_last_name"]').val(employee.apellido);
             $('#editEmployeeModal input[name="e_phone"]').val(employee['número de celular']);
@@ -237,7 +243,7 @@
             $('#editEmployeeModal').modal('show');
         }
 
-        function openDeleteEmployee(id) {
+        function openDeleteModal(id) {
             // Lógica para mostrar el mensaje de confirmación de eliminación
             $('#deleteEmployeeModal input[name="d_id"]').val(id);
             // y abrir el modal de eliminacións

@@ -13,8 +13,15 @@ class ProductController extends Controller
     {
         $productId = 0;
         $columns = [
-            'id', 'cod producto', 'categoria', 'categoria_id', 'descripción', 'talla',
-            'stock min', 'stock', 'precio compra', 'precio venta',
+            'id',
+            'cod producto',
+            'proveedor', 'proveedor_id',
+            'categoria', 'categoria_id',
+            'descripción',
+            'talla',
+            'stock min',
+            'stock',
+            'precio compra', 'precio venta',
             'creado en', 'actualizado en', 'opciones'
         ];
         $data = [];
@@ -25,8 +32,8 @@ class ProductController extends Controller
     {
         try {
             if ($request->ajax()) {
-                $products = Product::with('category')->get(); // usar with para con eloquent extraer mediante un join
-
+                //$products = Product::with('category')->get(); // usar with para con eloquent extraer mediante un join
+                $products = Product::all();
                 $data = $this->transformProducts($products);
 
                 return response()->json(['data' => $data], Response::HTTP_OK);
@@ -44,8 +51,10 @@ class ProductController extends Controller
             return [
                 'id' => $product->id,
                 'cod producto' => $product->cod_product,
+                'proveedor_id' =>  $product->provider->id,
+                'proveedor' => $product->provider->provider,
+                'categoria_id' =>  $product->category->id,
                 'categoria' => $product->category->name,
-                'categoria_id' => $product->category->id,
                 'descripción' => $product->desc,
                 'talla' => $product->size,
                 'stock min' => $product->stock_min,
@@ -54,34 +63,6 @@ class ProductController extends Controller
                 'precio venta' => $product->sale_price,
                 'creado en' => optional($product->created_at)->toDateTimeString(),
                 'actualizado en' => optional($product->updated_at)->toDateTimeString(),
-            ];
-        });
-    }
-
-    public function getProductOnlyNamePrice(Request $request)
-    {
-        try {
-            if ($request->ajax()) {
-                $products = Product::get(['id', 'desc', 'purchase_price']); // usar with para con eloquent extraer mediante un join
-
-                $data = $this->transformProductsNamePrice($products);
-
-                return response()->json(['data' => $data], Response::HTTP_OK);
-            } else {
-                throw new \Exception('Invalid request.');
-            }
-        } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
-        }
-    }
-
-    private function transformProductsNamePrice($products)
-    {
-        return $products->map(function ($product) {
-            return [
-                'id' => $product->id,
-                'descripción' => $product->desc,
-                'precio compra' => $product->purchase_price,
             ];
         });
     }
@@ -106,10 +87,31 @@ class ProductController extends Controller
         }
     }
 
+    public function searchSales(Request $request)
+    {
+        $term = $request->input('pro');
+        try {
+            $products = Product::where('desc', 'like', '%' . $term . '%')->get();
+
+            $data = [];
+            foreach ($products as $product) {
+                $data[] = [
+                    'id' => $product->cod_product,
+                    'text' => $product->desc . '-' . $product->sale_price,
+                ];
+            }
+
+            return response()->json($data, Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
     public function store(Request $request)
     {
         $validatedData = $request->validate([
             'i_cod_producto' => 'required',
+            'i_selectProveedor' => 'required',
             'selectCategoria' => 'required',
             'i_descripcion' => 'required',
             'i_talla' => 'required',
@@ -121,6 +123,7 @@ class ProductController extends Controller
 
         $product = Product::create([
             'cod_product' => $validatedData['i_cod_producto'],
+            'provider_id' => $validatedData['i_selectProveedor'],
             'category_id' => $validatedData['selectCategoria'],
             'desc' => $validatedData['i_descripcion'],
             'size' => $validatedData['i_talla'],
@@ -137,6 +140,7 @@ class ProductController extends Controller
     {
         $validatedData = $request->validate([
             'e_cod_producto' => 'required',
+            'e_selectProveedor' => 'required',
             'e_selectCategoria' => 'required',
             'e_descripcion' => 'required',
             'e_talla' => 'required',
@@ -147,15 +151,17 @@ class ProductController extends Controller
         ]);
 
         $product = Product::findOrFail($id);
-        $product->cod_product = $validatedData['e_cod_producto'];
-        $product->category_id = $validatedData['e_selectCategoria'];
-        $product->desc = $validatedData['e_descripcion'];
-        $product->size = $validatedData['e_talla'];
-        $product->stock_min = $validatedData['e_stock_min'];
-        $product->stock = $validatedData['e_stock'];
-        $product->purchase_price = $validatedData['e_precio_compra'];
-        $product->sale_price = $validatedData['e_precio_venta'];
-        $product->save();
+        $product->update([
+            'cod_product' => $validatedData['e_cod_producto'],
+            'provider_id' => $validatedData['e_selectProveedor'],
+            'category_id' => $validatedData['e_selectCategoria'],
+            'desc' => $validatedData['e_descripcion'],
+            'size' => $validatedData['e_talla'],
+            'stock_min' => $validatedData['e_stock_min'],
+            'stock' => $validatedData['e_stock'],
+            'purchase_price' => $validatedData['e_precio_compra'],
+            'sale_price' => $validatedData['e_precio_venta'],
+        ]);
 
         return response()->json(['message' => 'Producto actualizado con éxito', 'product' => $product]);
     }

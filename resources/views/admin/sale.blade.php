@@ -51,7 +51,7 @@
                     'label' => 'Fecha de venta',
                     'placeholder' => '@2002/06/10',
                     'title' => 'Fecha venta',
-                    'config' => 'date_hour',
+                    'config' => 'only_date',
                     'type' => 'datetime',
                     'inputClass' => 'col-md-6',
                 ],
@@ -113,7 +113,7 @@
 @section('js')
     <script>
         var salesDataRoute = '{{ route('sales.data') }}';
-        var productsDataRoute = '{{ route('products.search') }}';
+        var productsDataRoute = '{{ route('products.searchSales') }}';
         var employeesDataRoute = '{{ route('employees.search') }}';
         var proofofpaymentsDataRoute = '{{ route('proofofpayments.search') }}';
         var csrfToken = '{{ csrf_token() }}';

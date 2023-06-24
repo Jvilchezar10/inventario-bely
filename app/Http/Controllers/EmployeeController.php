@@ -88,7 +88,7 @@ class EmployeeController extends Controller
             'i_correo' => 'required|email',
             'i_state' => 'required|in:vigente,retirado',
         ]);
-        // $employee = Employee::create($validatedData);
+        
         $employee = Employee::create([
             'cod_emp' => $validatedData['i_cod_emp'],
             'name' => $validatedData['i_name'],

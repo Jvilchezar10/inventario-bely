@@ -13,17 +13,19 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('category_id');
-            $table->foreign('category_id')->references('id')->on('categories');
             $table->string('cod_product');
+            $table->unsignedBigInteger('provider_id');
+            $table->unsignedBigInteger('category_id');
             $table->text('desc');
             $table->string('size');
             $table->integer('stock_min');
             $table->integer('stock');
             $table->decimal('purchase_price', 8, 2);
             $table->decimal('sale_price', 8, 2);
-
             $table->timestamps();
+
+            $table->foreign('provider_id')->references('id')->on('providers');
+            $table->foreign('category_id')->references('id')->on('categories');
         });
     }
 

@@ -13,13 +13,16 @@ class SaleController extends Controller
         $saleId = 0;
         $columns = [
             'id',
-            'sales_date',
-            'client_id',
-            'proof_payment_id',
-            'employee_id',
-            'created_at',
-            'updated_at',
-            'actions'
+            'comprobante',
+            'n° de comprobante',
+            'empleado',
+            'cod venta',
+            'fecha de venta',
+            'cliente',
+            'total',
+            'creado en',
+            'actualizado en',
+            'opciones'
         ];
         $data = [];
         return view('admin.sale', compact('saleId', 'columns', 'data'));
@@ -45,10 +48,15 @@ class SaleController extends Controller
         return $sales->map(function ($sale) {
             return [
                 'id' => $sale->id,
-                'name' => $sale->name,
-                'state' => $sale->state,
-                'created_at' => optional($sale->created_at)->toDateTimeString(),
-                'updated_at' => optional($sale->updated_at)->toDateTimeString(),
+                'comprobante' => $sale->proofofpayment->name,
+                'n° de comprobante' => $sale->voucher_number,
+                'empleado' => optional($sale->employee)->name . ' ' . optional($sale->employee)->last_name,
+                'cod compra' => $sale->sale_code,
+                'fecha de compra' => $sale->sale_date,
+                'proveedor' => $sale->provider->provider,
+                'total' => $sale->total,
+                'creado en' => optional($sale->created_at)->toDateTimeString(),
+                'actualizado en' => optional($sale->updated_at)->toDateTimeString(),
             ];
         });
     }

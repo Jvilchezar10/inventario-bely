@@ -315,23 +315,9 @@ return [
             'can'  => 'manage-blog',
         ],
         [
-            'text'        => 'Categorías',
-            'url'         => 'inventario/categorias',
-            'icon'        => 'fas fa-tags',
-            // 'label'       => 4,
-            // 'label_color' => 'success',
-        ],
-        [
             'text'        => 'Productos',
-            'url'         => 'inventario/productos',
-            'icon'        => 'fas fa-tshirt',
-            // 'label'       => 4,
-            // 'label_color' => 'success',
-        ],
-        [
-            'text'        => 'Compras',
             'url'         => '#',
-            'icon'        => 'fas fa-shopping-cart',
+            'icon'        => 'fas fa-tshirt',
             'submenu'     => [
                 [
                     'text'        => 'Proveedores',
@@ -340,6 +326,27 @@ return [
                     // 'label'       => 4,
                     // 'label_color' => 'success',
                 ],
+                [
+                    'text'        => 'Categorías',
+                    'url'         => 'inventario/categorias',
+                    'icon'        => 'fas fa-tags',
+                    // 'label'       => 4,
+                    // 'label_color' => 'success',
+                ],
+                [
+                    'text'        => 'Productos',
+                    'url'         => 'inventario/productos',
+                    'icon'        => 'fas fa-tshirt',
+                    // 'label'       => 4,
+                    // 'label_color' => 'success',
+                ],
+            ]
+        ],
+        [
+            'text'        => 'Compras',
+            'url'         => '#',
+            'icon'        => 'fas fa-shopping-cart',
+            'submenu'     => [
                 [
                     'text'        => 'Registro de compras',
                     'url'         => 'inventario/compras',

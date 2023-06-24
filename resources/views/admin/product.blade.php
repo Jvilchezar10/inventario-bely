@@ -28,6 +28,12 @@
             'type' => 'input',
         ],
         [
+            'name' => 'i_selectProveedor',
+            'label' => 'Proveedor',
+            'placeholder' => 'Seleccionar el proveedor',
+            'type' => 'select2_with_search',
+        ],
+        [
             'name' => 'selectCategoria',
             'label' => 'Categoria',
             'placeholder' => 'Seleccionar la categoria',
@@ -79,6 +85,12 @@
             'label' => 'Cod Producto',
             'placeholder' => 'Ingrese el codigo del producto',
             'type' => 'input',
+        ],
+        [
+            'name' => 'e_selectProveedor',
+            'label' => 'Proveedor',
+            'placeholder' => 'Seleccionar el proveedor',
+            'type' => 'select2_with_search',
         ],
         [
             'name' => 'e_selectCategoria',
@@ -140,12 +152,14 @@
 @section('js')
     <script>
         var employeeId = 0;
+        var providersDataRoute = '{{ route('providers.search') }}';
         var productsDataRoute = '{{ route('products.data') }}';
         var categoriesDataRoute = '{{ route('categories.search') }}';
         var csrfToken = '{{ csrf_token() }}';
     </script>
     <script src="{{ asset('js/toast.js') }}"></script>
     <script>
+
         document.getElementById("registerProductForm").addEventListener("submit", function(event) {
             event.preventDefault(); // Detiene el envío del formulario predeterminado
         });
@@ -157,12 +171,9 @@
             event.preventDefault(); // Detiene el envío del formulario predeterminado
         });
 
-
         function registerProduct() {
             // Obtener los datos del formulario
             var formData = $('#registerProductModal form').serialize();
-            // Evitar que se envíe el formulario y se actualice la página
-            //event.preventDefault();
             // Realizar la petición AJAX para el registro de el empleado
 
             $.ajax({
@@ -286,14 +297,18 @@
         function openEditModal(button) {
             var product = JSON.parse(button.getAttribute('data-product')); // Analizar la cadena JSON en un objeto
             // Asignar los valores a los campos del modal
-            $('#editProductModal input[name="e_id"]').val(product.id);
-            $('#editProductModal input[name="e_cod_producto"]').val(product['cod producto']);
             var selectValue = product['categoria_id'];
             var selectText = product['categoria'];
-            var option = new Option(selectText, selectValue, true, true); // Crear una opción
-            // Vaciar el select y agregar la opción creada
-            $('#editProductModal select[name="e_selectCategoria"]').empty().append(option);
+            var optionCategoria = new Option(selectText, selectValue, true, true); // Crear una opción
 
+            var selectValue = product['proveedor_id'];
+            var selectText = product['proveedor'];
+            var optionProveedor = new Option(selectText, selectValue, true, true); // Crear una opción
+
+            $('#editProductModal input[name="e_id"]').val(product.id);
+            $('#editProductModal input[name="e_cod_producto"]').val(product['cod producto']);
+            $('#editProductModal select[name="e_selectProveedor"]').empty().append(optionProveedor);
+            $('#editProductModal select[name="e_selectCategoria"]').empty().append(optionCategoria);
             $('#editProductModal textarea[name="e_descripcion"]').text(product['descripción']);
             $('#editProductModal input[name="e_talla"]').val(product.talla);
             $('#editProductModal input[name="e_stock_min"]').val(product['stock min']);
@@ -324,6 +339,15 @@
                     {
                         data: 'cod producto',
                         name: 'cod producto'
+                    },
+                    {
+                        data: 'proveedor',
+                        name: 'proveedor'
+                    },
+                    {
+                        data: 'proveedor_id',
+                        name: 'proveedor_id',
+                        visible: false,
                     },
                     {
                         data: 'categoria',
@@ -525,6 +549,8 @@
         }
 
         $(function() {
+            initializeSelect2('#i_selectProveedor', providersDataRoute, 'prov');
+            initializeSelect2('#e_selectProveedor', providersDataRoute, 'prov');
             initializeSelect2('#selectCategoria', categoriesDataRoute, 'q');
             initializeSelect2('#e_selectCategoria', categoriesDataRoute, 'q');
         });
