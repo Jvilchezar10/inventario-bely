@@ -1,10 +1,10 @@
-@props(['formId', 'fields', 'title', 'onClick'])
+@props(['fields', 'formId', 'cardId', 'title', 'onClick'])
 
 @php
     $label_class = 'text-lightblue';
 @endphp
 
-<x-adminlte-card title='{{ $title }}' theme="pink" icon="fas fa-shopping-cart" class="elevation-3" maximizable>
+<x-adminlte-card title="{{ $title }}" id="{{ $cardId}}" theme="pink" icon="fas fa-shopping-cart" class="elevation-3" maximizable>
     <form id="{{ $formId }}" method="POST">
         @csrf
         <div class="row">
@@ -115,14 +115,15 @@
                 @endif
             @endforeach
         </div>
-        <br/>
+        <br />
         <div class="row">
             @foreach ($fields as $field)
-                @if ($field['type'] === 'button')
+                @if (isset($field['typeB']) && $field['typeB'] === 'button')
                     <div class="{{ $field['inputClass'] }}">
                         <div class="float-right">
                             <x-adminlte-button theme="{{ $field['class'] }}" label="{{ $field['label'] }}"
-                                onclick="{{ $field['onClick'] }}" id="{{ $field['label'] }}" />
+                                onclick="{{ $field['onClick'] }}" id="{{ $field['label'] }}"
+                                type="{{ $field['type'] }}" />
                         </div>
                     </div>
                 @endif

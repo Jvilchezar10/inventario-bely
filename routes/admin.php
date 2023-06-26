@@ -24,6 +24,17 @@ Route::middleware([
     })->name('dashboard');
 
     /**
+     * El código define las rutas para un controlador de providers en una aplicación Laravel
+     */
+
+    Route::get('/proveedores', [ProviderController::class, 'index'])->name('providers');
+    Route::post('/proveedores/data', [ProviderController::class, 'getData'])->name('providers.data');
+    Route::post('/proveedores/search', [ProviderController::class, 'search'])->name('providers.search');
+    Route::post('/proveedores', [ProviderController::class, 'store'])->name('providers.store');
+    Route::put('/proveedores/{id}', [ProviderController::class, 'update'])->name('providers.update');
+    Route::delete('/proveedores/{id}', [ProviderController::class, 'destroy'])->name('providers.destroy');
+
+    /**
      * El código define las rutas para un controlador de categories en una aplicación Laravel
      */
 
@@ -34,17 +45,6 @@ Route::middleware([
     Route::put('/categorias/{id}', [CategoryController::class, 'update'])->name('categories.update');
     Route::delete('/categorias/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
     Route::post('/categorias/update-ids', [CategoryController::class, 'updateIDs'])->name('categories.update-ids');
-
-    /**
-     * El código define las rutas para un controlador de employees en una aplicación Laravel
-     */
-
-    Route::get('/empleados', [EmployeeController::class, 'index'])->name('employees');
-    Route::post('/empleados/data', [EmployeeController::class, 'getData'])->name('employees.data');
-    Route::post('/empleados/search', [EmployeeController::class, 'search'])->name('employees.search');
-    Route::post('/empleados', [EmployeeController::class, 'store'])->name('employees.store');
-    Route::put('/empleados/{id}', [EmployeeController::class, 'update'])->name('employees.update');
-    Route::delete('/empleados/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
 
     /**
      * El código define las rutas para un controlador de products en una aplicación Laravel
@@ -59,36 +59,31 @@ Route::middleware([
     Route::put('/productos/{id}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/productos/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 
+    /**
+     * El código define las rutas para un controlador de purchases en una aplicación Laravel
+     */
+
+     Route::get('/compras', [PurchasController::class, 'index'])->name('purchases');
+     Route::post('/compras/data/product', [PurchasController::class, 'getData'])->name('purchases.data');
+     Route::post('/compras', [PurchasController::class, 'store'])->name('purchases.store');
+     Route::put('/compras/{id}', [PurchasController::class, 'update'])->name('purchases.update');
+     Route::delete('/compras/{id}', [PurchasController::class, 'destroy'])->name('purchases.destroy');
+
      /**
      * El código define las rutas para un controlador de purchases en una aplicación Laravel
      */
 
-    Route::get('/compras', [PurchasController::class, 'index'])->name('purchases');
-    Route::post('/compras/data/product', [PurchasController::class, 'getData'])->name('purchases.data');
-    Route::post('/compras', [PurchasController::class, 'store'])->name('purchases.store');
-    Route::put('/compras/{id}', [PurchasController::class, 'update'])->name('purchases.update');
-    Route::delete('/compras/{id}', [PurchasController::class, 'destroy'])->name('purchases.destroy');
+     Route::get('/detalle-de-compras', [PurchasesDetailController::class, 'index'])->name('purchasesdetail');
 
-    /**
-     * El código define las rutas para un controlador de providers en una aplicación Laravel
-     */
+     /**
+      * El código define las rutas para un controlador de sales en una aplicación Laravel
+      */
 
-     Route::get('/proveedores', [ProviderController::class, 'index'])->name('providers');
-     Route::post('/proveedores/data', [ProviderController::class, 'getData'])->name('providers.data');
-     Route::post('/proveedores/search', [ProviderController::class, 'search'])->name('providers.search');
-     Route::post('/proveedores', [ProviderController::class, 'store'])->name('providers.store');
-     Route::put('/proveedores/{id}', [ProviderController::class, 'update'])->name('providers.update');
-     Route::delete('/proveedores/{id}', [ProviderController::class, 'destroy'])->name('providers.destroy');
-
-    /**
-     * El código define las rutas para un controlador de sales en una aplicación Laravel
-     */
-
-    Route::get('/ventas', [SaleController::class, 'index'])->name('sales');
-    Route::post('/ventas/data', [SaleController::class, 'getData'])->name('sales.data');
-    Route::post('/ventas', [SaleController::class, 'store'])->name('sales.store');
-    Route::put('/ventas/{id}', [SaleController::class, 'update'])->name('sales.update');
-    Route::delete('/ventas/{id}', [SaleController::class, 'destroy'])->name('sales.destroy');
+     Route::get('/ventas', [SaleController::class, 'index'])->name('sales');
+     Route::post('/ventas/data', [SaleController::class, 'getData'])->name('sales.data');
+     Route::post('/ventas', [SaleController::class, 'store'])->name('sales.store');
+     Route::put('/ventas/{id}', [SaleController::class, 'update'])->name('sales.update');
+     Route::delete('/ventas/{id}', [SaleController::class, 'destroy'])->name('sales.destroy');
 
     /**
      * El código define las rutas para un controlador de proofofpayment en una aplicación Laravel
@@ -102,6 +97,17 @@ Route::middleware([
     Route::delete('/comprobantes/{id}', [ProofOfPaymentController::class, 'destroy'])->name('proofofpayments.destroy');
 
      /**
+     * El código define las rutas para un controlador de employees en una aplicación Laravel
+     */
+
+     Route::get('/empleados', [EmployeeController::class, 'index'])->name('employees');
+     Route::post('/empleados/data', [EmployeeController::class, 'getData'])->name('employees.data');
+     Route::post('/empleados/search', [EmployeeController::class, 'search'])->name('employees.search');
+     Route::post('/empleados', [EmployeeController::class, 'store'])->name('employees.store');
+     Route::put('/empleados/{id}', [EmployeeController::class, 'update'])->name('employees.update');
+     Route::delete('/empleados/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
+
+    /**
      * El código define las rutas para un controlador de roles en una aplicación Laravel
      */
     Route::get('/tipos-de-usuario', [RoleController::class, 'index'])->name('roles.index');

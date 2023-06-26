@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\Provider;
 use App\Models\ProofOfPayment;
+use App\Models\Employee;
+use App\Models\Provider;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -13,7 +14,7 @@ class Purchas extends Model
     use HasFactory;
     protected $table='purchases';
     protected $fillable = [
-        'proof_payment_id',
+        'proof_of_payments_id',
         'voucher_number',
         'employee_id',
         'purchase_code',
@@ -27,6 +28,11 @@ class Purchas extends Model
     public function proofofpayment() : BelongsTo
     {
         return $this->belongsTo(ProofOfPayment::class);
+    }
+
+    public function employee() : BelongsTo
+    {
+        return $this->belongsTo(Employee::class);
     }
 
     public function provider() : BelongsTo

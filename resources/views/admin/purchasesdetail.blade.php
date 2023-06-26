@@ -1,7 +1,7 @@
 @extends('adminlte::page')
 
 @section('content_header')
-    <h1 class="m-0 text-dark">Productos</h1>
+    <h1 class="m-0 text-dark">Compras</h1>
 @stop
 {{-- @section('css')
     <link rel="stylesheet" href="{{ asset('css/Product.css') }}">
@@ -15,7 +15,7 @@
         </div>
     @endif
 
-    <x-adminlte-card title="Detalle de compras" theme="pink" icon="fas fa-tshirt" class="elevation-3" maximizable>
+    <x-adminlte-card title="Lista de compras" theme="pink" icon="fas fa-tshirt" class="elevation-3" maximizable>
         <x-datatable :columns=$columns :data=$data id="productsTable" />
     </x-adminlte-card>
 
@@ -32,41 +32,8 @@
                         visible: false,
                     },
                     {
-                        data: 'cod producto',
-                        name: 'cod producto'
-                    },
-                    {
-                        data: 'categoria',
-                        name: 'categoria'
-                    },
-                    {
-                        data: 'categoria_id',
-                        name: 'categoria_id',
-                        visible: false,
-                    },
-                    {
-                        data: 'descripción',
-                        name: 'descripción'
-                    },
-                    {
-                        data: 'talla',
-                        name: 'talla'
-                    },
-                    {
-                        data: 'stock min',
-                        name: 'stock min'
-                    },
-                    {
-                        data: 'stock',
-                        name: 'stock'
-                    },
-                    {
-                        data: 'precio compra',
-                        name: 'precio compra'
-                    },
-                    {
-                        data: 'precio venta',
-                        name: 'precio venta'
+                        data: 'id',
+                        name: 'id',
                     },
                     {
                         data: 'creado en',

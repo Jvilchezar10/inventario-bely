@@ -354,6 +354,13 @@ return [
                     // 'label'       => 4,
                     // 'label_color' => 'success',
                 ],
+                [
+                    'text'        => 'Lista de compras',
+                    'url'         => 'inventario/detalle-de-compras',
+                    'icon'        => 'fas fa-shopping-cart',
+                    // 'label'       => 4,
+                    // 'label_color' => 'success',
+                ],
             ]
             // 'label'       => 4,
             // 'label_color' => 'success',
@@ -366,6 +373,13 @@ return [
                 [
                     'text'        => 'Registro de Ventas',
                     'url'         => 'inventario/ventas',
+                    'icon'        => 'far fa-clipboard',
+                    // 'label'       => 4,
+                    // 'label_color' => 'success',
+                ],
+                [
+                    'text'        => 'Lista de Ventas',
+                    'url'         => 'i#',
                     'icon'        => 'far fa-clipboard',
                     // 'label'       => 4,
                     // 'label_color' => 'success',

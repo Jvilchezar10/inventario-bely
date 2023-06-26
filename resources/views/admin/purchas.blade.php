@@ -13,7 +13,7 @@
     @endif
 
     @php
-        $columnsProducts = ['id', 'producto', 'precio', 'cantidad', 'subtotal', ''];
+        $columnsProducts = ['id', 'producto', 'precio','cantidad', 'subtotal', '', ''];
         $dataProducts = [];
     @endphp
 
@@ -39,12 +39,27 @@
             </x-adminlte-card>
         </div>
         <div class="col-md-5">
-            <x-card-detail title="Datos" formId="form_saledateil" :fields="[
+
+            <x-card-detail formId="form_saledetail" title="Datos" :fields="[
                 [
                     'name' => 'i_selectEmployee',
                     'label' => 'Empleado',
                     'placeholder' => '@juan edu',
                     'type' => 'select2_with_search',
+                    'inputClass' => 'col-md-6',
+                ],
+                [
+                    'name' => 'i_selectProvider',
+                    'label' => 'Proveedor',
+                    'placeholder' => '@juan_edu.sac',
+                    'type' => 'select2_with_search',
+                    'inputClass' => 'col-md-6',
+                ],
+                [
+                    'name' => 'i_purchases_code',
+                    'label' => 'Cod Compra',
+                    'placeholder' => '@126354789632',
+                    'type' => 'input',
                     'inputClass' => 'col-md-6',
                 ],
                 [
@@ -71,27 +86,22 @@
                     'inputClass' => 'col-md-6',
                 ],
                 [
-                    'name' => 'i_selectProvider',
-                    'label' => 'Proveedor',
-                    'placeholder' => '@juan_edu.sac',
-                    'type' => 'select2_with_search',
-                    'inputClass' => 'col-md-6',
-                ],
-                [
                     'label' => 'Anular',
                     'onClick' => 'fallo()',
                     'class' => 'danger',
-                    'type' => 'button',
+                    'typeB' => 'button',
+                    'type' => 'submit',
                     'inputClass' => 'col-md-6',
                 ],
                 [
                     'label' => 'Guardar',
-                    'onClick' => 'exito()',
+                    'onClick' => 'registerSale()',
                     'class' => 'success',
-                    'type' => 'button',
+                    'typeB' => 'button',
+                    'type' => 'submit',
                     'inputClass' => 'col-md-6',
                 ],
-            ]" />
+            ]" cardId="salecard" />
         </div>
     </div>
 
@@ -99,6 +109,7 @@
 
 @section('js')
     <script>
+        var total = 0;
         var purchasesDataRoute = '{{ route('purchases.data') }}';
         var productsDataRoute = '{{ route('products.search') }}';
         var employeesDataRoute = '{{ route('employees.search') }}';
@@ -108,18 +119,10 @@
     </script>
     <script src="{{ asset('js/toast.js') }}"></script>
     <script>
-        //funciones de prueba
-        function exito() {
-            showCustomToast({
-                title: 'Registro exitoso',
-                body: 'Producto registrado con éxito.',
-                class: 'bg-success',
-                icon: 'fas fa-check-circle',
-                close: false,
-                autohide: true,
-                delay: 5000
-            });
-        }
+        document.getElementById("form_saledetail").addEventListener("submit", function(event) {
+            event.preventDefault(); // Detiene el envío del formulario predeterminado
+        });
+
 
         //funciones de prueba
         function fallo() {
@@ -133,6 +136,72 @@
                 delay: 5000
             });
         }
+
+
+        function registerSale() {
+            // Obtener los datos del formulario
+            var formData = $('#salecard form').serializeArray();
+
+            var productsTable = $('#productsTable').DataTable();
+            // Obtener los datos de la tabla
+            var tableData = productsTable.rows().data().toArray();
+
+            // Combina los datos del formulario y del datatable en un objeto
+            var combinedData = {
+                formData: formData,
+                tableData: tableData,
+                total: total
+            };
+
+            // Evitar que se envíe el formulario y se actualice la página
+            $.ajax({
+                url: '{{ route('purchases.store') }}',
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(combinedData),
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                success: function(response) {
+                    // Mostrar mensaje de éxito o realizar acciones adicionales si es necesario
+                    console.log('Proveedor registrado con éxito.');
+                    // Cerrar el modal después de la operación exitosa
+                    showCustomToast({
+                        title: 'Registro exitoso',
+                        body: 'Datos registrados con éxito.',
+                        class: 'bg-success',
+                        icon: 'fas fa-check-circle',
+                        close: false,
+                        autohide: true,
+                        delay: 5000
+                    });
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    // Si se produce un error en la solicitud
+                    var response = xhr.responseJSON; // Obtener la respuesta JSON del servidor
+
+                    if (response && response.message) {
+                        console.log(response.message); // Mensaje de error del controlador
+                    } else {
+                        // Mostrar mensaje de error o realizar acciones adicionales si es necesario
+                        console.log('Error al registrar datos: ' + errorThrown);
+
+                        showCustomToast({
+                            title: 'Error fatal',
+                            body: ':c',
+                            class: 'bg-danger',
+                            icon: 'fas fa-exclamation-circle',
+                            close: false,
+                            autohide: true,
+                            delay: 5000
+                        });
+                    }
+                }
+            });
+        }
+
+
 
         $(document).ready(function() {
             // Inicializar tabla de productos
@@ -209,11 +278,11 @@
                     },
                     null, // subtotal
                     null,
+                    {visible:false}, //id producto
                 ],
             });
             // Función para actualizar el total
             function updateTotal() {
-                var total = 0;
                 var subtotals = productsTable.column(4).data().toArray();
 
                 for (var i = 0; i < subtotals.length; i++) {
@@ -269,10 +338,11 @@
                     table.row.add([
                         selectedProduct.id,
                         division[0],
-                        division[1],
+                        division[1],,
                         '',
                         '',
                         '',
+                        division[2]
                     ]).draw(false);
                 });
             }

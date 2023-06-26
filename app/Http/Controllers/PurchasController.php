@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Purchas;
+use App\Models\PurchasesDetail;
+use Dotenv\Parser\Value;
 use Illuminate\Http\Response;
 
 class PurchasController extends Controller
@@ -25,6 +27,7 @@ class PurchasController extends Controller
             'opciones'
         ];
         $data = [];
+
         return view('admin.purchas', compact('purchasId', 'columns', 'data'));
     }
 
@@ -63,34 +66,64 @@ class PurchasController extends Controller
 
     public function store(Request $request)
     {
-        // $validatedData = $request->validate([
-        //     'name' => 'required|max:255',
-        //     'state' => 'required|in:vigente,descontinuado',
-        // ]);
+        $combinedData = $request->json()->all();
 
-        // $purchas = Purchas::create($validatedData);
+        // Acceder a los datos del formulario y del datatable individualmente
+        $formData = $combinedData['formData'];
+        $tableData = $combinedData['tableData'];
+        $total = $combinedData['total'];
 
-        // return response()->json(['message' => 'Categoría creada con éxito', 'purchas' => $purchas]);
+
+        //USAME PARA VER LOS ERRORES
+        //throw new \Exception('Contenido de formData: ' . json_encode($tableData));
+
+        // Crear la compra y asignar el valor de 'proof_of_payments_id'
+
+        $fpurchas = date("Y-m-d", strtotime($formData[4]['value']));
+
+        $newPurchase = Purchas::create([
+            'employee_id' => ($formData[1]['value']),
+            'provider_id' => ($formData[2]['value']),
+            'purchase_code' => ($formData[3]['value']),
+            'purchase_date' => $fpurchas,
+            'proof_of_payments_id' => ($formData[5]['value']),
+            'voucher_number' => ($formData[6]['value']),
+            'total' => $total,
+        ]);
+
+
+
+        // Obtener el ID de la compra recién creada
+        $purchaseId = $newPurchase->id;
+
+        // Asociar el ID de la compra a cada fila de datos de la tabla
+        $keyMappings = [
+            '7' => 'product_id',
+            '2' => 'price',
+            '3' => 'quantity',
+            '4' => 'subtotal',
+        ];
+
+        $tableDataWithModifiedKeys = array_map(function ($row) use ($keyMappings, $purchaseId) {
+            $modifiedRow = [];
+
+            foreach ($row as $key => $value) {
+                if (array_key_exists($key, $keyMappings) && array_key_exists($key, $row)) {
+                    $modifiedRow[$keyMappings[$key]] = $value;
+                }
+            }
+
+            $modifiedRow['purchase_id'] = $purchaseId; // Agregar purchaseId a cada fila modificada
+
+            return $modifiedRow;
+        }, $tableData);
+
+        //throw new \Exception('Contenido de formData: ' . json_encode($tableDataWithModifiedKeys));
+
+        // Guardar los datos de la tabla en la tabla purchases_details
+        PurchasesDetail::insert($tableDataWithModifiedKeys);
+
+        return response()->json(['message' => 'Datos creados con éxito']);
     }
 
-    public function update(Request $request, $id)
-    {
-        // $validatedData = $request->validate([
-        //     'name' => 'required|max:255',
-        //     'state' => 'required|in:vigente,descontinuado',
-        // ]);
-
-        // $purchas = Purchas::findOrFail($id);
-        // $purchas->update($validatedData);
-
-        // return response()->json(['message' => 'Categoría actualizada con éxito', 'purchas' => $purchas]);
-    }
-
-    public function destroy($id)
-    {
-        // $purchas = Purchas::findOrFail($id);
-        // $purchas->delete();
-
-        // return response()->json(['message' => 'Categoría eliminada con éxito']);
-    }
 }

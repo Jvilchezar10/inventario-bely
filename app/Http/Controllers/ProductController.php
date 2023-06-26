@@ -77,7 +77,7 @@ class ProductController extends Controller
             foreach ($products as $product) {
                 $data[] = [
                     'id' => $product->cod_product,
-                    'text' => $product->desc . '-' . $product->purchase_price,
+                    'text' => $product->desc . '-' . $product->purchase_price . '-' . $product->id ,
                 ];
             }
 
