@@ -320,13 +320,6 @@ return [
             'icon'        => 'fas fa-tshirt',
             'submenu'     => [
                 [
-                    'text'        => 'Proveedores',
-                    'url'         => 'inventario/proveedores',
-                    'icon'        => 'fas fa-people-carry',
-                    // 'label'       => 4,
-                    // 'label_color' => 'success',
-                ],
-                [
                     'text'        => 'Categorías',
                     'url'         => 'inventario/categorias',
                     'icon'        => 'fas fa-tags',
@@ -347,6 +340,13 @@ return [
             'url'         => '#',
             'icon'        => 'fas fa-shopping-cart',
             'submenu'     => [
+                [
+                    'text'        => 'Proveedores',
+                    'url'         => 'inventario/proveedores',
+                    'icon'        => 'fas fa-people-carry',
+                    // 'label'       => 4,
+                    // 'label_color' => 'success',
+                ],
                 [
                     'text'        => 'Registro de compras',
                     'url'         => 'inventario/compras',
@@ -370,6 +370,13 @@ return [
             'url'         => '#',
             'icon'        => 'far fa-clipboard',
             'submenu'      => [
+                [
+                    'text'        => 'Clientes',
+                    'url'         => 'inventario/clientes',
+                    'icon'        => 'fas fa-users',
+                    // 'label'       => 4,
+                    // 'label_color' => 'success',
+                ],
                 [
                     'text'        => 'Registro de Ventas',
                     'url'         => 'inventario/ventas',
@@ -401,27 +408,27 @@ return [
             // 'label_color' => 'success',
         ],
         [
-            'text'        => 'Clientes',
-            'url'         => 'inventario/clientes',
-            'icon'        => 'fas fa-users',
-            // 'label'       => 4,
-            // 'label_color' => 'success',
-        ],
-        [
-            'text'        => 'Usuarios',
-            'url'         => 'inventario/usuarios',
+            'text'        => 'Usuario',
+            'url'         => '#',
             'icon'        => 'fas fa-user-circle',
-            // 'label'       => 4,
-            // 'label_color' => 'success',
+            'submenu'      => [
+                [
+                    'text'        => 'Usuario',
+                    'url'         => 'inventario/usuarios',
+                    'icon'        => 'fas fa-user-circle',
+                    // 'label'       => 4,
+                    // 'label_color' => 'success',
+                ],
+                [
+                    'text'        => 'Roles',
+                    'url'         => 'inventario/tipos-de-usuario',
+                    'icon'        => 'fas fa-user-circle',
+                    // 'label'       => 4,
+                    // 'label_color' => 'success',
+                ],
+            ]
         ],
-        [
-            'text'        => 'Roles',
-            'url'         => 'inventario/tipos-de-usuario',
-            'icon'        => 'fas fa-user-circle',
-            // 'label'       => 4,
-            // 'label_color' => 'success',
-        ],
-        ['header' => 'account_settings'],
+        ['header' => 'Configuración de cuenta'],
         [
             'text' => 'profile',
             'url'  => 'inventario/user/profile',

@@ -46,24 +46,6 @@ class PurchasController extends Controller
         }
     }
 
-    private function transformPurchas($purchases)
-    {
-        return $purchases->map(function ($purchas) {
-            return [
-                'id' => $purchas->id,
-                'comprobante' => optional($purchas->proofofpayment)->name,
-                'n° de comprobante' => optional($purchas->voucher_number),
-                'empleado' => optional($purchas->employee)->name . ' ' . optional($purchas->employee)->last_name,
-                'cod compra' => $purchas->purchase_code,
-                'fecha de compra' => $purchas->purchase_date,
-                'proveedor' => $purchas->provider->provider,
-                'total' => $purchas->total,
-                'creado en' => optional($purchas->created_at)->toDateTimeString(),
-                'actualizado en' => optional($purchas->updated_at)->toDateTimeString(),
-            ];
-        });
-    }
-
     public function store(Request $request)
     {
         $combinedData = $request->json()->all();
@@ -75,17 +57,18 @@ class PurchasController extends Controller
 
 
         //USAME PARA VER LOS ERRORES
-        //throw new \Exception('Contenido de formData: ' . json_encode($tableData));
+        //throw new \Exception('Contenido de formData: ' . json_encode($formData));
 
-        $fpurchas = date("Y-m-d", strtotime($formData[4]['value']));
+        $fpurchas = date("Y-m-d", strtotime($formData[5]['value']));
 
         $newPurchase = Purchas::create([
             'employee_id' => ($formData[1]['value']),
-            'provider_id' => ($formData[2]['value']),
-            'purchase_code' => ($formData[3]['value']),
+            'origin' => ($formData[2]['value']),
+            'provider_id' => ($formData[3]['value']),
+            'purchase_code' => ($formData[4]['value']),
             'purchase_date' => $fpurchas,
-            'proof_of_payments_id' => ($formData[5]['value']),
-            'voucher_number' => ($formData[6]['value']),
+            'proof_of_payments_id' => ($formData[6]['value']),
+            'voucher_number' => ($formData[7]['value']),
             'total' => $total,
         ]);
 

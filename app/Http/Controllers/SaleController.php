@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Sale;
+use App\Models\Product;
+use App\Models\SalesDetail;
 use Illuminate\Http\Response;
 
 class SaleController extends Controller
@@ -43,49 +45,61 @@ class SaleController extends Controller
         }
     }
 
-    private function transformSales($sales)
-    {
-        return $sales->map(function ($sale) {
-            return [
-                'id' => $sale->id,
-                'comprobante' => $sale->proofofpayment->name,
-                'n° de comprobante' => $sale->voucher_number,
-                'empleado' => optional($sale->employee)->name . ' ' . optional($sale->employee)->last_name,
-                'cod compra' => $sale->sale_code,
-                'fecha de compra' => $sale->sale_date,
-                'proveedor' => $sale->provider->provider,
-                'total' => $sale->total,
-                'creado en' => optional($sale->created_at)->toDateTimeString(),
-                'actualizado en' => optional($sale->updated_at)->toDateTimeString(),
-            ];
-        });
-    }
-
     public function store(Request $request)
     {
         $combinedData = $request->json()->all();
 
-        //$tableData = $combinedData['tableData'];
+        $tableData = $combinedData['tableData'];
         $formData = $combinedData['formData'];
-        //$total = $combinedData['total'];
+        $total = $combinedData['total'];
 
-         throw new \Exception('Contenido de formData: ' . json_encode($combinedData));
+        //throw new \Exception('Contenido de formData: ' . json_encode($tableData));
 
-         return response()->json(['message' => 'Datos creados con éxito']);
+        $fsale = date("Y-m-d", strtotime($formData[4]['value']));
 
-        //$fsale = date("Y-m-d", strtotime($formData[4]['value']));
+        $newSale = Sale::Create([
+            'employee_id' => ($formData[1]['value']),
+            'client_id' => ($formData[2]['value']),
+            'sales_code' => ($formData[3]['value']),
+            'sales_date' => $fsale,
+            'proof_of_payment_id' => ($formData[5]['value']),
+            'voucher_number' => ($formData[6]['value']),
+            'total' => $total,
+        ]);
 
-        // $newSales = Sale::create([
-
-        // ]);
-
-        // foreach ($tableDataWithModifiedKeys as $key => $value) {
-        //     $product = Product::find($value['product_id']);
-        //     $product->stock -= $value['quantity'];
-        //     $product->save();
-        // }
+        $saleId = $newSale->id;
 
 
+        $keyMappings = [
+            '6' => 'product_id',
+            '2' => 'price',
+            '3' => 'quantity',
+            '4' => 'subtotal',
+        ];
+
+        $tableDataWithModifiedKeys = array_map(function ($row) use ($keyMappings, $saleId) {
+            $modifiedRow = [];
+
+            foreach ($row as $key => $value) {
+                if (array_key_exists($key, $keyMappings) && array_key_exists($key, $row)) {
+                    $modifiedRow[$keyMappings[$key]] = $value;
+                }
+            }
+
+            $modifiedRow['sale_id'] = $saleId; // Agregar purchaseId a cada fila modificada
+
+            return $modifiedRow;
+        }, $tableData);
+
+
+        foreach ($tableDataWithModifiedKeys as $key => $value) {
+            $product = Product::find($value['product_id']);
+            $product->stock -= $value['quantity'];
+            $product->save();
+        }
+
+        SalesDetail::insert($tableDataWithModifiedKeys);
+
+        return response()->json(['message' => 'Datos creados con éxito']);
     }
-
 }

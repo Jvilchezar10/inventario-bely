@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\EmployeesImport;
 use Illuminate\Http\Request;
 use App\Models\Employee;
 use Illuminate\Http\Response;
@@ -88,7 +89,7 @@ class EmployeeController extends Controller
             'i_correo' => 'required|email',
             'i_state' => 'required|in:vigente,retirado',
         ]);
-        
+
         $employee = Employee::create([
             'cod_emp' => $validatedData['i_cod_emp'],
             'name' => $validatedData['i_name'],
@@ -131,5 +132,27 @@ class EmployeeController extends Controller
          $employee->delete();
 
          return response()->json(['message' => 'Categoría eliminada con éxito']);
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'excel_file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        // Obtener la ruta temporal del archivo cargado
+        $filePath = $request->file('excel_file')->getRealPath();
+
+        // Instanciar la clase de importación y llamar al método import
+        $employeesImport = new EmployeesImport();
+        $imported = $employeesImport->import($filePath);
+
+        if ($imported) {
+            // Redireccionar o mostrar un mensaje de éxito
+            return redirect()->back()->with('success', 'La importación del archivo Excel se realizó correctamente.');
+        } else {
+            // Redireccionar o mostrar un mensaje de error
+            return redirect()->back()->with('error', 'Ocurrió un error durante la importación del archivo Excel.');
+        }
     }
 }

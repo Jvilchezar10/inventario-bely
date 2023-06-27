@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('cod_product');
-            $table->unsignedBigInteger('provider_id');
             $table->unsignedBigInteger('category_id');
             $table->text('desc');
             $table->string('size');
@@ -24,7 +23,6 @@ return new class extends Migration
             $table->decimal('sale_price', 8, 2);
             $table->timestamps();
 
-            $table->foreign('provider_id')->references('id')->on('providers');
             $table->foreign('category_id')->references('id')->on('categories');
         });
     }

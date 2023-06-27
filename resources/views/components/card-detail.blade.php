@@ -4,7 +4,8 @@
     $label_class = 'text-lightblue';
 @endphp
 
-<x-adminlte-card title="{{ $title }}" id="{{ $cardId}}" theme="pink" icon="fas fa-shopping-cart" class="elevation-3" maximizable>
+<x-adminlte-card title="{{ $title }}" id="{{ $cardId }}" theme="pink" icon="fas fa-shopping-cart"
+    class="elevation-3" maximizable>
     <form id="{{ $formId }}" method="POST">
         @csrf
         <div class="row">
@@ -12,11 +13,11 @@
                 @if ($field['type'] === 'select')
                     {{-- Need  name, placeholder, options, --}}
                     <div class="{{ $field['inputClass'] }}">
-                        <x-adminlte-select2 name="{{ $field['name'] }}" igroup-size="lg" label-class="{{ $label_class }}"
-                            data-placeholder="">
+                        <x-adminlte-select2  id="{{ $field['name'] }}" name="{{ $field['name'] }}" igroup-size="sm" label-class="{{ $label_class }}"
+                            label="{{ $field['label'] }}" data-placeholder="{{ $field['placeholder'] }}">
                             <x-slot name="prependSlot">
-                                <div class="input-group-text bg-gradient-info">
-                                    <i class="fas fa-car-side"></i>
+                                <div class="input-group-text bg-gradient-pink">
+                                    <i class="fas fa-square-list"></i>
                                 </div>
                             </x-slot>
                             <x-adminlte-options :options="$field['options']" empty-option />

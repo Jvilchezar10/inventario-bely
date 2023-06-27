@@ -12,7 +12,7 @@
         </div>
     @endif
     @php
-        $columnsProducts = ['id', 'producto', 'precio', 'cantidad', 'subtotal', '' . ''];
+        $columnsProducts = ['id', 'producto', 'precio', 'cantidad', 'subtotal', '' , ''];
         $dataProducts = [];
     @endphp
 

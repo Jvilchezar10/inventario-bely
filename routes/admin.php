@@ -31,6 +31,7 @@ Route::middleware([
     Route::get('/proveedores', [ProviderController::class, 'index'])->name('providers');
     Route::post('/proveedores/data', [ProviderController::class, 'getData'])->name('providers.data');
     Route::post('/proveedores/search', [ProviderController::class, 'search'])->name('providers.search');
+    Route::post('/proveedores/import', [ProviderController::class, 'import'])->name('providers.import');
     Route::post('/proveedores', [ProviderController::class, 'store'])->name('providers.store');
     Route::put('/proveedores/{id}', [ProviderController::class, 'update'])->name('providers.update');
     Route::delete('/proveedores/{id}', [ProviderController::class, 'destroy'])->name('providers.destroy');
@@ -119,6 +120,7 @@ Route::middleware([
      Route::get('/empleados', [EmployeeController::class, 'index'])->name('employees');
      Route::post('/empleados/data', [EmployeeController::class, 'getData'])->name('employees.data');
      Route::post('/empleados/search', [EmployeeController::class, 'search'])->name('employees.search');
+     Route::post('/empleados/import', [EmployeeController::class, 'import'])->name('employees.import');
      Route::post('/empleados', [EmployeeController::class, 'store'])->name('employees.store');
      Route::put('/empleados/{id}', [EmployeeController::class, 'update'])->name('employees.update');
      Route::delete('/empleados/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');

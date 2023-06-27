@@ -15,7 +15,6 @@ class ProductController extends Controller
         $columns = [
             'id',
             'cod producto',
-            'proveedor', 'proveedor_id',
             'categoria', 'categoria_id',
             'descripción',
             'talla',
@@ -51,8 +50,6 @@ class ProductController extends Controller
             return [
                 'id' => $product->id,
                 'cod producto' => $product->cod_product,
-                'proveedor_id' =>  $product->provider->id,
-                'proveedor' => $product->provider->provider,
                 'categoria_id' =>  $product->category->id,
                 'categoria' => $product->category->name,
                 'descripción' => $product->desc,
@@ -111,7 +108,6 @@ class ProductController extends Controller
     {
         $validatedData = $request->validate([
             'i_cod_producto' => 'required',
-            'i_selectProveedor' => 'required',
             'selectCategoria' => 'required',
             'i_descripcion' => 'required',
             'i_talla' => 'required',
@@ -123,7 +119,6 @@ class ProductController extends Controller
 
         $product = Product::create([
             'cod_product' => $validatedData['i_cod_producto'],
-            'provider_id' => $validatedData['i_selectProveedor'],
             'category_id' => $validatedData['selectCategoria'],
             'desc' => $validatedData['i_descripcion'],
             'size' => $validatedData['i_talla'],
@@ -140,7 +135,6 @@ class ProductController extends Controller
     {
         $validatedData = $request->validate([
             'e_cod_producto' => 'required',
-            'e_selectProveedor' => 'required',
             'e_selectCategoria' => 'required',
             'e_descripcion' => 'required',
             'e_talla' => 'required',
@@ -153,7 +147,6 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $product->update([
             'cod_product' => $validatedData['e_cod_producto'],
-            'provider_id' => $validatedData['e_selectProveedor'],
             'category_id' => $validatedData['e_selectCategoria'],
             'desc' => $validatedData['e_descripcion'],
             'size' => $validatedData['e_talla'],

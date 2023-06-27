@@ -15,14 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->enum('state', ['descontinuado', 'vigente'])->default('vigente');
-            // $table->unsignedBigInteger('purchase_id');
-            // $table->foreign('purchase_id')->references('id')->on('purchases');
-            // $table->unsignedBigInteger('sale_id');
-            // $table->foreign('sale_id')->references('id')->on('sales');
-            // $table->string('image_path');
-            // $table->decimal('amount', 8, 2);
-            // $table->string('payment_method');
-            // $table->string('paid_at')->nullable();
             $table->timestamps();
         });
     }

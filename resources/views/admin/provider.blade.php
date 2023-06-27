@@ -60,6 +60,13 @@
     <x-delete-modal title='Eliminar Proveedor' size='md' modalId='deleteProviderModal' formId="destroyProviderForm"
         quetion='¿Está seguro que desea eliminar el proveedor?' :field="['name' => 'd_id']" onClick="deleteProvider()" />
 
+    <x-register-excel-modal title='Importar proveedores' modalId='registerProviderExcelModal' :field="[
+        'name' => 'excel_file',
+        'label' => 'Seleccionar archivo Excel',
+        'placeholder' => 'Seleccione un archivo',
+    ]"
+        :route="route('providers.import')" />
+
 @endsection
 
 @section('js')
@@ -204,6 +211,10 @@
             $('#registerProviderModal').modal('show');
         }
 
+        function openRegisterExcelModal() {
+            $('#registerProviderExcelModal').modal('show');
+        }
+
         function openEditModal(button) {
             var provider = JSON.parse(button.getAttribute('data-product')); // Analizar la cadena JSON en un objeto
 
@@ -324,6 +335,11 @@
                         text: '<i class="fa fa-plus"></i> Registrar Proveedor',
                         className: 'btn btn-sm btn-primary bg-danger mx-1',
                         action: () => openRegisterModal(),
+                    },
+                    {
+                        text: '<i class="fa fa-plus"></i> Cargar proveedores',
+                        className: 'btn btn-sm btn-primary bg-danger mx-1',
+                        action: () => openRegisterExcelModal(),
                     },
                 ],
                 responsive: true,

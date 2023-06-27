@@ -84,6 +84,13 @@
     <x-delete-modal title='Eliminar Empleado' size='md' modalId='deleteEmployeeModal' formId="destroyEmployeeForm"
         quetion='¿Está seguro que desea eliminar el producto?' :field="['name' => 'd_id']" onClick="deleteEmployee()" />
 
+    <x-register-excel-modal title='Importar Empleados' modalId='registerEmployeeExcelModal' :field="[
+        'name' => 'excel_file',
+        'label' => 'Seleccionar archivo Excel',
+        'placeholder' => 'Seleccione un archivo',
+    ]"
+        :route="route('employees.import')" />
+
 @endsection
 
 @section('js')
@@ -228,6 +235,10 @@
             $('#registerEmployeeModal').modal('show');
         }
 
+        function openRegisterExcelModal() {
+            $('#registerEmployeeExcelModal').modal('show');
+        }
+
         function openEditModal(button) {
             var employee = JSON.parse(button.getAttribute('data-employee')); // Analizar la cadena JSON en un objeto
 
@@ -350,6 +361,11 @@
                         text: '<i class="fa fa-plus"></i> Registrar Empleado',
                         className: 'btn btn-sm btn-primary bg-danger mx-1',
                         action: () => openRegisterModal(),
+                    },
+                    {
+                        text: '<i class="fa fa-plus"></i> Cargar empleados',
+                        className: 'btn btn-sm btn-primary bg-danger mx-1',
+                        action: () => openRegisterExcelModal(),
                     },
                 ],
                 responsive: true,

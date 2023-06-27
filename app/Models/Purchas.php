@@ -20,6 +20,7 @@ class Purchas extends Model
         'purchase_code',
         'purchase_date',
         'provider_id',
+        'origin',
         'total',
         'created_at',
         'updated_at',

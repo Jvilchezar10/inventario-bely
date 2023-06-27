@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('purchase_date');
             $table->unsignedBigInteger('provider_id');
             $table->decimal('total', 8, 2);
+            $table->string('origin');
             $table->timestamps();
 
             $table->foreign('proof_of_payments_id')->references('id')->on('proof_of_payments')->onDelete('cascade');

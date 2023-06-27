@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Imports\ProvidersImport;
 use App\Models\Provider;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Session;
@@ -166,5 +167,27 @@ class ProviderController extends Controller
         $provider->delete();
 
         return response()->json(['message' => 'Proveedor eliminado con éxito']);
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'excel_file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        // Obtener la ruta temporal del archivo cargado
+        $filePath = $request->file('excel_file')->getRealPath();
+
+        // Instanciar la clase de importación y llamar al método import
+        $employeesImport = new providersImport();
+        $imported = $employeesImport->import($filePath);
+
+        if ($imported) {
+            // Redireccionar o mostrar un mensaje de éxito
+            return redirect()->back()->with('success', 'La importación del archivo Excel se realizó correctamente.');
+        } else {
+            // Redireccionar o mostrar un mensaje de error
+            return redirect()->back()->with('error', 'Ocurrió un error durante la importación del archivo Excel.');
+        }
     }
 }

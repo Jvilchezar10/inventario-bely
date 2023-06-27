@@ -13,7 +13,7 @@
     @endif
 
     @php
-        $columnsProducts = ['id', 'producto', 'precio','cantidad', 'subtotal', '', ''];
+        $columnsProducts = ['id', 'producto', 'precio', 'cantidad', 'subtotal', '', ''];
         $dataProducts = [];
     @endphp
 
@@ -46,6 +46,17 @@
                     'label' => 'Empleado',
                     'placeholder' => '@juan edu',
                     'type' => 'select2_with_search',
+                    'inputClass' => 'col-md-6',
+                ],
+                [
+                    'name' => 'i_selectOrigin',
+                    'label' => 'Origen',
+                    'placeholder' => 'elige',
+                    'type' => 'select',
+                    'options' => [
+                        'nacional' => 'Nacional',
+                        'internacional' => 'Internacional',
+                    ],
                     'inputClass' => 'col-md-6',
                 ],
                 [
@@ -278,7 +289,9 @@
                     },
                     null, // subtotal
                     null,
-                    {visible:false}, //id producto
+                    {
+                        visible: false
+                    }, //id producto
                 ],
             });
             // Función para actualizar el total
@@ -338,7 +351,7 @@
                     table.row.add([
                         selectedProduct.id,
                         division[0],
-                        division[1],,
+                        division[1], ,
                         '',
                         '',
                         '',

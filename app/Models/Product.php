@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Category;
-use App\Models\Provider;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -17,7 +16,6 @@ class Product extends Model
     protected $fillable = [
         'id',
         'cod_product',
-        'provider_id',
         'category_id',
         'desc',
         'size',
@@ -32,11 +30,6 @@ class Product extends Model
     public static function getTableColumns()
     {
         return Schema::getColumnListing((new self())->getTable());
-    }
-
-    public function provider():BelongsTo
-    {
-        return $this->belongsTo(Provider::class);
     }
 
     public function category():BelongsTo
