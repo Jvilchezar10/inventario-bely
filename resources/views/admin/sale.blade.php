@@ -12,12 +12,12 @@
         </div>
     @endif
     @php
-        $columnsProducts = ['id', 'producto', 'precio', 'cantidad', 'subtotal'];
+        $columnsProducts = ['id', 'producto', 'precio', 'cantidad', 'subtotal', '' . ''];
         $dataProducts = [];
     @endphp
 
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-7">
             <x-adminlte-card title="Detalle de ventas" theme="pink" icon="fas fa-tshirt" class="elevation-3" maximizable>
                 <x-adminlte-select2 id="search_product" name="search_product" label="Buscar Producto"
                     label-class="'text-lightblue'" igroup-size="sm" data-placeholder="ingrese el producto">
@@ -37,13 +37,27 @@
                 </div>
             </x-adminlte-card>
         </div>
-        <div class="col-md-4">
-            <x-card-detail title="Datos" formId="form_saledateil" :fields="[
+        <div class="col-md-5">
+            <x-card-detail formId="form_saledateil" title="Datos" :fields="[
                 [
                     'name' => 'i_selectEmployee',
                     'label' => 'Empleado',
                     'placeholder' => '@juan edu',
                     'type' => 'select2_with_search',
+                    'inputClass' => 'col-md-6',
+                ],
+                [
+                    'name' => 'i_selectClient',
+                    'label' => 'Cliente',
+                    'placeholder' => '@Ramirez Perez',
+                    'type' => 'select2_with_search',
+                    'inputClass' => 'col-md-6',
+                ],
+                [
+                    'name' => 'i_sales_code',
+                    'label' => 'Cod Venta',
+                    'placeholder' => '@126354789632',
+                    'type' => 'input',
                     'inputClass' => 'col-md-6',
                 ],
                 [
@@ -70,41 +84,22 @@
                     'inputClass' => 'col-md-6',
                 ],
                 [
-                    'name' => 'i_fullname',
-                    'label' => 'Nombre del cliente',
-                    'placeholder' => 'Ingrese el nombre completo del cliente',
-                    'type' => 'input',
-                    'inputClass' => 'col-md-6',
-                ],
-                [
-                    'name' => 'i_dni',
-                    'label' => 'DNI',
-                    'placeholder' => '@74859612',
-                    'type' => 'input',
-                    'inputClass' => 'col-md-6',
-                ],
-                [
-                    'name' => 'i_phone',
-                    'label' => 'Número de celular',
-                    'placeholder' => '@951753456',
-                    'type' => 'input',
-                    'inputClass' => 'col-md-6',
-                ],
-                [
                     'label' => 'Anular',
                     'onClick' => 'fallo()',
                     'class' => 'danger',
-                    'type' => 'button',
+                    'typeB' => 'button',
+                    'type' => 'submit',
                     'inputClass' => 'col-md-6',
                 ],
                 [
                     'label' => 'Guardar',
-                    'onClick' => 'exito()',
+                    'onClick' => 'registerSale()',
                     'class' => 'success',
-                    'type' => 'button',
+                    'typeB' => 'button',
+                    'type' => 'submit',
                     'inputClass' => 'col-md-6',
                 ],
-            ]" />
+            ]" cardId="salecard" />
         </div>
     </div>
 @endsection
@@ -112,26 +107,19 @@
 
 @section('js')
     <script>
+        var total = 0;
         var salesDataRoute = '{{ route('sales.data') }}';
         var productsDataRoute = '{{ route('products.searchSales') }}';
+        var clientsDataRoute = '{{ route('clients.search') }}';
         var employeesDataRoute = '{{ route('employees.search') }}';
         var proofofpaymentsDataRoute = '{{ route('proofofpayments.search') }}';
         var csrfToken = '{{ csrf_token() }}';
     </script>
     <script src="{{ asset('js/toast.js') }}"></script>
     <script>
-        //funciones de prueba
-        function exito() {
-            showCustomToast({
-                title: 'Registro exitoso',
-                body: 'Producto registrado con éxito.',
-                class: 'bg-success',
-                icon: 'fas fa-check-circle',
-                close: false,
-                autohide: true,
-                delay: 5000
-            });
-        }
+        document.getElementById("form_saledateil").addEventListener("submit", function(event) {
+            event.preventDefault(); // Detiene el envío del formulario predeterminado
+        });
 
         //funciones de prueba
         function fallo() {
@@ -144,6 +132,67 @@
                 autohide: true,
                 delay: 5000
             });
+        }
+
+        function registerSale() {
+
+            var formData = $('#salecard form').serializeArray();
+
+            var productsTable = $('#productsTable').DataTable();
+
+            var tableData = productsTable.rows().data().toArray();
+
+            var combinedData = {
+                formData: formData,
+                tableData: tableData,
+                total: total
+            }
+
+            $.ajax({
+                url: '{{ route('sales.store') }}',
+                type: 'POST',
+                dataType: 'json',
+                contetntType: 'application/json',
+                data: JSON.stringify(combinedData),
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                success: function(response) {
+                    // Mostrar mensaje de éxito o realizar acciones adicionales si es necesario
+                    console.log('Venta registrada con éxito.');
+                    // Cerrar el modal después de la operación exitosa
+                    showCustomToast({
+                        title: 'Registro exitoso',
+                        body: 'Datos registrados con éxito.',
+                        class: 'bg-success',
+                        icon: 'fas fa-check-circle',
+                        close: false,
+                        autohide: true,
+                        delay: 5000
+                    });
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    // Si se produce un error en la solicitud
+                    var response = xhr.responseJSON; // Obtener la respuesta JSON del servidor
+
+                    if (response && response.message) {
+                        console.log(response.message); // Mensaje de error del controlador
+                    } else {
+                        // Mostrar mensaje de error o realizar acciones adicionales si es necesario
+                        console.log('Error al registrar datos: ' + errorThrown);
+
+                        showCustomToast({
+                            title: 'Error fatal',
+                            body: ':c',
+                            class: 'bg-danger',
+                            icon: 'fas fa-exclamation-circle',
+                            close: false,
+                            autohide: true,
+                            delay: 5000
+                        });
+                    }
+                }
+            })
         }
 
         $(document).ready(function() {
@@ -220,11 +269,14 @@
                         },
                     },
                     null, // subtotal
+                    null,
+                    {
+                        visible: false
+                    }, //id producto
                 ],
             });
             // Función para actualizar el total
             function updateTotal() {
-                var total = 0;
                 var subtotals = productsTable.column(4).data().toArray();
 
                 for (var i = 0; i < subtotals.length; i++) {
@@ -283,6 +335,8 @@
                         division[1],
                         '',
                         '',
+                        '',
+                        division[2],
                     ]).draw(false);
                 });
             }
@@ -349,6 +403,7 @@
 
         $(function() {
             initializeSelect2('#i_selectEmployee', employeesDataRoute, 'emp');
+            initializeSelect2('#i_selectClient', clientsDataRoute, 'cli');
             initializeSelect2('#i_selectProof', proofofpaymentsDataRoute, 'q');
         });
     </script>

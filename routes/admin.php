@@ -10,9 +10,10 @@ use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\ProofOfPaymentController;
-
+use App\Http\Controllers\SalesDetailController;
 use App\Http\Controllers\UserController;
-use App\Models\PurchasesDetail;
+use App\Http\Controllers\ClientController;
+
 
 Route::middleware([
     'auth:sanctum',
@@ -34,7 +35,17 @@ Route::middleware([
     Route::put('/proveedores/{id}', [ProviderController::class, 'update'])->name('providers.update');
     Route::delete('/proveedores/{id}', [ProviderController::class, 'destroy'])->name('providers.destroy');
 
-    /**
+     /**
+     * El código define las rutas para un controlador de providers en una aplicación Laravel
+     */
+
+     Route::get('/clientes', [ClientController::class, 'index'])->name('clients');
+     Route::post('/clientes/data', [ClientController::class, 'getData'])->name('clients.data');
+     Route::post('/clientes/search', [ClientController::class, 'search'])->name('clients.search');
+     Route::post('/clientes', [ClientController::class, 'store'])->name('clients.store');
+     Route::put('/clientes/{id}', [ClientController::class, 'update'])->name('clients.update');
+     Route::delete('/clientes/{id}', [ClientController::class, 'destroy'])->name('clients.destroy');/**
+
      * El código define las rutas para un controlador de categories en una aplicación Laravel
      */
 
@@ -84,8 +95,13 @@ Route::middleware([
      Route::post('/ventas', [SaleController::class, 'store'])->name('sales.store');
      Route::put('/ventas/{id}', [SaleController::class, 'update'])->name('sales.update');
      Route::delete('/ventas/{id}', [SaleController::class, 'destroy'])->name('sales.destroy');
+/**
+     * El código define las rutas para un controlador de purchases en una aplicación Laravel
+     */
 
-    /**
+     Route::get('/detalle-de-ventas', [SalesDetailController::class, 'index'])->name('salesdetail');
+
+     /**
      * El código define las rutas para un controlador de proofofpayment en una aplicación Laravel
      */
 

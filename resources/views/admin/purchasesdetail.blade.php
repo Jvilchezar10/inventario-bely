@@ -23,6 +23,9 @@
 
 @section('js')
     <script>
+        var purchases_DataRoute = '{{ route('purchases.data') }}';
+        var csrfToken = '{{ csrf_token() }}';
+
         $(function() {
 
             var table = $('#productsTable').DataTable({
@@ -32,8 +35,44 @@
                         visible: false,
                     },
                     {
-                        data: 'id',
-                        name: 'id',
+                        data: 'comprobante',
+                        name: 'comprobante',
+                    },
+                    {
+                        data: 'n° de comprobante',
+                        name: 'n° de comprobante',
+                    },
+                    {
+                        data: 'empleado',
+                        name: 'empleado',
+                    },
+                    {
+                        data: 'cod compra',
+                        name: 'cod compra',
+                    },
+            //         {    'id',    'id',
+            // 'comprobante',
+            // 'n° de comprobante',
+            // 'empleado',
+            // 'cod compra',
+            // 'fecha de compra',
+            // 'proveedor',
+            // 'total',
+            // 'creado en',
+            // 'actualizado en',
+            // 'opciones'
+
+        ];
+                        data: 'fecha de compra',
+                        name: 'fecha de compra',
+                    },
+                    {
+                        data: 'proveedor',
+                        name: 'proveedor',
+                    },
+                    {
+                        data: 'total',
+                        name: 'total',
                     },
                     {
                         data: 'creado en',
@@ -99,16 +138,16 @@
                         text: '<i class="fa fa-print"></i>',
                         className: 'btn btn-sm btn-default',
                     },
-                    {
-                        text: '<i class="fa fa-plus"></i> Registrar Producto',
-                        className: 'btn btn-sm btn-primary bg-danger mx-1',
-                        action: () => openRegisterModal(),
-                    },
-                    {
-                        text: '<i class="fa fa-plus"></i> Cargar Productos',
-                        className: 'btn btn-sm btn-primary bg-danger mx-1',
-                        action: () => openRegisterExcelModal(),
-                    },
+                    // {
+                    //     text: '<i class="fa fa-plus"></i> Registrar Producto',
+                    //     className: 'btn btn-sm btn-primary bg-danger mx-1',
+                    //     action: () => openRegisterModal(),
+                    // },
+                    // {
+                    //     text: '<i class="fa fa-plus"></i> Cargar Productos',
+                    //     className: 'btn btn-sm btn-primary bg-danger mx-1',
+                    //     action: () => openRegisterExcelModal(),
+                    // },
                 ],
                 responsive: true,
                 paging: true,
@@ -119,6 +158,60 @@
                     selector: 'td:first-child'
                 },
             });
+
+            function initializeDataTable(data) {
+                table.clear().rows.add(data).draw();
+            }
+
+            function refreshPurchsesDataTable() {
+                $.ajax({
+                    url: purchases_DataRoute,
+                    type: 'POST',
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    success: function(response) {
+                        if (response.data) {
+                            // console.log('Datos encontrados: \n ' + response.data);
+                            initializeDataTable(response.data);
+                        } else {
+                            console.log('No se encontraron datos de Componentes.');
+                        }
+                    },
+                    error: function(xhr, textStatus, error) {
+                        var errorContainer = $('#error-message');
+
+                        if (xhr.status === 403) {
+                            errorContainer.text('Acceso denegado').show();
+                        } else {
+                            errorContainer.text('Error desconocido').show();
+                        }
+                        // Desaparecer el mensaje después de 5 segundos
+                        setTimeout(function() {
+                            errorContainer.hide();
+                        }, 3000); // 3000 milisegundos = 5 segundos
+
+                    }
+                });
+            }
+
+            function generateButtons(row) {
+                var btnEdit =
+                    '<button class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit" onclick="openEditModal(this)" data-product=\'' +
+                    JSON.stringify(row) +
+                    '\'><i class="fa fa-lg fa-fw fa-pen"></i></button> ';
+                var btnDelete =
+                    '<button class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete" onclick="openDeleteModal(' +
+                    row.id +
+                    ')"><i class="fa fa-lg fa-fw fa-trash"></i></button> ';
+
+                return '<nobr>' + btnEdit + btnDelete + '</nobr>';
+            }
+
+            refreshPurchsesDataTable();
+
+            setInterval(refreshPurchsesDataTable, 5000);
         });
     </script>
 @endsection

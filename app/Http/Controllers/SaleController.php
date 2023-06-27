@@ -63,34 +63,29 @@ class SaleController extends Controller
 
     public function store(Request $request)
     {
-        // $validatedData = $request->validate([
-        //     'name' => 'required|max:255',
-        //     'state' => 'required|in:vigente,descontinuado',
+        $combinedData = $request->json()->all();
+
+        //$tableData = $combinedData['tableData'];
+        $formData = $combinedData['formData'];
+        //$total = $combinedData['total'];
+
+         throw new \Exception('Contenido de formData: ' . json_encode($combinedData));
+
+         return response()->json(['message' => 'Datos creados con éxito']);
+
+        //$fsale = date("Y-m-d", strtotime($formData[4]['value']));
+
+        // $newSales = Sale::create([
+
         // ]);
 
-        // $sale = Sale::create($validatedData);
+        // foreach ($tableDataWithModifiedKeys as $key => $value) {
+        //     $product = Product::find($value['product_id']);
+        //     $product->stock -= $value['quantity'];
+        //     $product->save();
+        // }
 
-        // return response()->json(['message' => 'Categoría creada con éxito', 'sale' => $sale]);
+
     }
 
-    public function update(Request $request, $id)
-    {
-        // $validatedData = $request->validate([
-        //     'name' => 'required|max:255',
-        //     'state' => 'required|in:vigente,descontinuado',
-        // ]);
-
-        // $sale = Sale::findOrFail($id);
-        // $sale->update($validatedData);
-
-        // return response()->json(['message' => 'Categoría actualizada con éxito', 'sale' => $sale]);
-    }
-
-    public function destroy($id)
-    {
-        // $sale = Sale::findOrFail($id);
-        // $sale->delete();
-
-        // return response()->json(['message' => 'Categoría eliminada con éxito']);
-    }
 }

@@ -1,7 +1,7 @@
 @extends('adminlte::page')
 
 @section('content_header')
-    <h1 class="m-0 text-dark">Categorías</h1>
+    <h1 class="m-0 text-dark">Clientes</h1>
 @stop
 
 @section('content')
@@ -12,69 +12,75 @@
         </div>
     @endif
 
-    <x-adminlte-card title="Lista de Categorías" theme="pink" icon="fas fa-tags" class="elevation-3" maximizable>
-        <x-datatable :columns=$columns :data=$data id="categoriesTable" />
+    <x-adminlte-card title="Lista de Clientes" theme="pink" icon="fas fa-tags" class="elevation-3" maximizable>
+        <x-datatable :columns=$columns :data=$data id="clientsTable" />
     </x-adminlte-card>
 
     {{-- Modales --}}
-    <x-register-modal formId="registerCategoryForm" :fields="[
-        ['name' => 'i_name', 'label' => 'Categoría', 'placeholder' => 'Ingrese la categoría', 'type' => 'input'],
+    <x-register-modal formId="registerClientForm" :fields="[
         [
-            'name' => 'i_state',
-            'label' => 'Estado',
-            'type' => 'radio',
-            'options' => [
-                ['value' => 'vigente', 'label' => 'Vigente'],
-                ['value' => 'descontinuado', 'label' => 'Descontinuado'],
-            ],
+            'name' => 'i_name',
+            'label' => 'Nombre completo',
+            'placeholder' => 'ingrese el nombre del cliente',
+            'type' => 'input',
         ],
-    ]" title='Añadir Categoria' size='md'
-        modalId='registerCategoryModal' onClick="registerCategory()" />
+        ['name' => 'i_DNI', 'label' => 'DNI', 'placeholder' => '@75363204', 'type' => 'input'],
+        [
+            'name' => 'i_phone',
+            'label' => 'Número de celular',
+            'placeholder' => '@951758468',
+            'type' => 'input',
+        ],
+    ]" title='Añadir cliente' size='md'
+        modalId='registerClientModal' onClick="registerClient()" />
 
-    <x-edit-modal formId="updateCategoryForm" :fields="[
+    <x-edit-modal formId="updateClientForm" :fields="[
         ['name' => 'e_id', 'type' => 'hidden'],
-        ['name' => 'e_name', 'label' => 'Categoría', 'placeholder' => 'Ingrese la categoría', 'type' => 'input'],
         [
-            'name' => 'e_state',
-            'label' => 'Estado',
-            'type' => 'radio',
-            'options' => [
-                ['value' => 'vigente', 'label' => 'Vigente'],
-                ['value' => 'descontinuado', 'label' => 'Descontinuado'],
-            ],
+            'name' => 'e_name',
+            'label' => 'Nombre completo',
+            'placeholder' => 'ingrese el nombre del cliente',
+            'type' => 'input',
         ],
-    ]" title='Editar Categoria' size='md'
-        modalId='editCategoryModal' onClick="updateCategory()" />
+        ['name' => 'e_DNI', 'label' => 'DNI', 'placeholder' => '@75363204', 'type' => 'input'],
+        [
+            'name' => 'e_phone',
+            'label' => 'Número de celular',
+            'placeholder' => '@951758468',
+            'type' => 'input',
+        ],
+    ]" title='Editar cliente' size='md'
+        modalId='editClientModal' onClick="updateClient()" />
 
-    <x-delete-modal title='Eliminar Categoría' size='md' modalId='deleteCategoryModal' formId="destroyCategoryForm"
-        quetion='¿Está seguro que desea eliminar la categoria?' :field="['name' => 'd_id']" onClick="deleteCategory()" />
+    <x-delete-modal title='Eliminar cliente' size='md' modalId='deleteClientModal' formId="destroyClientForm"
+        quetion='¿Está seguro que desea eliminar el cliente?' :field="['name' => 'd_id']" onClick="deleteClient()" />
 
 @endsection
 
 @section('js')
     <script>
-        var categoryId = 0;
-        var categorysDataRoute = '{{ route('categories.data') }}';
+        var clientId = 0;
+        var clientsDataRoute = '{{ route('clients.data') }}';
         var csrfToken = '{{ csrf_token() }}';
     </script>
     <script src="{{ asset('js/toast.js') }}"></script>
     <script>
-        document.getElementById("registerCategoryForm").addEventListener("submit", function(event) {
+        document.getElementById("registerClientForm").addEventListener("submit", function(event) {
             event.preventDefault(); // Detiene el envío del formulario predeterminado
         });
-        document.getElementById("updateCategoryForm").addEventListener("submit", function(event) {
+        document.getElementById("updateClientForm").addEventListener("submit", function(event) {
             event.preventDefault(); // Detiene el envío del formulario predeterminado
         });
-        document.getElementById("destroyCategoryForm").addEventListener("submit", function(event) {
+        document.getElementById("destroyClientForm").addEventListener("submit", function(event) {
             event.preventDefault(); // Detiene el envío del formulario predeterminado
         });
 
-        function registerCategory() {
+        function registerClient() {
             // Obtener los datos del formulario
-            var formData = $('#registerCategoryModal form').serialize();
+            var formData = $('#registerClientModal form').serialize();
             // Realizar la petición AJAX para el registro de la categoría
             $.ajax({
-                url: '{{ route('categories.store') }}',
+                url: '{{ route('clients.store') }}',
                 type: 'POST',
                 dataType: 'json',
                 data: formData,
@@ -95,7 +101,7 @@
                         delay: 5000
                     });
                     //
-                    $('#registerCategoryModal').modal('hide');
+                    $('#registerClientModal').modal('hide');
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     // Si se produce un error en la solicitud
@@ -105,7 +111,7 @@
                         errorContainer.text('Acceso denegado').show();
                     } else {
                         showCustomToast({
-                            title: 'Elimación denegada',
+                            title: 'Eliminación denegada',
                             body: 'No puedes registar una categoría vacia.',
                             class: 'bg-danger',
                             icon: 'fas fa-exclamation-triangle',
@@ -124,15 +130,15 @@
             });
         }
 
-        function updateCategory() {
+        function updateClient() {
             // Obtener los datos del formulario
-            var formData = $('#editCategoryModal form').serialize();
-            var id = $('#editCategoryModal input[name="e_id"]').val();
+            var formData = $('#editClientModal form').serialize();
+            var id = $('#editClientModal input[name="e_id"]').val();
 
             event.preventDefault();
             // Realizar la petición AJAX para la actualización de la categoría
             $.ajax({
-                url: '{{ route('categories.update', ['id' => ':id']) }}'.replace(':id', id),
+                url: '{{ route('clients.update', ['id' => ':id']) }}'.replace(':id', id),
                 type: 'POST',
                 dataType: 'json',
                 data: formData,
@@ -153,7 +159,7 @@
                         delay: 5000
                     });
                     //
-                    $('#editCategoryModal').modal('hide');
+                    $('#editClientModal').modal('hide');
                 },
                 error: function(xhr, textStatus, error) {
                     // Mostrar mensaje de error o realizar acciones adicionales si es necesario\
@@ -173,12 +179,12 @@
             });
         }
 
-        function deleteCategory() {
-            var id = $('#deleteCategoryModal input[name="d_id"]').val();
+        function deleteClient() {
+            var id = $('#deleteClientModal input[name="d_id"]').val();
 
             // Realizar la petición AJAX para la eliminación de la categoría
             $.ajax({
-                url: '{{ route('categories.destroy', ['id' => ':id']) }}'.replace(':id', id),
+                url: '{{ route('clients.destroy', ['id' => ':id']) }}'.replace(':id', id),
                 type: 'POST',
                 dataType: 'json',
                 data: {
@@ -202,7 +208,7 @@
                         delay: 5000
                     });
                     //
-                    $('#deleteCategoryModal').modal('hide');
+                    $('#deleteClientModal').modal('hide');
                 },
                 error: function(xhr, textStatus, error) {
                     var errorContainer = $('#error-message');
@@ -230,44 +236,46 @@
             });
         }
 
-
-
         function openRegisterModal() {
-            $('#registerCategoryModal').modal('show');
+            $('#registerClientModal').modal('show');
         }
 
         function openEditModal(button) {
-            var category = JSON.parse(button.getAttribute('data-product')); // Analizar la cadena JSON en un objeto
+            var client = JSON.parse(button.getAttribute('data-product')); // Analizar la cadena JSON en un objeto
 
             // Asignar los valores a los campos del modal
-            $('#editCategoryModal input[name="e_id"]').val(category.id);
-            $('#editCategoryModal input[name="e_name"]').val(category.nombre);
-            $('#updateCategoryForm input[name="e_state"][value="vigente"]').prop('checked', category.estado === 'vigente');
-            $('#updateCategoryForm input[name="e_state"][value="descontinuado"]').prop('checked', category.estado ===
-                'descontinuado');
-            $('#editCategoryModal').modal('show'); // Invocar al modal de edición
+            $('#editClientModal input[name="e_id"]').val(client.id);
+            $('#editClientModal input[name="e_name"]').val(client['nombre completo']);
+            $('#editClientModal input[name="e_DNI"]').val(client['DNI']);
+            $('#editClientModal input[name="e_phone"]').val(client['número de celular']);
+
+            $('#editClientModal').modal('show'); // Invocar al modal de edición
         }
 
         function openDeleteModal(id) {
-            $('#deleteCategoryModal input[name="d_id"]').val(id);
+            $('#deleteClientModal input[name="d_id"]').val(id);
             // abrir modal
-            $('#deleteCategoryModal').modal('show');
+            $('#deleteClientModal').modal('show');
         }
 
         $(function() {
 
-            var table = $('#categoriesTable').DataTable({
+            var table = $('#clientsTable').DataTable({
                 columns: [{
                         data: 'id',
                         name: 'id',
                     },
                     {
-                        data: 'nombre',
-                        name: 'nombre',
+                        data: 'nombre completo',
+                        name: 'nombre completo',
                     },
                     {
-                        data: 'estado',
-                        name: 'estado',
+                        data: 'DNI',
+                        name: 'DNI',
+                    },
+                    {
+                        data: 'número de celular',
+                        name: 'número de celular',
                     },
                     {
                         data: 'creado en',
@@ -334,7 +342,7 @@
                         className: 'btn btn-sm btn-default',
                     },
                     {
-                        text: '<i class="fa fa-plus"></i> Registrar Categoria',
+                        text: '<i class="fa fa-plus"></i> Registrar cliente',
                         className: 'btn btn-sm btn-primary bg-danger mx-1',
                         action: () => openRegisterModal(),
                     },
@@ -353,9 +361,9 @@
                 table.clear().rows.add(data).draw();
             }
 
-            function refreshCategoryDataTable() {
+            function refreshclientDataTable() {
                 $.ajax({
-                    url: categorysDataRoute,
+                    url: clientsDataRoute,
                     type: 'POST',
                     dataType: 'json',
                     headers: {
@@ -399,9 +407,9 @@
                 return '<nobr>' + btnEdit + btnDelete + '</nobr>';
             }
 
-            refreshCategoryDataTable();
+            refreshclientDataTable();
 
-            setInterval(refreshCategoryDataTable, 5000);
+            setInterval(refreshclientDataTable, 5000);
         });
     </script>
 @endsection

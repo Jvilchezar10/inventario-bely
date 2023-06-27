@@ -1,4 +1,4 @@
-@extends('adminlte::page')
+@extends('adminlte::page',['iFrameEnabled' => true])
 
 @section('content_header')
     <h1 class="m-0 text-dark">Dashboard</h1>

@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Purchas;
+use App\Models\Product;
 use App\Models\PurchasesDetail;
-use Dotenv\Parser\Value;
 use Illuminate\Http\Response;
 
 class PurchasController extends Controller
@@ -51,8 +51,8 @@ class PurchasController extends Controller
         return $purchases->map(function ($purchas) {
             return [
                 'id' => $purchas->id,
-                'comprobante' => $purchas->proofofpayment->name,
-                'n° de comprobante' => $purchas->voucher_number,
+                'comprobante' => optional($purchas->proofofpayment)->name,
+                'n° de comprobante' => optional($purchas->voucher_number),
                 'empleado' => optional($purchas->employee)->name . ' ' . optional($purchas->employee)->last_name,
                 'cod compra' => $purchas->purchase_code,
                 'fecha de compra' => $purchas->purchase_date,
@@ -77,8 +77,6 @@ class PurchasController extends Controller
         //USAME PARA VER LOS ERRORES
         //throw new \Exception('Contenido de formData: ' . json_encode($tableData));
 
-        // Crear la compra y asignar el valor de 'proof_of_payments_id'
-
         $fpurchas = date("Y-m-d", strtotime($formData[4]['value']));
 
         $newPurchase = Purchas::create([
@@ -90,8 +88,6 @@ class PurchasController extends Controller
             'voucher_number' => ($formData[6]['value']),
             'total' => $total,
         ]);
-
-
 
         // Obtener el ID de la compra recién creada
         $purchaseId = $newPurchase->id;
@@ -117,6 +113,12 @@ class PurchasController extends Controller
 
             return $modifiedRow;
         }, $tableData);
+
+        foreach ($tableDataWithModifiedKeys as $key => $value) {
+            $product = Product::find($value['product_id']);
+            $product->stock += $value['quantity'];
+            $product->save();
+        }
 
         //throw new \Exception('Contenido de formData: ' . json_encode($tableDataWithModifiedKeys));
 

@@ -40,7 +40,7 @@
         </div>
         <div class="col-md-5">
 
-            <x-card-detail formId="form_saledetail" title="Datos" :fields="[
+            <x-card-detail formId="form_purchasdetail" title="Datos" :fields="[
                 [
                     'name' => 'i_selectEmployee',
                     'label' => 'Empleado',
@@ -95,13 +95,13 @@
                 ],
                 [
                     'label' => 'Guardar',
-                    'onClick' => 'registerSale()',
+                    'onClick' => 'registerPurchase()',
                     'class' => 'success',
                     'typeB' => 'button',
                     'type' => 'submit',
                     'inputClass' => 'col-md-6',
                 ],
-            ]" cardId="salecard" />
+            ]" cardId="purchasecard" />
         </div>
     </div>
 
@@ -119,7 +119,7 @@
     </script>
     <script src="{{ asset('js/toast.js') }}"></script>
     <script>
-        document.getElementById("form_saledetail").addEventListener("submit", function(event) {
+        document.getElementById("form_purchasdetail").addEventListener("submit", function(event) {
             event.preventDefault(); // Detiene el envío del formulario predeterminado
         });
 
@@ -138,9 +138,9 @@
         }
 
 
-        function registerSale() {
+        function registerPurchase() {
             // Obtener los datos del formulario
-            var formData = $('#salecard form').serializeArray();
+            var formData = $('#purchasecard form').serializeArray();
 
             var productsTable = $('#productsTable').DataTable();
             // Obtener los datos de la tabla
@@ -165,7 +165,7 @@
                 },
                 success: function(response) {
                     // Mostrar mensaje de éxito o realizar acciones adicionales si es necesario
-                    console.log('Proveedor registrado con éxito.');
+                    console.log('Compra registrada con éxito.');
                     // Cerrar el modal después de la operación exitosa
                     showCustomToast({
                         title: 'Registro exitoso',

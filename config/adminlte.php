@@ -401,6 +401,13 @@ return [
             // 'label_color' => 'success',
         ],
         [
+            'text'        => 'Clientes',
+            'url'         => 'inventario/clientes',
+            'icon'        => 'fas fa-users',
+            // 'label'       => 4,
+            // 'label_color' => 'success',
+        ],
+        [
             'text'        => 'Usuarios',
             'url'         => 'inventario/usuarios',
             'icon'        => 'fas fa-user-circle',
@@ -711,7 +718,7 @@ return [
             'fullscreen' => true,
         ],
         'options' => [
-            'loading_screen' => 1000,
+            'loading_screen' => 500,
             'auto_show_new_tab' => true,
             'use_navbar_items' => true,
         ],

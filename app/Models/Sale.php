@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\Client;
 use App\Models\ProofOfPayment;
+use App\Models\Employee;
+use App\Models\Client;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -26,6 +27,11 @@ class Sale extends Model
     public function proofofpayment() : BelongsTo
     {
         return $this->belongsTo(ProofOfPayment::class);
+    }
+
+    public function employee() : BelongsTo
+    {
+        return $this->belongsTo(Employee::class);
     }
 
     public function client()
