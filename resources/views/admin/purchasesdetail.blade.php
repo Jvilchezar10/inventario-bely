@@ -50,19 +50,18 @@
                         data: 'cod compra',
                         name: 'cod compra',
                     },
-            //         {    'id',    'id',
-            // 'comprobante',
-            // 'n° de comprobante',
-            // 'empleado',
-            // 'cod compra',
-            // 'fecha de compra',
-            // 'proveedor',
-            // 'total',
-            // 'creado en',
-            // 'actualizado en',
-            // 'opciones'
-
-        ];
+                    //         {    'id',    'id',
+                    // 'comprobante',
+                    // 'n° de comprobante',
+                    // 'empleado',
+                    // 'cod compra',
+                    // 'fecha de compra',
+                    // 'proveedor',
+                    // 'total',
+                    // 'creado en',
+                    // 'actualizado en',
+                    // 'opciones'
+                    {
                         data: 'fecha de compra',
                         name: 'fecha de compra',
                     },
@@ -91,9 +90,12 @@
                         searchable: false,
                         render: function(data, type, row) {
                             return generateButtons(row);
-                        },
+                        };
                     }
+36+-
                 ],
+
+
                 // Configuración adicional del DataTable
                 timeout: 5000, // Tiempo de espera en milisegundos (5 segundos)
                 lengthMenu: [

@@ -12,7 +12,7 @@
         </div>
     @endif
     @php
-        $columnsProducts = ['id', 'producto', 'precio', 'cantidad', 'subtotal', '' , ''];
+        $columnsProducts = ['id', 'producto', 'precio', 'cantidad', 'subtotal', '', ''];
         $dataProducts = [];
     @endphp
 
@@ -269,28 +269,46 @@
                         },
                     },
                     null, // subtotal
-                    null,
+                    {
+                        data: null,
+                        className: 'delete-column',
+                        defaultContent: '<button class="btn btn-danger btn-sm delete-product">Eliminar</button>'
+                    }, // botones
                     {
                         visible: false
                     }, //id producto
                 ],
+                columnDefs: [{
+                    targets: [-1],
+                    visible: false
+                }]
             });
             // Función para actualizar el total
             function updateTotal() {
                 var subtotals = productsTable.column(4).data().toArray();
+                total = 0;
 
-                for (var i = 0; i < subtotals.length; i++) {
-                    var subtotal = parseFloat(subtotals[i]);
-                    if (!isNaN(subtotal)) {
-                        total += subtotal;
+                    for (var i = 0; i < subtotals.length; i++) {
+                        var subtotal = parseFloat(subtotals[i]);
+                        if (!isNaN(subtotal)) {
+                            total += subtotal;
+                        }
                     }
-                }
 
                 $('#totalAmount').text(total.toFixed(2));
             }
 
             // Llamar a la función updateTotal al cargar la página para mostrar el total inicial
             updateTotal();
+
+            $(document).on('click', '.delete-product', deleteProduct);
+
+            function deleteProduct() {
+                var row = $(this).closest('tr');
+                var productsTable = $('#productsTable').DataTable();
+                productsTable.row(row).remove().draw();
+                updateTotal();
+            }
 
             function initializeSelect2(selector, dataRoute, paramName) {
                 $(selector).select2({
@@ -338,6 +356,7 @@
                         '',
                         division[2],
                     ]).draw(false);
+                    $(selector).val(null).trigger('change');
                 });
             }
 

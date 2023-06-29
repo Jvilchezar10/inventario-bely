@@ -430,7 +430,7 @@ return [
         ],
         ['header' => 'Configuración de cuenta'],
         [
-            'text' => 'profile',
+            'text' => 'perfil',
             'url'  => 'inventario/user/profile',
             'icon' => 'fas fa-fw fa-user',
         ],

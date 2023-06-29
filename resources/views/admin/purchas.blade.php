@@ -134,21 +134,6 @@
             event.preventDefault(); // Detiene el envío del formulario predeterminado
         });
 
-
-        //funciones de prueba
-        function fallo() {
-            showCustomToast({
-                title: 'Registro fallo',
-                body: ':(',
-                class: 'bg-danger',
-                icon: 'fas fa-exclamation-triangle',
-                close: false,
-                autohide: true,
-                delay: 5000
-            });
-        }
-
-
         function registerPurchase() {
             // Obtener los datos del formulario
             var formData = $('#purchasecard form').serializeArray();
@@ -212,7 +197,12 @@
             });
         }
 
-
+        // function deleteProduct() {
+        //     var row = $(this).closest('tr');
+        //     var productsTable = $('#productsTable').DataTable();
+        //     productsTable.row(row).remove().draw();
+        //     updateTotal();
+        // }
 
         $(document).ready(function() {
             // Inicializar tabla de productos
@@ -288,15 +278,25 @@
                         },
                     },
                     null, // subtotal
-                    null,
+                    {
+                        data: null,
+                        className: 'delete-column',
+                        defaultContent: '<button class="btn btn-danger btn-sm delete-product">Eliminar</button>'
+                    }, // botones
                     {
                         visible: false
                     }, //id producto
                 ],
+                columnDefs: [{
+                    targets: [-1],
+                    visible: false
+                }]
             });
+
             // Función para actualizar el total
             function updateTotal() {
                 var subtotals = productsTable.column(4).data().toArray();
+                total = 0;
 
                 for (var i = 0; i < subtotals.length; i++) {
                     var subtotal = parseFloat(subtotals[i]);
@@ -310,6 +310,15 @@
 
             // Llamar a la función updateTotal al cargar la página para mostrar el total inicial
             updateTotal();
+
+            $(document).on('click', '.delete-product', deleteProduct);
+
+            function deleteProduct() {
+                var row = $(this).closest('tr');
+                var productsTable = $('#productsTable').DataTable();
+                productsTable.row(row).remove().draw();
+                updateTotal();
+            }
 
             function initializeSelect2(selector, dataRoute, paramName) {
                 $(selector).select2({
@@ -357,6 +366,7 @@
                         '',
                         division[2]
                     ]).draw(false);
+                    $(selector).val(null).trigger('change');
                 });
             }
 
@@ -376,10 +386,14 @@
 
             // Guardar cambios al salir del campo de edición
             $('#productsTable tbody').on('blur', '.form-control', function() {
-                var input = $(this);
-                var value = input.val();
-                var cell = input.closest('td');
-                cell.empty().text(value);
+                try {
+                    var input = $(this);
+                    var value = input.val();
+                    var cell = input.closest('td');
+                    cell.empty().text(value);
+                } catch (error) {
+                    console.error(error);
+                }
             });
         });
     </script>

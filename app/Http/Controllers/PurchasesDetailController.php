@@ -60,22 +60,11 @@ class PurchasesDetailController extends Controller
 
     public function update(Request $request, $id)
     {
-        // $validatedData = $request->validate([
-        //     'name' => 'required|max:255',
-        //     'state' => 'required|in:vigente,descontinuado',
-        // ]);
-
-        // $purchas = Purchas::findOrFail($id);
-        // $purchas->update($validatedData);
-
-        // return response()->json(['message' => 'Categoría actualizada con éxito', 'purchas' => $purchas]);
+         
     }
 
     public function destroy($id)
     {
-        // $purchas = Purchas::findOrFail($id);
-        // $purchas->delete();
 
-        // return response()->json(['message' => 'Categoría eliminada con éxito']);
     }
 }
