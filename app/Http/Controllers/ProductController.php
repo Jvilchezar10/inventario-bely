@@ -111,10 +111,10 @@ class ProductController extends Controller
             'selectCategoria' => 'required',
             'i_descripcion' => 'required',
             'i_talla' => 'required',
-            'i_stock_min' => 'required|numeric',
-            'i_stock' => 'required|numeric',
-            'i_precio_compra' => 'required|numeric',
-            'i_precio_venta' => 'required|numeric',
+            'i_stock_min' => 'required|numeric|gte:0',
+            'i_stock' => 'required|numeric|gte:0',
+            'i_precio_compra' => 'required|numeric|gte:0',
+            'i_precio_venta' => 'required|numeric|gte:0',
         ]);
 
         $product = Product::create([

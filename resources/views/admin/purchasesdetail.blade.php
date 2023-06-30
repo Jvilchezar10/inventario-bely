@@ -16,7 +16,7 @@
     @endif
 
     <x-adminlte-card title="Lista de compras" theme="pink" icon="fas fa-tshirt" class="elevation-3" maximizable>
-        <x-datatable :columns=$columns :data=$data id="productsTable" />
+        <x-datatable :columns=$columns :data=$data id="PurchasDetailTable" />
     </x-adminlte-card>
 
 @endsection
@@ -28,7 +28,7 @@
 
         $(function() {
 
-            var table = $('#productsTable').DataTable({
+            var table = $('#PurchasDetailTable').DataTable({
                 columns: [{
                         data: 'id',
                         name: 'id',
@@ -50,7 +50,7 @@
                         data: 'cod compra',
                         name: 'cod compra',
                     },
-                    //         {    'id',    'id',
+                    // {    'id',    'id',
                     // 'comprobante',
                     // 'n° de comprobante',
                     // 'empleado',
@@ -61,6 +61,11 @@
                     // 'creado en',
                     // 'actualizado en',
                     // 'opciones'
+                    // 'purchas_id',
+                    // 'producto',
+                    // 'cantidad',
+                    // 'precio',
+                    // 'subtotal',
                     {
                         data: 'fecha de compra',
                         name: 'fecha de compra',
@@ -92,7 +97,6 @@
                             return generateButtons(row);
                         };
                     }
-36+-
                 ],
 
 

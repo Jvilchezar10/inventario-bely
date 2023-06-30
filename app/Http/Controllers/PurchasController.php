@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Purchas;
 use App\Models\Product;
 use App\Models\PurchasesDetail;
+use Carbon\Carbon;
 use Illuminate\Http\Response;
 
 class PurchasController extends Controller
@@ -59,7 +60,7 @@ class PurchasController extends Controller
         //USAME PARA VER LOS ERRORES
         //throw new \Exception('Contenido de formData: ' . json_encode($formData));
 
-        $fpurchas = date("Y-m-d", strtotime($formData[5]['value']));
+        $fpurchas = Carbon::createFromFormat('d/m/Y', $formData[5]['value'])->format('Y-m-d');
 
         $newPurchase = Purchas::create([
             'employee_id' => ($formData[1]['value']),
@@ -71,6 +72,8 @@ class PurchasController extends Controller
             'voucher_number' => ($formData[7]['value']),
             'total' => $total,
         ]);
+
+        throw new \Exception('Contenido de formData: ' . json_encode([$formData[5]['value'],$fpurchas, $newPurchase->purchase_date]));
 
         // Obtener el ID de la compra recién creada
         $purchaseId = $newPurchase->id;

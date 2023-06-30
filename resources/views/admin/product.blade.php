@@ -3,9 +3,6 @@
 @section('content_header')
     <h1 class="m-0 text-dark">Productos</h1>
 @stop
-{{-- @section('css')
-    <link rel="stylesheet" href="{{ asset('css/Product.css') }}">
-@stop --}}
 
 @section('content')
     <div id="error-message" class="alert alert-danger" style="display: none;"></div>
@@ -139,16 +136,15 @@
 
 @section('js')
     <script>
-        var employeeId = 0;
         var productsDataRoute = '{{ route('products.data') }}';
         var categoriesDataRoute = '{{ route('categories.search') }}';
         var csrfToken = '{{ csrf_token() }}';
     </script>
     <script src="{{ asset('js/toast.js') }}"></script>
     <script>
-
         document.getElementById("registerProductForm").addEventListener("submit", function(event) {
             event.preventDefault(); // Detiene el envío del formulario predeterminado
+
         });
         document.getElementById("updateProductForm").addEventListener("submit", function(event) {
             event.preventDefault(); // Detiene el envío del formulario predeterminado
@@ -182,14 +178,24 @@
                         icon: 'fas fa-check-circle',
                         close: false,
                         autohide: true,
-                        delay: 5000
+                        delay: 5000,
                     });
                     //
                     $('#registerProductModal').modal('hide');
                 },
                 error: function(xhr, textStatus, error) {
                     // Mostrar mensaje de error o realizar acciones adicionales si es necesario
-                    console.log('Error al registrar el producto: ' + error);
+                    showCustomToast({
+                        title: 'Error al registrar productos',
+                        body: 'No puedes registrar un producto' + '<br>' + 'vacio',
+                        class: 'bg-danger',
+                        icon: 'fas fa-check-circle',
+                        close: false,
+                        autohide: true,
+                        delay: 5000
+                    });
+
+                    //console.log('Error al registrar el producto: ' + error);
                 }
             });
         }
@@ -228,7 +234,16 @@
                 },
                 error: function(xhr, textStatus, error) {
                     // Mostrar mensaje de error o realizar acciones adicionales si es necesario
-                    console.log('Error al actualizar el Productos: ' + error);
+                    showCustomToast({
+                        title: 'Error al actualizar el Productos',
+                        body: error,
+                        class: 'bg-danger',
+                        icon: 'fas fa-check-circle',
+                        close: false,
+                        autohide: true,
+                        delay: 5000
+                    });
+                    //console.log('Error al actualizar el Productos: ' + error);
                 }
             });
         }
@@ -309,7 +324,6 @@
 
         function openDeleteModal(id) {
             $('#deleteProductModal input[name="d_id"]').val(id);
-            // Lógica para mostrar el mensaje de confirmación de eliminación
             // y abrir el modal de eliminacións
             $('#deleteProductModal').modal('show');
         }

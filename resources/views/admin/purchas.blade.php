@@ -149,6 +149,8 @@
                 total: total
             };
 
+            console.log(formData);
+
             // Evitar que se envíe el formulario y se actualice la página
             $.ajax({
                 url: '{{ route('purchases.store') }}',
@@ -196,13 +198,6 @@
                 }
             });
         }
-
-        // function deleteProduct() {
-        //     var row = $(this).closest('tr');
-        //     var productsTable = $('#productsTable').DataTable();
-        //     productsTable.row(row).remove().draw();
-        //     updateTotal();
-        // }
 
         $(document).ready(function() {
             // Inicializar tabla de productos

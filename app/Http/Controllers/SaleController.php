@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Sale;
 use App\Models\Product;
 use App\Models\SalesDetail;
+use Carbon\Carbon;
 use Illuminate\Http\Response;
 
 class SaleController extends Controller
@@ -55,7 +56,7 @@ class SaleController extends Controller
 
         //throw new \Exception('Contenido de formData: ' . json_encode($tableData));
 
-        $fsale = date("Y-m-d", strtotime($formData[4]['value']));
+        $fsale = Carbon::createFromFormat('d/m/Y', $formData[4]['value'])->format('Y-m-d');
 
         $newSale = Sale::Create([
             'employee_id' => ($formData[1]['value']),
