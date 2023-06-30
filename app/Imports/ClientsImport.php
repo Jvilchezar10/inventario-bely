@@ -2,10 +2,10 @@
 
 namespace App\Imports;
 
-use App\Models\Provider;
+use App\Models\Client;
 use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 
-class ProvidersImport
+class ClientsImport
 {
     public function import($filePath)
     {
@@ -28,22 +28,16 @@ class ProvidersImport
                 }
 
                 // Obtener los valores de las celdas
-                $provider = $cells[0]->getValue();
+                $full_name = $cells[0]->getValue();
                 $DNI = $cells[1]->getValue();
-                $RUC = $cells[2]->getValue();
-                $phone = $cells[3]->getValue();
-                $contact = $cells[4]->getValue();
-                $contact_phone = $cells[5]->getValue();
+                $phone = $cells[2]->getValue();
 
-                $provider = new Provider([
-                    'provider' => $provider,
+                $area = new Client([
+                    'full_name'  => $full_name,
                     'DNI' => $DNI,
-                    'RUC' => $RUC,
                     'phone' => $phone,
-                    'contact' => $contact,
-                    'contact_phone' => $contact_phone,
                 ]);
-                $provider->save();
+                $area->save();
             }
         }
 

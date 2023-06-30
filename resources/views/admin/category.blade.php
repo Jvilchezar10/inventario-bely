@@ -49,6 +49,13 @@
     <x-delete-modal title='Eliminar Categoría' size='md' modalId='deleteCategoryModal' formId="destroyCategoryForm"
         quetion='¿Está seguro que desea eliminar la categoria?' :field="['name' => 'd_id']" onClick="deleteCategory()" />
 
+        <x-register-excel-modal title='Importar categorías' modalId='registerCategoryExcelModal' :field="[
+        'name' => 'excel_file',
+        'label' => 'Seleccionar archivo Excel',
+        'placeholder' => 'Seleccione un archivo',
+    ]"
+        :route="route('categories.import')" />
+
 @endsection
 
 @section('js')
@@ -236,6 +243,10 @@
             $('#registerCategoryModal').modal('show');
         }
 
+        function openRegisterExcelModal() {
+            $('#registerCategoryExcelModal').modal('show');
+        }
+
         function openEditModal(button) {
             var category = JSON.parse(button.getAttribute('data-product')); // Analizar la cadena JSON en un objeto
 
@@ -334,9 +345,14 @@
                         className: 'btn btn-sm btn-default',
                     },
                     {
-                        text: '<i class="fa fa-plus"></i> Registrar Categoria',
+                        text: '<i class="fa fa-plus"></i> Registrar categoria',
                         className: 'btn btn-sm btn-primary bg-danger mx-1',
                         action: () => openRegisterModal(),
+                    },
+                    {
+                        text: '<i class="fa fa-plus"></i> Cargar categoria',
+                        className: 'btn btn-sm btn-primary bg-danger mx-1',
+                        action: () => openRegisterExcelModal(),
                     },
                 ],
                 responsive: true,

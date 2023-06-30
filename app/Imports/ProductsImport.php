@@ -43,7 +43,7 @@ class ProductsImport
                 try {
                     $category_id = Category::where('name', $category)->get('id');
 
-                    $area = new Product([
+                    $product = new Product([
                         'cod_product' => $cod_product,
                         'category_id' => $category_id[0]->id,
                         'desc' => $desc,
@@ -53,7 +53,7 @@ class ProductsImport
                         'purchase_price' => $purchase_price,
                         'sale_price' => $sale_price,
                     ]);
-                    $area->save();
+                    $product->save();
                 } catch (\Throwable $th) {
                     $errorMessage = $th->getMessage();
 

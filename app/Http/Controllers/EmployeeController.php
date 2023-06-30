@@ -128,10 +128,10 @@ class EmployeeController extends Controller
 
     public function destroy($id)
     {
-         $employee = Employee::findOrFail($id);
-         $employee->delete();
+        $employee = Employee::findOrFail($id);
+        $employee->delete();
 
-         return response()->json(['message' => 'Categoría eliminada con éxito']);
+        return response()->json(['message' => 'Categoría eliminada con éxito']);
     }
 
     public function import(Request $request)
@@ -147,12 +147,15 @@ class EmployeeController extends Controller
         $employeesImport = new EmployeesImport();
         $imported = $employeesImport->import($filePath);
 
-        if ($imported) {
+
+        if ($imported[1]) {
             // Redireccionar o mostrar un mensaje de éxito
-            return redirect()->back()->with('success', 'La importación del archivo Excel se realizó correctamente.');
+            dd('$imported = true');
+            return redirect()->back()->with('success', json_decode($imported[0]));
         } else {
+            //dd($imported[0]);
             // Redireccionar o mostrar un mensaje de error
-            return redirect()->back()->with('error', 'Ocurrió un error durante la importación del archivo Excel.');
+            return redirect()->back()->with('errors', $imported[0]);
         }
     }
 }

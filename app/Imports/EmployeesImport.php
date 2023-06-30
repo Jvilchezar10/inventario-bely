@@ -13,14 +13,13 @@ class EmployeesImport
 
         // Abrir el archivo Excel
         $reader->open($filePath);
-
+        $errores = 0;
+        $validos = 0;
         $rowIndex = 0; // Variable para el índice de la fila
 
         foreach ($reader->getSheetIterator() as $sheet) {
             foreach ($sheet->getRowIterator() as $row) {
                 $rowIndex++;
-
-                $cells = $row->getCells();
 
                 // Ignorar la primera fila si contiene encabezados
                 if ($rowIndex === 1) {
@@ -28,12 +27,12 @@ class EmployeesImport
                 }
 
                 // Obtener los valores de las celdas
-                $cod_emp = $cells[0]->getValue();
-                $name = $cells[1]->getValue();
-                $last_name = $cells[2]->getValue();
-                $phone = $cells[3]->getValue();
-                $email = $cells[4]->getValue();
-                $state = trim($cells[5]->getValue());
+                $cod_emp = $row->getCellAtIndex(0)->getValue();
+                $name = $row->getCellAtIndex(1)->getValue();
+                $last_name = $row->getCellAtIndex(2)->getValue();
+                $phone = $row->getCellAtIndex(3)->getValue();
+                $email = $row->getCellAtIndex(4)->getValue();
+                $state = trim($row->getCellAtIndex(5)->getValue());
 
                 $estadoOptions = [
                     ['value' => 'vigente', 'label' => 'Vigente'],
@@ -50,31 +49,49 @@ class EmployeesImport
 
                 // Validar que todos los datos sean aceptados
                 if ($this->validateData($cod_emp, $name, $last_name, $phone, $email, $estadoValue)) {
-                    // Crear un nuevo objeto Employee y guardar en la base de datos
-                    $employee = new Employee([
-                        'cod_emp' => $cod_emp,
-                        'name' => $name,
-                        'last_name' => $last_name,
-                        'phone' => $phone,
-                        'email' => $email,
-                        'state' => $estadoValue,
-                    ]);
+                    // Verificar si el empleado ya existe en la base de datos
+                    $existingEmployee = Employee::where('cod_emp', $cod_emp)
+                        ->orWhere('email', $email)
+                        ->first();
 
-                    try {
-                        $employee->save();
-                    } catch (\Exception $e) {
-                        throw new \Exception("Error al guardar el empleado en la base de datos. Detalles: " . $e->getMessage());
+                    if ($existingEmployee) {
+                        $errores += 1;
+                        //$reader->close();
+                        //return ["Los datos del empleado ya existen. Cod. Empleado: $cod_emp, Email: $email", false];
+                    } else {
+                        // Crear un nuevo objeto Employee y guardar en la base de datos
+                        $employee = new Employee([
+                            'cod_emp' => $cod_emp,
+                            'name' => $name,
+                            'last_name' => $last_name,
+                            'phone' => $phone,
+                            'email' => $email,
+                            'state' => $estadoValue,
+                        ]);
+
+                        try {
+                            $validos += 1;
+                            $employee->save();
+                        } catch (\Exception $e) {
+                            $errores += 1;
+                            //$reader->close();
+                            //return ["Error al guardar el empleado en la base de datos", false];
+                        }
                     }
                 } else {
-                    throw new \Exception("Los datos del empleado no son válidos. Cod. Empleado: $cod_emp, Nombre: $name, Apellido: $last_name, Teléfono: $phone, Email: $email, Estado: $estadoValue");
+                    $errores += 1;
+                    //$reader->close();
+                    //return ["Los datos del empleado no son válidos. Cod. Empleado: $cod_emp, Nombre: $name, Apellido: $last_name, Teléfono: $phone, Email: $email, Estado: $estadoValue", false];
                 }
             }
         }
 
         // Cerrar el lector de Excel
         $reader->close();
-
-        return true;
+        if ($validos > 0) {
+            return ["Registro realizados exitosamente, resultados: validos: $validos, errores: $errores", true];
+        }
+        return ["No se registro el excel, resultados: errores: $errores", false];
     }
 
     private function validateData($cod_emp, $name, $last_name, $phone, $email, $estadoValue)
@@ -89,7 +106,10 @@ class EmployeesImport
             return false;
         }
 
-        // Realizar otras validaciones según tus requisitos (por ejemplo, validar el formato del correo electrónico)
+        // Validar el formato del correo electrónico
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
 
         return true;
     }

@@ -43,6 +43,7 @@ Route::middleware([
      Route::get('/clientes', [ClientController::class, 'index'])->name('clients');
      Route::post('/clientes/data', [ClientController::class, 'getData'])->name('clients.data');
      Route::post('/clientes/search', [ClientController::class, 'search'])->name('clients.search');
+     Route::post('/clientes/import', [ClientController::class, 'import'])->name('clients.import');
      Route::post('/clientes', [ClientController::class, 'store'])->name('clients.store');
      Route::put('/clientes/{id}', [ClientController::class, 'update'])->name('clients.update');
      Route::delete('/clientes/{id}', [ClientController::class, 'destroy'])->name('clients.destroy');/**
@@ -54,6 +55,7 @@ Route::middleware([
     Route::post('/categorias/data', [CategoryController::class, 'getData'])->name('categories.data');
     Route::post('/categorias', [CategoryController::class, 'store'])->name('categories.store');
     Route::post('/categorias/search', [CategoryController::class, 'search'])->name('categories.search');
+    Route::post('/categorias/import', [CategoryController::class, 'import'])->name('categories.import');
     Route::put('/categorias/{id}', [CategoryController::class, 'update'])->name('categories.update');
     Route::delete('/categorias/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
     Route::post('/categorias/update-ids', [CategoryController::class, 'updateIDs'])->name('categories.update-ids');

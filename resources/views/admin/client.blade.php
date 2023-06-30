@@ -55,6 +55,13 @@
     <x-delete-modal title='Eliminar cliente' size='md' modalId='deleteClientModal' formId="destroyClientForm"
         quetion='¿Está seguro que desea eliminar el cliente?' :field="['name' => 'd_id']" onClick="deleteClient()" />
 
+        <x-register-excel-modal title='Importar clientes' modalId='registerClientExcelModal' :field="[
+        'name' => 'excel_file',
+        'label' => 'Seleccionar archivo Excel',
+        'placeholder' => 'Seleccione un archivo',
+    ]"
+        :route="route('clients.import')" />
+
 @endsection
 
 @section('js')
@@ -240,6 +247,10 @@
             $('#registerClientModal').modal('show');
         }
 
+        function openRegisterExcelModal() {
+            $('#registerClientExcelModal').modal('show');
+        }
+
         function openEditModal(button) {
             var client = JSON.parse(button.getAttribute('data-product')); // Analizar la cadena JSON en un objeto
 
@@ -345,6 +356,11 @@
                         text: '<i class="fa fa-plus"></i> Registrar cliente',
                         className: 'btn btn-sm btn-primary bg-danger mx-1',
                         action: () => openRegisterModal(),
+                    },
+                    {
+                        text: '<i class="fa fa-plus"></i> Cargar clientes',
+                        className: 'btn btn-sm btn-primary bg-danger mx-1',
+                        action: () => openRegisterExcelModal(),
                     },
                 ],
                 responsive: true,

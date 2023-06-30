@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ClientsImport;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Client;
@@ -45,7 +46,7 @@ class ClientController extends Controller
             return [
                 'id' => $client->id,
                 'nombre completo' => $client->full_name,
-                'DNI'=> $client->DNI,
+                'DNI' => $client->DNI,
                 'número de celular' => $client->phone,
                 'creado en' => optional($client->created_at)->toDateTimeString(),
                 'actualizado en' => optional($client->updated_at)->toDateTimeString(),
@@ -82,8 +83,8 @@ class ClientController extends Controller
 
         $validatedData = $request->validate([
             'i_name' => 'required',
-            'i_DNI' => 'required',
-            'i_phone' => 'required',
+            'i_DNI' => 'required|numeric|max:8',
+            'i_phone' => 'required|numeric|max:9',
         ]);
         // $client = Client::create($validatedData);
         $client = Client::create([
@@ -93,7 +94,6 @@ class ClientController extends Controller
         ]);
 
         return response()->json(['message' => 'Proveedor creada con éxito', 'client' => $client]);
-
     }
 
     public function update(Request $request, $id)
@@ -101,8 +101,8 @@ class ClientController extends Controller
 
         $validatedData = $request->validate([
             'e_name' => 'required',
-            'e_DNI' => 'required',
-            'e_phone' => 'required',
+            'e_DNI' => 'required|numeric|max:8',
+            'e_phone' => 'required|numeric|max:9',
         ]);
         // $client = Client::create($validatedData);
         $client = Client::findOrFail($id);
@@ -123,6 +123,26 @@ class ClientController extends Controller
 
         return response()->json(['message' => 'Proveedor eliminado con éxito']);
     }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'excel_file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        // Obtener la ruta temporal del archivo cargado
+        $filePath = $request->file('excel_file')->getRealPath();
+
+        // Instanciar la clase de importación y llamar al método import
+        $clientsImport = new ClientsImport();
+        $imported = $clientsImport->import($filePath);
+
+        if ($imported) {
+            // Redireccionar o mostrar un mensaje de éxito
+            return redirect()->back()->with('success', 'La importación del archivo Excel se realizó correctamente.');
+        } else {
+            // Redireccionar o mostrar un mensaje de error
+            return redirect()->back()->with('error', 'Ocurrió un error durante la importación del archivo Excel.');
+        }
+    }
 }
-
-

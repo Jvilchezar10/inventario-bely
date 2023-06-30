@@ -14,6 +14,19 @@
             {{ $message }}
         </div>
     @endif
+    @if ($errors = Session::get('errors'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-exclamation-circle mr-2"></i>
+                <div>
+                    <strong>¡Ups!</strong> Hubo algunos problemas con tu entrada.
+                </div>
+            </div>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
 
     <x-adminlte-card title="Lista de Empleados" theme="pink" icon="fas fa-users" class="elevation-3" maximizable>
         <x-datatable :columns=$columns :data=$data id="employeesTable" />
