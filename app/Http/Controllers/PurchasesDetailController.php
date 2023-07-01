@@ -15,12 +15,22 @@ class PurchasesDetailController extends Controller
         $purchasesdetailId = 0;
         $columns = [
             'id',
-            'purchas_id',
-            'producto',
-            'cantidad',
-            'precio',
-            'subtotal',
-            'actions'
+            'purchas_id',//DETAIL
+            'comprobante',
+            'n° de comprobante',
+            'empleado',
+            'cod compra',
+            'fecha de compra',
+            'proveedor',
+            'origen',
+            'productos',//DETAIL
+            'cantidad',//DETAIL
+            'precio',//DETAIL
+            'subtotal',//DETAIL
+            'total',
+            'creado en',
+            'actualizado en',
+            'actions'//DETAIL
         ];
         $data = [];
 

@@ -40,4 +40,9 @@ class Purchas extends Model
     {
         return $this->belongsTo(Provider::class);
     }
+
+    public function purchasesDetails()
+    {
+        return $this->hasMany(PurchasesDetail::class, 'purchas_id');
+    }
 }

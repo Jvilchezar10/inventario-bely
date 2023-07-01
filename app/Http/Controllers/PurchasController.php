@@ -14,22 +14,8 @@ class PurchasController extends Controller
     public function index()
     {
         $purchasId = 0;
-        $columns = [
-            'id',
-            'comprobante',
-            'n° de comprobante',
-            'empleado',
-            'cod compra',
-            'fecha de compra',
-            'proveedor',
-            'total',
-            'creado en',
-            'actualizado en',
-            'opciones'
-        ];
-        $data = [];
 
-        return view('admin.purchas', compact('purchasId', 'columns', 'data'));
+        return view('admin.purchas', compact('purchasId'));
     }
 
     public function getData(Request $request)
@@ -45,6 +31,29 @@ class PurchasController extends Controller
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
+    }
+
+    private function transformPurchas($purchases)
+    {
+        return $purchases->map(function ($purchas) {
+            return [
+                'id' => $purchas->purchasesDetails->id,
+                'purchas_id' => $purchas->id,
+                'comprobante' => $purchas->proofofpayment->name,
+                'n° de comprobante'=> $purchas->voucher_number,
+                'empleado'=> $purchas->employee->name . " " . $purchas->employee->last_name,
+                'cod compra' => $purchas->purchase_code,
+                'fecha de compra' => $purchas->purchase_date,
+                'proveedor'=> $purchas->provider->provider,
+                'productos' => $purchas->purchasesDetails->product->desc,//DETAIL
+                'cantidad' => $purchas->purchasesDetails->quantity,//DETAIL
+                'precio'=> $purchas->purchasesDetails->product->purchase_price,//DETAIL
+                'subtotal' => $purchas->purchasesDetails->subtotal,//DETAIL
+                'total'=> $purchas->total,
+                'creado en' => optional($purchas->created_at)->toDateTimeString(),
+                'actualizado en' => optional($purchas->updated_at)->toDateTimeString(),
+            ];
+        });
     }
 
     public function store(Request $request)

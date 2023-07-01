@@ -24,27 +24,16 @@
         var csrfToken = '{{ csrf_token() }}';
 
         $(function() {
-            // 'id',
-            // 'comprobante',
-            // 'n° de comprobante',
-            // 'empleado',
-            // 'cod compra',
-            // 'fecha de compra',
-            // 'proveedor',
-            // 'total',
-            // 'creado en',
-            // 'actualizado en',
-            // 'opciones'
-            // 'purchas_id',
-            // 'producto',
-            // 'cantidad',
-            // 'precio',
-            // 'subtotal',
 
             var table = $('#PurchasDetailTable').DataTable({
                 columns: [{
                         data: 'id',
                         name: 'id',
+                        visible: false,
+                    },
+                    {
+                        data: 'purchas_id',
+                        name: 'purchas_id',
                         visible: false,
                     },
                     {
@@ -70,6 +59,22 @@
                     {
                         data: 'proveedor',
                         name: 'proveedor',
+                    },
+                    {
+                        data: 'productos',
+                        name: 'productos',
+                    },
+                    {
+                        data: 'cantidad',
+                        name: 'cantidad',
+                    },
+                    {
+                        data: 'precio',
+                        name: 'precio',
+                    },
+                      {
+                        data: 'subtotal',
+                        name: 'subtotal',
                     },
                     {
                         data: 'total',
@@ -153,7 +158,7 @@
                     // },
                 ],
                 responsive: true,
-                paging: true,|
+                paging: true,
                 stateDuration: -1,
                 info: true,
                 select: {

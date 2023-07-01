@@ -28,7 +28,7 @@ class PurchasesDetail extends Model
 
     public function purchas()
     {
-        return $this->belongsTo(Purchas::class);
+        return $this->belongsTo(Purchas::class, 'purchas_id');
     }
 
     public function product()
@@ -36,4 +36,3 @@ class PurchasesDetail extends Model
         return $this->belongsTo(Product::class);
     }
 }
-

@@ -149,7 +149,7 @@
                 total: total
             };
 
-            console.log(formData);
+            //console.log(formData);
 
             // Evitar que se envíe el formulario y se actualice la página
             $.ajax({
