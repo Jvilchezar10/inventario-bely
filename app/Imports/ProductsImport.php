@@ -23,7 +23,7 @@ class ProductsImport
 
                 $cells = $row->getCells();
 
-                dd($cells);
+                //dd($cells);
 
                 // Ignorar la primera fila si contiene encabezados
                 if ($rowIndex === 1) {

@@ -3,9 +3,6 @@
 @section('content_header')
     <h1 class="m-0 text-dark">Compras</h1>
 @stop
-{{-- @section('css')
-    <link rel="stylesheet" href="{{ asset('css/Product.css') }}">
-@stop --}}
 
 @section('content')
     <div id="error-message" class="alert alert-danger" style="display: none;"></div>
@@ -27,6 +24,22 @@
         var csrfToken = '{{ csrf_token() }}';
 
         $(function() {
+            // 'id',
+            // 'comprobante',
+            // 'n° de comprobante',
+            // 'empleado',
+            // 'cod compra',
+            // 'fecha de compra',
+            // 'proveedor',
+            // 'total',
+            // 'creado en',
+            // 'actualizado en',
+            // 'opciones'
+            // 'purchas_id',
+            // 'producto',
+            // 'cantidad',
+            // 'precio',
+            // 'subtotal',
 
             var table = $('#PurchasDetailTable').DataTable({
                 columns: [{
@@ -50,22 +63,6 @@
                         data: 'cod compra',
                         name: 'cod compra',
                     },
-                    // {    'id',    'id',
-                    // 'comprobante',
-                    // 'n° de comprobante',
-                    // 'empleado',
-                    // 'cod compra',
-                    // 'fecha de compra',
-                    // 'proveedor',
-                    // 'total',
-                    // 'creado en',
-                    // 'actualizado en',
-                    // 'opciones'
-                    // 'purchas_id',
-                    // 'producto',
-                    // 'cantidad',
-                    // 'precio',
-                    // 'subtotal',
                     {
                         data: 'fecha de compra',
                         name: 'fecha de compra',
@@ -95,8 +92,8 @@
                         searchable: false,
                         render: function(data, type, row) {
                             return generateButtons(row);
-                        };
-                    }
+                        },
+                    },
                 ],
 
 
@@ -156,7 +153,7 @@
                     // },
                 ],
                 responsive: true,
-                paging: true,
+                paging: true,|
                 stateDuration: -1,
                 info: true,
                 select: {

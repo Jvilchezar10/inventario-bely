@@ -73,7 +73,7 @@ class PurchasController extends Controller
             'total' => $total,
         ]);
 
-        throw new \Exception('Contenido de formData: ' . json_encode([$formData[5]['value'],$fpurchas, $newPurchase->purchase_date]));
+        //throw new \Exception('Contenido de formData: ' . json_encode([$formData[5]['value'],$fpurchas, $newPurchase->purchase_date]));
 
         // Obtener el ID de la compra recién creada
         $purchaseId = $newPurchase->id;

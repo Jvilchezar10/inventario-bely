@@ -2,7 +2,6 @@
 
 
 @section('content')
-
     <div class="row">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
@@ -25,12 +24,22 @@
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Permisos:</strong>
-                @if (!empty($rolePermissions))
+                <br />
+                <div class="row">
+                    @php $count = 0; @endphp
                     @foreach ($rolePermissions as $v)
-                        <label class="label label-success">{{ $v->name }},</label>
+                        <div class="col-lg-3">
+                            <label class="label label-success">{{ $v->name }}</label>
+                        </div>
+                        @php $count++; @endphp
+                        @if ($count % 4 == 0)
+                </div>
+                <div class="row">
+                    @endif
                     @endforeach
-                @endif
+                </div>
             </div>
         </div>
+
     </div>
 @endsection

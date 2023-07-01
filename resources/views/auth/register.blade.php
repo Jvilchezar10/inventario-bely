@@ -129,13 +129,13 @@
                 },
                 success: function(response) {
                     // Mostrar mensaje de éxito o realizar acciones adicionales si es necesario
-                    console.log('Categoría registrada con éxito.');
+                    console.log('Usuario registrada con éxito.');
                     // Cerrar el modal después de la operación exitosa
                     $('#registerUserModal').modal('hide');
                 },
                 error: function(xhr, textStatus, error) {
                     // Mostrar mensaje de error o realizar acciones adicionales si es necesario
-                    console.log('Error al registrar la categoría: ' + error);
+                    console.log('Error al registrar el usuario: ' + error);
                 }
             });
         }

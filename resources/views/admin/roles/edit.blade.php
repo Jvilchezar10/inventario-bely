@@ -37,13 +37,24 @@
             <div class="form-group">
                 <strong>Permisos:</strong>
                 <br />
-                @foreach ($permission as $value)
-                    <label>{{ Form::checkbox('permission[]', $value->id, in_array($value->id, $rolePermissions) ? true : false, ['class' => 'name']) }}
-                        {{ $value->name }}</label>
-                    <br />
-                @endforeach
+                <div class="row">
+                    @php $count = 0; @endphp
+                    @foreach ($permission as $value)
+                        <div class="col-lg-3">
+                            <label>{{ Form::checkbox('permission[]', $value->id, in_array($value->id, $rolePermissions) ? true : false, ['class' => 'name']) }}
+                                {{ $value->name }}
+                            </label>
+                        </div>
+                        @php $count++; @endphp
+                        @if ($count % 4 == 0)
+                </div>
+                <div class="row">
+                    @endif
+                    @endforeach
+                </div>
             </div>
         </div>
+
         <div class="col-xs-12 col-sm-12 col-md-12 text-center">
             <button type="submit" class="btn btn-primary">Guardar</button>
         </div>
