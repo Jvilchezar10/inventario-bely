@@ -78,7 +78,7 @@ Route::middleware([
      */
 
      Route::get('/compras', [PurchasController::class, 'index'])->name('purchases');
-     Route::post('/compras/data/product', [PurchasController::class, 'getData'])->name('purchases.data');
+     Route::post('/compras/data/', [PurchasController::class, 'getData'])->name('purchases.data');
      Route::post('/compras', [PurchasController::class, 'store'])->name('purchases.store');
      Route::put('/compras/{id}', [PurchasController::class, 'update'])->name('purchases.update');
      Route::delete('/compras/{id}', [PurchasController::class, 'destroy'])->name('purchases.destroy');

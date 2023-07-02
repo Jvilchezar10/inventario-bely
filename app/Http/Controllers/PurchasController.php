@@ -37,19 +37,19 @@ class PurchasController extends Controller
     {
         return $purchases->map(function ($purchas) {
             return [
-                'id' => $purchas->purchasesDetails->id,
+                'id' => optional($purchas->purchasesDetails[0])->id,
                 'purchas_id' => $purchas->id,
-                'comprobante' => $purchas->proofofpayment->name,
-                'n° de comprobante'=> $purchas->voucher_number,
-                'empleado'=> $purchas->employee->name . " " . $purchas->employee->last_name,
+                'comprobante' => optional($purchas->proofofpayment)->name,
+                'n° de comprobante' => $purchas->voucher_number,
+                'empleado' => optional($purchas->employee)->name . " " . optional( $purchas->employee)->last_name,
                 'cod compra' => $purchas->purchase_code,
                 'fecha de compra' => $purchas->purchase_date,
-                'proveedor'=> $purchas->provider->provider,
-                'productos' => $purchas->purchasesDetails->product->desc,//DETAIL
-                'cantidad' => $purchas->purchasesDetails->quantity,//DETAIL
-                'precio'=> $purchas->purchasesDetails->product->purchase_price,//DETAIL
-                'subtotal' => $purchas->purchasesDetails->subtotal,//DETAIL
-                'total'=> $purchas->total,
+                'proveedor' => optional($purchas->provider)->provider,
+                'productos' => optional($purchas->purchasesDetails[0]->product)->desc, //DETAIL
+                'cantidad' => optional($purchas->purchasesDetails[0])->quantity, //DETAIL
+                'precio' => optional($purchas->purchasesDetails[0]->product)->purchase_price, //DETAIL
+                'subtotal' => optional($purchas->purchasesDetails[0])->subtotal, //DETAIL
+                'total' => $purchas->total,
                 'creado en' => optional($purchas->created_at)->toDateTimeString(),
                 'actualizado en' => optional($purchas->updated_at)->toDateTimeString(),
             ];
@@ -122,5 +122,4 @@ class PurchasController extends Controller
 
         return response()->json(['message' => 'Datos creados con éxito']);
     }
-
 }

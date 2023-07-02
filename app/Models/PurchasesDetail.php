@@ -11,8 +11,9 @@ use Illuminate\Database\Eloquent\Model;
 class PurchasesDetail extends Model
 {
     use HasFactory;
+    protected $table='purchases_details';
     protected $fillable = [
-        'purchas_id',
+        'purchase_id',
         'product_id',
         'quantity',
         'price',
@@ -28,7 +29,7 @@ class PurchasesDetail extends Model
 
     public function purchas()
     {
-        return $this->belongsTo(Purchas::class, 'purchas_id');
+        return $this->belongsTo(Purchas::class, 'purchase_id');
     }
 
     public function product()

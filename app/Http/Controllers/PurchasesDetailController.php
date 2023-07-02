@@ -10,12 +10,12 @@ use Illuminate\Http\Response;
 
 class PurchasesDetailController extends Controller
 {
-     public function index()
-     {
+    public function index()
+    {
         $purchasesdetailId = 0;
         $columns = [
             'id',
-            'purchas_id',//DETAIL
+            'purchas_id', //DETAIL
             'comprobante',
             'n° de comprobante',
             'empleado',
@@ -23,19 +23,28 @@ class PurchasesDetailController extends Controller
             'fecha de compra',
             'proveedor',
             'origen',
-            'productos',//DETAIL
-            'cantidad',//DETAIL
-            'precio',//DETAIL
-            'subtotal',//DETAIL
+            'productos', //DETAIL
+            'cantidad', //DETAIL
+            'precio', //DETAIL
+            'subtotal', //DETAIL
             'total',
             'creado en',
             'actualizado en',
-            'actions'//DETAIL
+            'actions' //DETAIL
         ];
         $data = [];
+        $purchases = Purchas::all();
+        $purchasesdetail = PurchasesDetail::all();
+        //dd($purchases[3]->purchasesDetails[0]);
+        //dd($purchases[3]->purchasesDetails[0]);
+        //dd($purchases[3]);
+        //dd($purchasesdetail->purchase_id);
+        foreach ($purchasesdetail as $detail) {
+            dd($detail->purchase_id);
+        }
 
         return view('admin.purchasesdetail', compact('purchasesdetailId', 'columns', 'data'));
-     }
+    }
 
     // public function getData(Request $request)
     // {
@@ -51,6 +60,4 @@ class PurchasesDetailController extends Controller
     //         return response()->json(['message' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
     //     }
     // }
-
-
- }
+}
