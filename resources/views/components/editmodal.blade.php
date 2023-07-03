@@ -1,4 +1,4 @@
-@props(['route', 'fields', 'title', 'size', 'modalId'])
+@props(['route', 'fields', 'title', 'size', 'modalId', ' route_id'])
 
 
 @php
@@ -7,7 +7,7 @@
 
 <x-adminlte-modal id="{{ $modalId }}" :title="$title" :size="$size" theme="pink" icon="fas fa-edit"
     v-centered static-backdrop>
-    <form action="{{ $route }}" method="POST">
+    <form action="{{ $route }}" method="POST" id="{{ $route_id}}">
         @csrf
         @method('PUT')
 

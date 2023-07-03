@@ -15,7 +15,7 @@ class PurchasesDetailController extends Controller
         $purchasesdetailId = 0;
         $columns = [
             'id',
-            'purchas_id', //DETAIL
+            // 'purchas_id', //DETAIL
             'comprobante',
             'n° de comprobante',
             'empleado',
@@ -23,24 +23,25 @@ class PurchasesDetailController extends Controller
             'fecha de compra',
             'proveedor',
             'origen',
-            'productos', //DETAIL
-            'cantidad', //DETAIL
-            'precio', //DETAIL
-            'subtotal', //DETAIL
+            // 'productos', //DETAIL
+            // 'cantidad', //DETAIL
+            // 'precio', //DETAIL
+            // 'subtotal', //DETAIL
             'total',
-            'creado en',
-            'actualizado en',
+            // 'creado en', //DETAIL
+            // 'actualizado en',  //DETAIL
             'actions' //DETAIL
         ];
         $data = [];
         $purchases = Purchas::all();
-        $purchasesdetail = PurchasesDetail::all();
+        //$purchasesdetail = PurchasesDetail::all();
+        $purchasesdetail = PurchasesDetail::with('purchas')->get();
         //dd($purchases[3]->purchasesDetails[0]);
         //dd($purchases[3]->purchasesDetails[0]);
         //dd($purchases[3]);
         //dd($purchasesdetail->purchase_id);
         foreach ($purchasesdetail as $detail) {
-            dd($detail->purchase_id);
+            //dd($detail->purchase_id);
         }
 
         return view('admin.purchasesdetail', compact('purchasesdetailId', 'columns', 'data'));

@@ -13,7 +13,7 @@ use App\Http\Controllers\ProofOfPaymentController;
 use App\Http\Controllers\SalesDetailController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ClientController;
-
+use App\Models\User;
 
 Route::middleware([
     'auth:sanctum',
@@ -36,17 +36,18 @@ Route::middleware([
     Route::put('/proveedores/{id}', [ProviderController::class, 'update'])->name('providers.update');
     Route::delete('/proveedores/{id}', [ProviderController::class, 'destroy'])->name('providers.destroy');
 
-     /**
+    /**
      * El código define las rutas para un controlador de providers en una aplicación Laravel
      */
 
-     Route::get('/clientes', [ClientController::class, 'index'])->name('clients');
-     Route::post('/clientes/data', [ClientController::class, 'getData'])->name('clients.data');
-     Route::post('/clientes/search', [ClientController::class, 'search'])->name('clients.search');
-     Route::post('/clientes/import', [ClientController::class, 'import'])->name('clients.import');
-     Route::post('/clientes', [ClientController::class, 'store'])->name('clients.store');
-     Route::put('/clientes/{id}', [ClientController::class, 'update'])->name('clients.update');
-     Route::delete('/clientes/{id}', [ClientController::class, 'destroy'])->name('clients.destroy');/**
+    Route::get('/clientes', [ClientController::class, 'index'])->name('clients');
+    Route::post('/clientes/data', [ClientController::class, 'getData'])->name('clients.data');
+    Route::post('/clientes/search', [ClientController::class, 'search'])->name('clients.search');
+    Route::post('/clientes/import', [ClientController::class, 'import'])->name('clients.import');
+    Route::post('/clientes', [ClientController::class, 'store'])->name('clients.store');
+    Route::put('/clientes/{id}', [ClientController::class, 'update'])->name('clients.update');
+    Route::delete('/clientes/{id}', [ClientController::class, 'destroy'])->name('clients.destroy');
+    /**
 
      * El código define las rutas para un controlador de categories en una aplicación Laravel
      */
@@ -77,34 +78,34 @@ Route::middleware([
      * El código define las rutas para un controlador de purchases en una aplicación Laravel
      */
 
-     Route::get('/compras', [PurchasController::class, 'index'])->name('purchases');
-     Route::post('/compras/data/', [PurchasController::class, 'getData'])->name('purchases.data');
-     Route::post('/compras', [PurchasController::class, 'store'])->name('purchases.store');
-     Route::put('/compras/{id}', [PurchasController::class, 'update'])->name('purchases.update');
-     Route::delete('/compras/{id}', [PurchasController::class, 'destroy'])->name('purchases.destroy');
+    Route::get('/compras', [PurchasController::class, 'index'])->name('purchases');
+    Route::post('/compras/data/', [PurchasController::class, 'getData'])->name('purchases.data');
+    Route::post('/compras', [PurchasController::class, 'store'])->name('purchases.store');
+    Route::put('/compras/{id}', [PurchasController::class, 'update'])->name('purchases.update');
+    Route::delete('/compras/{id}', [PurchasController::class, 'destroy'])->name('purchases.destroy');
 
-     /**
+    /**
      * El código define las rutas para un controlador de purchases en una aplicación Laravel
      */
 
-     Route::get('/detalle-de-compras', [PurchasesDetailController::class, 'index'])->name('purchasesdetail');
+    Route::get('/detalle-de-compras', [PurchasesDetailController::class, 'index'])->name('purchasesdetail');
 
-     /**
-      * El código define las rutas para un controlador de sales en una aplicación Laravel
-      */
+    /**
+     * El código define las rutas para un controlador de sales en una aplicación Laravel
+     */
 
-     Route::get('/ventas', [SaleController::class, 'index'])->name('sales');
-     Route::post('/ventas/data', [SaleController::class, 'getData'])->name('sales.data');
-     Route::post('/ventas', [SaleController::class, 'store'])->name('sales.store');
-     Route::put('/ventas/{id}', [SaleController::class, 'update'])->name('sales.update');
-     Route::delete('/ventas/{id}', [SaleController::class, 'destroy'])->name('sales.destroy');
-/**
+    Route::get('/ventas', [SaleController::class, 'index'])->name('sales');
+    Route::post('/ventas/data', [SaleController::class, 'getData'])->name('sales.data');
+    Route::post('/ventas', [SaleController::class, 'store'])->name('sales.store');
+    Route::put('/ventas/{id}', [SaleController::class, 'update'])->name('sales.update');
+    Route::delete('/ventas/{id}', [SaleController::class, 'destroy'])->name('sales.destroy');
+    /**
      * El código define las rutas para un controlador de purchases en una aplicación Laravel
      */
 
-     Route::get('/detalle-de-ventas', [SalesDetailController::class, 'index'])->name('salesdetail');
+    Route::get('/detalle-de-ventas', [SalesDetailController::class, 'index'])->name('salesdetail');
 
-     /**
+    /**
      * El código define las rutas para un controlador de proofofpayment en una aplicación Laravel
      */
 
@@ -115,17 +116,17 @@ Route::middleware([
     Route::put('/comprobantes/{id}', [ProofOfPaymentController::class, 'update'])->name('proofofpayments.update');
     Route::delete('/comprobantes/{id}', [ProofOfPaymentController::class, 'destroy'])->name('proofofpayments.destroy');
 
-     /**
+    /**
      * El código define las rutas para un controlador de employees en una aplicación Laravel
      */
 
-     Route::get('/empleados', [EmployeeController::class, 'index'])->name('employees');
-     Route::post('/empleados/data', [EmployeeController::class, 'getData'])->name('employees.data');
-     Route::post('/empleados/search', [EmployeeController::class, 'search'])->name('employees.search');
-     Route::post('/empleados/import', [EmployeeController::class, 'import'])->name('employees.import');
-     Route::post('/empleados', [EmployeeController::class, 'store'])->name('employees.store');
-     Route::put('/empleados/{id}', [EmployeeController::class, 'update'])->name('employees.update');
-     Route::delete('/empleados/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
+    Route::get('/empleados', [EmployeeController::class, 'index'])->name('employees');
+    Route::post('/empleados/data', [EmployeeController::class, 'getData'])->name('employees.data');
+    Route::post('/empleados/search', [EmployeeController::class, 'search'])->name('employees.search');
+    Route::post('/empleados/import', [EmployeeController::class, 'import'])->name('employees.import');
+    Route::post('/empleados', [EmployeeController::class, 'store'])->name('employees.store');
+    Route::put('/empleados/{id}', [EmployeeController::class, 'update'])->name('employees.update');
+    Route::delete('/empleados/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
 
     /**
      * El código define las rutas para un controlador de roles en una aplicación Laravel
@@ -141,6 +142,15 @@ Route::middleware([
     Route::delete('/tipos-de-usuario/{id}', [RoleController::class, 'destroy'])->name('roles.destroy');
 
 
-    Route::resource('users', UserController::class);
+    //Route::resource('users', UserController::class);
+    Route::get('/usuarios', [UserController::class, 'index'])->name('users.index');
+    //Route::post('/usuarios/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('/usuarios', [UserController::class, 'store'])->name('users.store');
+    Route::get('/usuarios/show', [UserController::class, 'show'])->name('users.show');
+    Route::get('/usuarios/{id}', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/usuarios/{id}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/usuarios/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::post('/usuarios/data', [UserController::class, 'getData'])->name('users.data');
     // Route::resource('tipos-de-usuario', RoleController::class);
+
 });

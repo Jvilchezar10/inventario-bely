@@ -5,28 +5,59 @@
 @stop
 
 @php
-    $columns = ['id', 'Nombre', 'Correo', 'Empleado', 'Tipo de usuario', 'Creado en', 'Actualizado en', 'Opciones'];
+    $columns = ['id', 'Nombre', 'Correo', 'empleado_id', 'Empleado', 'Tipo de usuario_id', 'Tipo de usuario', 'Creado en', 'Actualizado en', 'Opciones'];
     $data = [];
     $usuarioId = 0;
 @endphp
 
-
 @section('content')
+    @if (count($errors) > 0)
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-exclamation-circle mr-2"></i>
+                <div>
+                    <strong>¡Ups!</strong> Hubo algunos problemas con tu entrada.
+                </div>
+            </div>
+            <ul class="mt-2 mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
+    @if ($message = Session::get('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-check-circle mr-2"></i>
+                <div>
+                    {{ $message }}
+                </div>
+            </div>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
     <x-adminlte-card title="Lista de Usuarios" theme="pink" icon="fas fa-tags" class="elevation-3" maximizable>
         <x-datatable :columns=$columns :data=$data id="usersTable" />
     </x-adminlte-card>
 
     {{-- Modales --}}
-    <x-register-modal formId="registerUserForm" :fields="[
+    <x-registermodal :route="route('users.store')" :fields="[
         [
-            'name' => 'name',
+            'name' => 'i_name',
             'label' => 'Nombre',
             'placeholder' => 'Ingrese nombre',
             'type' => 'input',
             'required' => 'true',
         ],
         [
-            'name' => 'email',
+            'name' => 'i_email',
             'label' => 'Correo electrónico',
             'placeholder' => 'Ingrese correo',
             'type' => 'input',
@@ -40,13 +71,7 @@
             'type' => 'select2_with_search',
         ],
         [
-            'name' => 'i_selectRoles',
-            'label' => 'Tipo de usuario',
-            'placeholder' => 'Seleccionar el tipo de usuario',
-            'type' => 'select2_with_search',
-        ],
-        [
-            'name' => 'password',
+            'name' => 'i_password',
             'label' => 'Contraseña',
             'placeholder' => 'Ingrese contraseña',
             'type' => 'input',
@@ -54,31 +79,59 @@
             'required' => 'true',
         ],
         [
-            'name' => 'password_confirmation',
+            'name' => 'confirm-password',
             'label' => 'Confirmar contraseña',
-            'placeholder' => 'Ingresar contraseñá',
+            'placeholder' => 'Ingrese contraseña',
             'type' => 'input',
             'type_input' => 'password',
             'required' => 'true',
         ],
-    ]" title="Registrar Usuario" size="md"
-        modalId="registerUserModal" onClick="registerUser()" />
-
-
-    <x-editmodal :route="route('user-profile-information.update', ['id' => $usuarioId])" :fields="[
         [
-            'name' => 'name',
+            'name' => 'i_selectRoles',
+            'label' => 'Tipo de usuario',
+            'placeholder' => 'Seleccionar el tipo de usuario',
+            'type' => 'select2_with_search',
+        ],
+    ]" title="Registrar Usuario" size="md"
+        modalId="registerUserModal" />
+
+
+    <x-editmodal :route="route('users.update', ['id' => $usuarioId])" :fields="[
+        [
+            'name' => 'e_name',
             'label' => 'Nombre',
             'placeholder' => 'Ingrese nombre',
             'type' => 'input',
             'required' => 'true',
         ],
         [
-            'name' => 'email',
+            'name' => 'e_email',
             'label' => 'Correo electrónico',
             'placeholder' => 'Ingrese correo',
             'type' => 'input',
             'type_input' => 'email',
+            'required' => 'true',
+        ],
+        [
+            'name' => 'e_selectEmpleado',
+            'label' => 'Empleado',
+            'placeholder' => 'Seleccionar el empleado',
+            'type' => 'select2_with_search',
+        ],
+        [
+            'name' => 'e_password',
+            'label' => 'Contraseña',
+            'placeholder' => 'Ingrese contraseña',
+            'type' => 'input',
+            'type_input' => 'password',
+            'required' => 'true',
+        ],
+        [
+            'name' => 'e_confirm-password',
+            'label' => 'Confirmar contraseña',
+            'placeholder' => 'Ingrese contraseña',
+            'type' => 'input',
+            'type_input' => 'password',
             'required' => 'true',
         ],
         [
@@ -87,81 +140,78 @@
             'placeholder' => 'Seleccionar el tipo de usuario',
             'type' => 'select2_with_search',
         ],
-        [
-            'name' => 'e_selectEmpleado',
-            'label' => 'Categoria',
-            'placeholder' => 'Seleccionar el empleado',
-            'type' => 'select2_with_search',
-        ],
         ['name' => 'e_id', 'type' => 'hidden'],
-    ]" title='Editar Usuario' size='md' modalId='editUserModal' />
+    ]" title='Editar Usuario' size='md' modalId='editUserModal'
+        route_id="editForm" />
 
 
-    {{-- <x-deletemodal title='Eliminar Usuario' size='md' modalId='deleteUserModal' :route="route('usuarios.destroy', ['id' => $usuarioId])"
-    quetion='¿Está seguro que desea eliminar el usuario?' :field="['name' => 'd_id']" /> --}}
+    <x-deletemodal title='Eliminar Usuario' size='md' modalId='deleteUserModal' :route="route('users.destroy', ['id' => $usuarioId])"
+        quetion='¿Está seguro que desea eliminar el usuario?' :field="['name' => 'd_id']" route_id="deleteForm" />
 
 @endsection
 
 @section('js')
     <script>
-        var usersDataRoute = '{{ route('register.data') }}';
+        var usersDataRoute = '{{ route('users.data') }}';
         var employeesDataRoute = '{{ route('employees.search') }}';
         var rolesDataRoute = '{{ route('roles.search') }}';
         var csrfToken = '{{ csrf_token() }}';
     </script>
     <script>
-        document.getElementById("registerUserForm").addEventListener("submit", function(event) {
-            event.preventDefault(); // Detiene el envío del formulario predeterminado
-            registerUser(); // Llama a la función para procesar los datos y enviar la petición AJAX
-        });
+        var openModals = [{
+            'name': 'registerUser',
+            'onClick': () => {
+                $('#registerUserModal').modal('show');
+            },
+        }, {
+            'name': 'editUser',
+            'onClick': (button) => {
+                var user = JSON.parse(button.getAttribute('data-user'));
+                // Analizar la cadena JSON en un objeto
+                //console.log(User);
 
-        function registerUser() {
-            // Obtener los datos del formulario
-            var formData = $('#registerUserModal form').serialize();
-            // Realizar la petición AJAX para el registro de la categoría
-            $.ajax({
-                url: '{{ route('register') }}',
-                type: 'POST',
-                dataType: 'json',
-                data: formData,
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                success: function(response) {
-                    // Mostrar mensaje de éxito o realizar acciones adicionales si es necesario
-                    console.log('Usuario registrada con éxito.');
-                    // Cerrar el modal después de la operación exitosa
-                    $('#registerUserModal').modal('hide');
-                },
-                error: function(xhr, textStatus, error) {
-                    // Mostrar mensaje de error o realizar acciones adicionales si es necesario
-                    console.log('Error al registrar el usuario: ' + error);
-                }
+                var selectValue = user['empleado_id'];
+                var selectText = user['Empleado'];
+                var optionEmployee = new Option(selectText, selectValue, true, true); // Crear una opción
+
+                // Obtener el ID y nombre del rol
+                var roleId = user['Tipo de usuario_id'];
+                var roleName = user['Tipo de usuario'];
+                var optionRole = new Option(roleName, roleId, true,
+                true); // Crear una opción para el rol seleccionado
+
+                $('#editUserModal input[name="e_id"]').val(user.id);
+                $('#editUserModal input[name="e_name"]').val(user['Nombre']);
+                $('#editUserModal input[name="e_email"]').val(user['Correo']);
+                $('#editUserModal select[name="e_selectEmpleado"]').empty().append(optionEmployee);
+                $('#editUserModal input[name="e_password"]').val('');
+                $('#editUserModal input[name="confirm-password"]').val('');
+                $('#editUserModal select[name="e_selectRoles"]').empty().append(optionRole);
+
+                var route = '{{ route('users.update', ['id' => ':id']) }}'
+                    .replace(':id', user.id);
+                $('#editForm').attr('action', route);
+
+                $('#editUserModal').modal('show');
+
+            },
+        }, {
+            'name': 'deleteUser',
+            'onClick': (id) => {
+
+                var formId = 'deleteForm';
+                var route = '{{ route('users.destroy', ['id' => ':id']) }}'
+                    .replace(':id', id);
+                $('#' + formId).attr('action', route);
+
+                $('#deleteUserModal').modal('show');
+            },
+        }, ];
+
+        function searchOption(modalName) {
+            return openModals.find(function(modal) {
+                return modal.name === modalName;
             });
-        }
-
-        function openRegisterUser() {
-            // Lógica para registrar una Usero
-            $('#registerUserModal').modal('show');
-        }
-
-        function openEditUser(button) {
-            var User = JSON.parse(button.getAttribute('data-user')); // Analizar la cadena JSON en un objeto
-
-            // Asignar los valores a los campos del modal
-            // $('#editUserModal input[name="e_id"]').val(User.id);
-            // $('#editUserModal input[name="e_User"]').val(User.name);
-            // $('#editUserModal input[name="e_state"][value="vigente"]').prop('checked', User.state === 'vigente');
-            // $('#editUserModal input[name="e_state"][value="descontinuado"]').prop('checked', User.state ===
-            // 'descontinuado');
-
-            $('#editUserModal').modal('show'); // Invocar al modal de edición
-        }
-
-        function openDeleteUser(id) {
-            // Lógica para mostrar el mensaje de confirmación de eliminación
-            // y abrir el modal de eliminacións
-            $('#deleteUserModal').modal('show');
         }
 
         $(function() {
@@ -180,8 +230,18 @@
                         name: 'Correo'
                     },
                     {
+                        data: 'empleado_id',
+                        name: 'empleado_id',
+                        visible: false,
+                    },
+                    {
                         data: 'Empleado',
                         name: 'Empleado',
+                    },
+                    {
+                        data: 'Tipo de usuario_id',
+                        name: 'Tipo de usuario_id',
+                        visible: false,
                     },
                     {
                         data: 'Tipo de usuario',
@@ -199,7 +259,7 @@
                     },
                     {
                         data: 'id',
-                        name: ' ',
+                        name: 'Opciones',
                         orderable: false,
                         searchable: false,
                         render: function(data, type, row) {
@@ -252,9 +312,9 @@
                         className: 'btn btn-sm btn-default',
                     },
                     {
-                        text: '<i class="fa fa-plus"></i> Registrar Usero',
+                        text: '<i class="fa fa-plus"></i> Registrar Usuario',
                         className: 'btn btn-sm btn-primary bg-danger mx-1',
-                        action: () => openRegisterUser(),
+                        action: () => searchOption('registerUser').onClick(),
                     },
                 ],
                 responsive: true,
@@ -295,13 +355,13 @@
 
             function generateButtons(row) {
                 var btnEdit =
-                    '<button class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit" onclick="openRditUser(this)" data-user=\'' +
-                    JSON.stringify(row) +
+                    '<button class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit" onclick="searchOption(\'' +
+                    'editUser' + '\').onClick(this)" data-user=\'' + JSON.stringify(row) +
                     '\'><i class="fa fa-lg fa-fw fa-pen"></i></button> ';
                 var btnDelete =
-                    '<button class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete" onclick="openDeleteUser(' +
-                    row.id +
-                    ')"><i class="fa fa-lg fa-fw fa-trash"></i></button> ';
+                    '<button class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete" onclick="searchOption(\'' +
+                    'deleteUser' + '\').onClick(' +
+                    row.id + ')"><i class="fa fa-lg fa-fw fa-trash"></i></button> ';
 
                 return '<nobr>' + btnEdit + btnDelete + '</nobr>';
             }

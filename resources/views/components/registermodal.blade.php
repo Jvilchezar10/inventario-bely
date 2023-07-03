@@ -91,9 +91,9 @@
             @else
             @endif
         @endforeach
-        <x-slot name="footerSlot">
+        <div class="modal-footer">
             <x-adminlte-button class="mr-auto" theme="danger" label="Registrar" type="submit" />
             <x-adminlte-button theme="secondary" label="Cerrar" data-dismiss="modal" />
-        </x-slot>
+        </div>
     </form>
 </x-adminlte-modal>

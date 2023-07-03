@@ -10,6 +10,8 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\Employee;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class User extends Authenticatable
 {
@@ -62,7 +64,7 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function employee()
+    public function employee():BelongsTo
     {
         return $this->belongsTo(Employee::class);
     }

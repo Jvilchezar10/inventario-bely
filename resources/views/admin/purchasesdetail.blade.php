@@ -12,8 +12,18 @@
         </div>
     @endif
 
+    @php
+        $columnsProducts = ['purchas_id', 'productos', 'cantidad', 'precio', 'subtotal'];
+        $dataProducts = [];
+    @endphp
+
     <x-adminlte-card title="Lista de compras" theme="pink" icon="fas fa-tshirt" class="elevation-3" maximizable>
         <x-datatable :columns=$columns :data=$data id="PurchasDetailTable" />
+    </x-adminlte-card>
+    <x-adminlte-card title="Lista de compras" theme="pink" icon="fas fa-tshirt" class="elevation-3" maximizable>
+        <div class="card-body">
+            <x-datatable :columns="$columnsProducts" :data="$dataProducts" id="productsTable" />
+        </div>
     </x-adminlte-card>
 
 @endsection
@@ -72,7 +82,7 @@
                         data: 'precio',
                         name: 'precio',
                     },
-                      {
+                    {
                         data: 'subtotal',
                         name: 'subtotal',
                     },
