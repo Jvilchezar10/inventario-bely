@@ -35,8 +35,8 @@ class EmployeesImport
                 $state = trim($row->getCellAtIndex(5)->getValue());
 
                 $estadoOptions = [
-                    ['value' => 'vigente', 'label' => 'Vigente'],
-                    ['value' => 'retirado', 'label' => 'Retirado']
+                    ['value' => 'vigente'],
+                    ['value' => 'retirado']
                 ];
 
                 $estadoValue = null;

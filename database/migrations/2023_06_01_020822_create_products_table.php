@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('cod_product');
             $table->unsignedBigInteger('category_id');
             $table->text('desc');
+            $table->text('color');
             $table->string('size');
             $table->integer('stock_min');
             $table->integer('stock');

@@ -23,6 +23,7 @@
             'label' => 'Cod Producto',
             'placeholder' => '@PRO0001',
             'type' => 'input',
+            'isAutofocus' => true,
         ],
         [
             'name' => 'selectCategoria',
@@ -35,6 +36,12 @@
             'label' => 'Descripción',
             'placeholder' => 'Ingrese la descripción del producto',
             'type' => 'long_text',
+        ],
+        [
+            'name' => 'i_color',
+            'label' => 'Color',
+            'placeholder' => 'Ingrese el color del producto',
+            'type' => 'input',
         ],
         [
             'name' => 'i_talla',
@@ -82,6 +89,12 @@
             'label' => 'Categoria',
             'placeholder' => 'Seleccionar la categoria',
             'type' => 'select2_with_search',
+        ],
+        [
+            'name' => 'e_descripcion',
+            'label' => 'Descripción',
+            'placeholder' => 'Ingrese la descripción del producto',
+            'type' => 'long_text',
         ],
         [
             'name' => 'e_descripcion',
@@ -311,6 +324,7 @@
             $('#editProductModal input[name="e_cod_producto"]').val(product['cod producto']);
             $('#editProductModal select[name="e_selectCategoria"]').empty().append(optionCategoria);
             $('#editProductModal textarea[name="e_descripcion"]').text(product['descripción']);
+            $('#editProductModal input[name="e_color"]').val(product.color);
             $('#editProductModal input[name="e_talla"]').val(product.talla);
             $('#editProductModal input[name="e_stock_min"]').val(product['stock min']);
             $('#editProductModal input[name="e_stock"]').val(product['stock']);
@@ -352,6 +366,10 @@
                     {
                         data: 'descripción',
                         name: 'descripción'
+                    },
+                    {
+                        data: 'color',
+                        name: 'color'
                     },
                     {
                         data: 'talla',

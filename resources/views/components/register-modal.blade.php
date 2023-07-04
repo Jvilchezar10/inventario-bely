@@ -11,6 +11,11 @@
         @csrf
         @foreach ($fields as $field)
             {{--  --}}
+            @php
+                if (!isset($field['isAutofocus'])) {
+                    $field['isAutofocus'] = false;
+                }
+            @endphp
             @if ($field['type'] === 'select')
                 {{-- Need  name, placeholder, options, --}}
                 <x-adminlte-select2 name="{{ $field['name'] }}" igroup-size="lg" label-class="{{ $label_class }}"
@@ -56,11 +61,13 @@
                 @if (isset($field['required']))
                     <x-adminlte-input name="{{ $field['name'] }}" label="{{ $field['label'] }}"
                         placeholder="{{ $field['placeholder'] }}" label-class="{{ $label_class }}" disable-feedback
-                        autofocus autocomplete="{{ $field['name'] }}" type="{{ $field['type_input'] }}" required/>
+                        autofocus="{{ $field['isAutofocus'] }}" autocomplete="{{ $field['name'] }}"
+                        type="{{ $field['type_input'] }}" required />
                 @else
                     <x-adminlte-input name="{{ $field['name'] }}" label="{{ $field['label'] }}"
                         placeholder="{{ $field['placeholder'] }}" label-class="{{ $label_class }}" disable-feedback
-                        autofocus autocomplete="{{ $field['name'] }}" type="{{ $field['type_input'] }}" />
+                        autofocus="{{ $field['isAutofocus'] }}" autocomplete="{{ $field['name'] }}"
+                        type="{{ $field['type_input'] }}" />
                 @endif
             @elseif ($field['type'] === 'datetime')
                 {{-- Need  name, config, placeholder, label, --}}
@@ -79,7 +86,8 @@
             @elseif ($field['type'] === 'number')
                 <x-adminlte-input name="{{ $field['name'] }}" label="{{ $field['label'] }}"
                     placeholder="{{ $field['placeholder'] }}" type="number" igroup-size="sm" min=0 max=500
-                    step="0.01" label-class="{{ $label_class }}" autofocus autocomplete="{{ $field['name'] }}">
+                    step="0.01" label-class="{{ $label_class }}" autofocus="{{ $field['isAutofocus'] }}"
+                    autocomplete="{{ $field['name'] }}">
                     <x-slot name="appendSlot">
                         <div class="input-group-text bg-pink">
                             <i class="fas fa-hashtag"></i>
@@ -90,7 +98,7 @@
                 {{-- With prepend slot, sm size and label --}}
                 <x-adminlte-textarea name="{{ $field['name'] }}" label="{{ $field['label'] }}" rows=4
                     label-class="{{ $label_class }}" igroup-size="sm" placeholder="{{ $field['placeholder'] }}"
-                    autofocus autocomplete="{{ $field['name'] }}">
+                    autofocus="{{ $field['isAutofocus'] }}" autocomplete="{{ $field['name'] }}">
                     <x-slot name="prependSlot">
                         <div class="input-group-text bg-pink">
                             <i class="fas fa-lg fa-file-alt"></i>

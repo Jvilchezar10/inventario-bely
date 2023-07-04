@@ -206,7 +206,7 @@
                         icon: 'fas fa-check-circle',
                         close: false,
                         autohide: true,
-                        delay: 5000
+                        delay: 5000,
                     });
                     //
                     $('#deleteCategoryModal').modal('hide');
@@ -221,7 +221,7 @@
 
                         showCustomToast({
                             title: 'Elimación denegada',
-                            body: 'No puedes eliminar una categoría que esta siendo usada.',
+                            body: 'No puedes eliminar una categoría que esta siendo usada.' + error,
                             class: 'bg-danger',
                             icon: 'fas fa-exclamation-triangle',
                             close: false,

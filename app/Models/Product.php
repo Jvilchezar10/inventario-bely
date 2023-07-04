@@ -18,6 +18,7 @@ class Product extends Model
         'cod_product',
         'category_id',
         'desc',
+        'color',
         'size',
         'stock_min',
         'stock',

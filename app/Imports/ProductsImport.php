@@ -34,19 +34,27 @@ class ProductsImport
                 $cod_product = $cells[0]->getValue();
                 $category = $cells[1]->getValue();
                 $desc = $cells[2]->getValue();
-                $size = $cells[3]->getValue();
-                $stock_min = $cells[4]->getValue();
-                $stock = $cells[5]->getValue();
-                $purchase_price = $cells[6]->getValue();
-                $sale_price = $cells[7]->getValue();
+                $color = $cells[3]->getValue();
+                $size = $cells[4]->getValue();
+                $stock_min = $cells[5]->getValue();
+                $stock = $cells[6]->getValue();
+                $purchase_price = $cells[7]->getValue();
+                $sale_price = $cells[8]->getValue();
 
                 try {
-                    $category_id = Category::where('name', $category)->get('id');
+                    $category = Category::where('name', $category)->first();
+
+                    if (!$category) {
+                        $errorMessage = "Categoría no encontrada: " . $category;
+                        // Realiza alguna acción adicional aquí, como registrar el error en un archivo de registro
+                        return $errorMessage;
+                    }
 
                     $product = new Product([
                         'cod_product' => $cod_product,
-                        'category_id' => $category_id[0]->id,
+                        'category_id' => $category->id,
                         'desc' => $desc,
+                        'color' => $color,
                         'size' => $size,
                         'stock_min' => $stock_min,
                         'stock' => $stock,

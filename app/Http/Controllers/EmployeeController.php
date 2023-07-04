@@ -150,7 +150,6 @@ class EmployeeController extends Controller
 
         if ($imported[1]) {
             // Redireccionar o mostrar un mensaje de éxito
-            dd('$imported = true');
             return redirect()->back()->with('success', json_decode($imported[0]));
         } else {
             //dd($imported[0]);
