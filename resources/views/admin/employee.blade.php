@@ -3,9 +3,6 @@
 @section('content_header')
     <h1 class="m-0 text-dark">Empleados</h1>
 @stop
-{{-- @section('css')
-    <link rel="stylesheet" href="{{ asset('css/category.css') }}">
-@stop --}}
 
 @section('content')
     <div id="error-message" class="alert alert-danger" style="display: none;"></div>
@@ -183,7 +180,6 @@
                     'X-CSRF-TOKEN': csrfToken
                 },
                 success: function(response) {
-                    generateCode()
                     // Mostrar mensaje de éxito o realizar acciones adicionales si es necesario
                     console.log('Empleado actualizado con éxito.');
                     // Cerrar el modal después de la operación exitosa
@@ -255,7 +251,7 @@
         function openEditModal(button) {
             var employee = JSON.parse(button.getAttribute('data-employee')); // Analizar la cadena JSON en un objeto
 
-            employeeId = employee.id;
+            $('#editEmployeeModal input[name="e_id"]').val(employee.id);
             $('#editEmployeeModal input[name="e_cod_emp"]').val(employee['cod emp']);
             $('#editEmployeeModal input[name="e_name"]').val(employee.nombre);
             $('#editEmployeeModal input[name="e_last_name"]').val(employee.apellido);

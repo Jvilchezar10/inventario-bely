@@ -208,7 +208,7 @@
 
             // Realizar la petición AJAX para la actualización de la Productos
             $.ajax({
-                //     url: '{{ route('categories.update', ['id' => ':id']) }}'.replace(':id', id),
+                //
                 url: '{{ route('products.update', ['id' => ':id']) }}'.replace(':id', id),
                 type: 'POST',
                 dataType: 'json',
