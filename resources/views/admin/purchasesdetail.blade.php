@@ -18,11 +18,11 @@
     @endphp
 
     <x-adminlte-card title="Lista de compras" theme="pink" icon="fas fa-tshirt" class="elevation-3" maximizable>
-        <x-datatable :columns=$columns :data=$data id="PurchasDetailTable" />
+        <x-datatable :columns=$columns :data=$data id="PurchasTable" />
     </x-adminlte-card>
-    <x-adminlte-card title="Lista de compras" theme="pink" icon="fas fa-tshirt" class="elevation-3" maximizable>
+    <x-adminlte-card title="Detalle de compra" theme="pink" icon="fas fa-tshirt" class="elevation-3" maximizable>
         <div class="card-body">
-            <x-datatable :columns="$columnsProducts" :data="$dataProducts" id="productsTable" />
+            <x-datatable :columns="$columnsProducts" :data="$dataProducts" id="PurchasDetailTable" />
         </div>
     </x-adminlte-card>
 
@@ -35,17 +35,17 @@
 
         $(function() {
 
-            var table = $('#PurchasDetailTable').DataTable({
+            var table = $('#PurchasTable').DataTable({
                 columns: [{
                         data: 'id',
                         name: 'id',
                         visible: false,
                     },
-                    {
-                        data: 'purchas_id',
-                        name: 'purchas_id',
-                        visible: false,
-                    },
+                    // {
+                    //     data: 'purchas_id',
+                    //     name: 'purchas_id',
+                    //     visible: false,
+                    // },
                     {
                         data: 'comprobante',
                         name: 'comprobante',
@@ -70,22 +70,22 @@
                         data: 'proveedor',
                         name: 'proveedor',
                     },
-                    {
-                        data: 'productos',
-                        name: 'productos',
-                    },
-                    {
-                        data: 'cantidad',
-                        name: 'cantidad',
-                    },
-                    {
-                        data: 'precio',
-                        name: 'precio',
-                    },
-                    {
-                        data: 'subtotal',
-                        name: 'subtotal',
-                    },
+                    // {
+                    //     data: 'productos',
+                    //     name: 'productos',
+                    // },
+                    // {
+                    //     data: 'cantidad',
+                    //     name: 'cantidad',
+                    // },
+                    // {
+                    //     data: 'precio',
+                    //     name: 'precio',
+                    // },
+                    // {
+                    //     data: 'subtotal',
+                    //     name: 'subtotal',
+                    // },
                     {
                         data: 'total',
                         name: 'total',

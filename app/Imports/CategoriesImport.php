@@ -8,6 +8,78 @@ use Exception;
 
 class CategoriesImport
 {
+    // public function import($filePath)
+    // {
+    //     $reader = ReaderEntityFactory::createXLSXReader();
+
+    //     // Abrir el archivo Excel
+    //     $reader->open($filePath);
+
+    //     $rowIndex = 0; // Variable para el índice de la fila
+    //     $errorMessages = [];
+
+    //     try {
+    //         foreach ($reader->getSheetIterator() as $sheet) {
+    //             foreach ($sheet->getRowIterator() as $row) {
+    //                 $rowIndex++;
+
+    //                 $cells = $row->getCells();
+
+    //                 // Ignorar la primera fila si contiene encabezados
+    //                 if ($rowIndex === 1) {
+    //                     continue;
+    //                 }
+
+    //                 try {
+    //                     // Obtener los valores de las celdas
+    //                     $id = $cells[0]->getValue();
+    //                     $name = $cells[1]->getValue();
+    //                     $state = trim($row->getCellAtIndex(2)->getValue());
+
+    //                     // Agregar tus validaciones aquí
+    //                     if (empty($id) || empty($name) || empty($state)) {
+    //                         throw new Exception("Registro incompleto en la fila $rowIndex");
+    //                     }
+
+    //                     $estadoOptions = [
+    //                         ['value' => 'vigente'],
+    //                         ['value' => 'descontinuado']
+    //                     ];
+
+    //                     $estadoValue = null;
+    //                     foreach ($estadoOptions as $option) {
+    //                         if ($option['value'] === $state) {
+    //                             $estadoValue = $option['value'];
+    //                             break;
+    //                         }
+    //                     }
+
+    //                     $category = new Category([
+    //                         'id' => $id,
+    //                         'name' => $name,
+    //                         'state' => $estadoValue,
+    //                     ]);
+    //                     $category->save();
+    //                 } catch (Exception $e) {
+    //                     $errorMessages[] = $e->getMessage();
+    //                 }
+    //             }
+    //         }
+    //     } catch (Exception $e) {
+    //         $reader->close(); // Cerrar el lector de Excel en caso de error
+    //         throw $e; // Relanzar la excepción original
+    //     }
+
+    //     // Cerrar el lector de Excel
+    //     $reader->close();
+
+    //     // if (!empty($errorMessages)) {
+    //     //     $errorMessage = implode("\n", $errorMessages);
+    //     //     throw new Exception("Se encontraron errores al importar los registros:\n$errorMessage");
+    //     // }
+
+    //     return true;
+    // }
     public function import($filePath)
     {
         $reader = ReaderEntityFactory::createXLSXReader();
@@ -41,6 +113,11 @@ class CategoriesImport
                             throw new Exception("Registro incompleto en la fila $rowIndex");
                         }
 
+                        $existingCategory = Category::where('id', $id)->first();
+                        if ($existingCategory) {
+                            continue; // Saltar los datos existentes
+                        }
+
                         $estadoOptions = [
                             ['value' => 'vigente'],
                             ['value' => 'descontinuado']
@@ -61,7 +138,7 @@ class CategoriesImport
                         ]);
                         $category->save();
                     } catch (Exception $e) {
-                        $errorMessages[] = $e->getMessage();
+                        $errorMessages[] = "Error en la fila $rowIndex: " . $e->getMessage();
                     }
                 }
             }
@@ -74,8 +151,8 @@ class CategoriesImport
         $reader->close();
 
         if (!empty($errorMessages)) {
-            $errorMessage = implode("\n", $errorMessages);
-            //throw new Exception("Se encontraron errores al importar los registros:\n$errorMessage");
+            // Mostrar los mensajes de error en la vista
+            return redirect()->back()->with('errors', $errorMessages);
         }
 
         return true;

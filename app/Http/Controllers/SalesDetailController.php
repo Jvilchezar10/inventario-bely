@@ -21,7 +21,7 @@ class SalesDetailController extends Controller
             'actions'
         ];
         $data = [];
-        return view('admin.saledetail', compact('saledetailId', 'columns', 'data'));
+        return view('admin.salesdetail', compact('saledetailId', 'columns', 'data'));
     }
 
     public function getData(Request $request)

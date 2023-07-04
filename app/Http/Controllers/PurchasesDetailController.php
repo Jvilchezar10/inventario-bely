@@ -33,32 +33,11 @@ class PurchasesDetailController extends Controller
             'actions' //DETAIL
         ];
         $data = [];
-        $purchases = Purchas::all();
-        //$purchasesdetail = PurchasesDetail::all();
+        // $purchases = Purchas::all();
         $purchasesdetail = PurchasesDetail::with('purchas')->get();
-        //dd($purchases[3]->purchasesDetails[0]);
-        //dd($purchases[3]->purchasesDetails[0]);
-        //dd($purchases[3]);
-        //dd($purchasesdetail->purchase_id);
         foreach ($purchasesdetail as $detail) {
-            //dd($detail->purchase_id);
         }
 
         return view('admin.purchasesdetail', compact('purchasesdetailId', 'columns', 'data'));
     }
-
-    // public function getData(Request $request)
-    // {
-    //     try {
-    //         if ($request->ajax()) {
-    //             $purchasesdetail = PurchasesDetail::all();
-    //             $data = $this->transformPurchasesDetail($purchasesdetail);
-    //             return response()->json(['data' => $data], Response::HTTP_OK);
-    //         } else {
-    //             throw new \Exception('Invalid request.');
-    //         }
-    //     } catch (\Exception $e) {
-    //         return response()->json(['message' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
-    //     }
-    // }
 }

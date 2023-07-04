@@ -386,7 +386,7 @@ return [
                 ],
                 [
                     'text'        => 'Lista de Ventas',
-                    'url'         => 'i#',
+                    'url'         => 'inventario/detalle-de-ventas',
                     'icon'        => 'far fa-clipboard',
                     // 'label'       => 4,
                     // 'label_color' => 'success',
