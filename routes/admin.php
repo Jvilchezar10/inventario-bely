@@ -89,7 +89,7 @@ Route::middleware([
      */
 
     Route::get('/detalle-de-compras', [PurchasesDetailController::class, 'index'])->name('purchasesdetail');
-
+    Route::post('/detalle-de-compras/data/', [PurchasesDetailController::class, 'getData'])->name('purchasesdetail.data');
     /**
      * El código define las rutas para un controlador de sales en una aplicación Laravel
      */

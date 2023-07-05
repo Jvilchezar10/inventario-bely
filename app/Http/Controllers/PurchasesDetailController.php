@@ -15,7 +15,6 @@ class PurchasesDetailController extends Controller
         $purchasesdetailId = 0;
         $columns = [
             'id',
-            // 'purchas_id', //DETAIL
             'comprobante',
             'n° de comprobante',
             'empleado',
@@ -23,13 +22,9 @@ class PurchasesDetailController extends Controller
             'fecha de compra',
             'proveedor',
             'origen',
-            // 'productos', //DETAIL
-            // 'cantidad', //DETAIL
-            // 'precio', //DETAIL
-            // 'subtotal', //DETAIL
             'total',
-            // 'creado en', //DETAIL
-            // 'actualizado en',  //DETAIL
+            'creado en', //DETAIL
+            'actualizado en',  //DETAIL
             'actions' //DETAIL
         ];
         $data = [];
@@ -39,5 +34,36 @@ class PurchasesDetailController extends Controller
         }
 
         return view('admin.purchasesdetail', compact('purchasesdetailId', 'columns', 'data'));
+    }
+
+    public function getData(Request $request)
+    {
+        try {
+            if ($request->ajax()) {
+                $purchasesdetails = PurchasesDetail::all();
+                $data = $this->transformPurchas($purchasesdetails);
+                return response()->json(['data' => $data], Response::HTTP_OK);
+            } else {
+                throw new \Exception('Invalid request.');
+            }
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+
+    private function transformPurchas($purchasesdetails)
+    {
+        return $purchasesdetails->map(function ($purchasesdetail) {
+            return [
+                'id' => optional($purchasesdetail)->id,
+                'productos' => optional($purchasesdetail->product)->desc, //DETAIL
+                'cantidad' => optional($purchasesdetail)->quantity, //DETAIL
+                'precio' => optional($purchasesdetail->product)->purchasesdetaile_price, //DETAIL
+                'subtotal' => optional($purchasesdetail)->subtotal, //DETAIL
+                'creado en' => optional($purchasesdetail->created_at)->toDateTimeString(),
+                'actualizado en' => optional($purchasesdetail->updated_at)->toDateTimeString(),
+            ];
+        });
     }
 }

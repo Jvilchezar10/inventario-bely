@@ -33,22 +33,18 @@ class PurchasController extends Controller
         }
     }
 
+
     private function transformPurchas($purchases)
     {
         return $purchases->map(function ($purchas) {
             return [
-                'id' => optional($purchas->purchasesDetails[0])->id,
-                'purchas_id' => $purchas->id,
+                'id' => $purchas->id,
                 'comprobante' => optional($purchas->proofofpayment)->name,
                 'n° de comprobante' => $purchas->voucher_number,
                 'empleado' => optional($purchas->employee)->name . " " . optional( $purchas->employee)->last_name,
                 'cod compra' => $purchas->purchase_code,
                 'fecha de compra' => $purchas->purchase_date,
                 'proveedor' => optional($purchas->provider)->provider,
-                'productos' => optional($purchas->purchasesDetails[0]->product)->desc, //DETAIL
-                'cantidad' => optional($purchas->purchasesDetails[0])->quantity, //DETAIL
-                'precio' => optional($purchas->purchasesDetails[0]->product)->purchase_price, //DETAIL
-                'subtotal' => optional($purchas->purchasesDetails[0])->subtotal, //DETAIL
                 'total' => $purchas->total,
                 'creado en' => optional($purchas->created_at)->toDateTimeString(),
                 'actualizado en' => optional($purchas->updated_at)->toDateTimeString(),
