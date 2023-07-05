@@ -2,22 +2,20 @@
 
 namespace Database\Factories;
 
+use App\Models\Client;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Client>
- */
 class ClientFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition(): array
+    protected $model = Client::class;
+
+    public function definition()
     {
         return [
-            //
+            'full_name' => $this->faker->name,
+            'DNI' => $this->faker->randomNumber(8),
+            'phone' => $this->faker->numerify('9########'),
         ];
     }
 }
+

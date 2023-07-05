@@ -2,33 +2,41 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Product;
 use App\Models\Category;
-// use App\Models\Product;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
- */
 class ProductFactory extends Factory
 {
     /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Product::class;
+
+    /**
      * Define the model's default state.
      *
-     * @return array<string, mixed>
+     * @return array
      */
-    public function definition(): array
+    public function definition()
     {
-        $categories = Category::all()->pluck('id');
-
         return [
-            'category_id' => $this->faker->randomElement($categories),
-            'cod_product' => $this->faker->unique()->ean13,
-            'desc' => $this->faker->sentence,
+            'cod_product' => $this->faker->unique()->numerify('PRO####'),
+            'category_id' => function () {
+                return Category::factory()->create()->id;
+            },
+            'desc' => $this->faker->text,
+            'color' => $this->faker->colorName,
             'size' => $this->faker->randomElement(['S', 'M', 'L', 'XL']),
-            'stock_min' => $this->faker->numberBetween(1, 10),
-            'stock' => $this->faker->numberBetween(10, 100),
-            'purchase_price' => $this->faker->randomFloat(2, 10, 50),
-            'precio_venta' => $this->faker->randomFloat(2, 100, 500),
+            'stock_min' => $this->faker->numberBetween(1, 50),
+            'stock' => $this->faker->numberBetween(0, 100),
+            'purchase_price' => $this->faker->randomFloat(2, 1, 1000),
+            'sale_price' => $this->faker->randomFloat(2, 10, 2000),
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }
+
