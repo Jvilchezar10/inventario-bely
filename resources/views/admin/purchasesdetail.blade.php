@@ -213,7 +213,7 @@
         });
     </script>
     <script>
-        var purchasesdetail_DataRoute = '{{ route('purchasesdetail.data') }}';
+        var purchasesdetail_DataRoute = '{{ route('purchasesdetails.data') }}';
 
         $(function() {
             var table = $('#PurchasDetailTable').DataTable({

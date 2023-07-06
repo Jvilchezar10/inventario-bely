@@ -13,7 +13,6 @@ use App\Http\Controllers\ProofOfPaymentController;
 use App\Http\Controllers\SalesDetailController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ClientController;
-use App\Models\User;
 
 Route::middleware([
     'auth:sanctum',
@@ -88,8 +87,9 @@ Route::middleware([
      * El código define las rutas para un controlador de purchases en una aplicación Laravel
      */
 
-    Route::get('/detalle-de-compras', [PurchasesDetailController::class, 'index'])->name('purchasesdetail');
-    Route::post('/detalle-de-compras/data/', [PurchasesDetailController::class, 'getData'])->name('purchasesdetail.data');
+    Route::get('/detalle-de-compras', [PurchasesDetailController::class, 'index'])->name('purchasesdetails');
+    Route::post('/detalle-de-compras/data',[PurchasesDetailController::class, 'getData'])->name('purchasesdetails.data');
+
     /**
      * El código define las rutas para un controlador de sales en una aplicación Laravel
      */
@@ -104,6 +104,7 @@ Route::middleware([
      */
 
     Route::get('/detalle-de-ventas', [SalesDetailController::class, 'index'])->name('salesdetail');
+
 
     /**
      * El código define las rutas para un controlador de proofofpayment en una aplicación Laravel
