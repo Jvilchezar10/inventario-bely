@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('proof_of_payments_id');
+            $table->unsignedBigInteger('proof_of_payment_id');
             $table->string('voucher_number');
             $table->unsignedBigInteger('employee_id');
             $table->string('purchase_code');
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('origin');
             $table->timestamps();
 
-            $table->foreign('proof_of_payments_id')->references('id')->on('proof_of_payments')->onDelete('cascade');
+            $table->foreign('proof_of_payment_id')->references('id')->on('proof_of_payments')->onDelete('cascade');
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
             $table->foreign('provider_id')->references('id')->on('providers')->onDelete('cascade');
         });

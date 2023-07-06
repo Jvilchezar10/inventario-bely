@@ -13,18 +13,18 @@
     @endif
 
     @php
-        $columnsProducts = ['purchas_id', 'productos', 'cantidad', 'precio', 'subtotal'];
+        $columnsProducts = ['id', 'productos', 'cantidad', 'precio', 'subtotal', 'creado en', 'actualizado en', 'opciones'];
         $dataProducts = [];
     @endphp
 
-    <x-adminlte-card title="Lista de compras" theme="pink" icon="fas fa-tshirt" class="elevation-3" maximizable>
-        <x-datatable :columns=$columns :data=$data id="PurchasTable" />
-    </x-adminlte-card>
-
-    <x-adminlte-card title="Detalle de compra" theme="pink" icon="fas fa-tshirt" class="elevation-3" maximizable>
+    <x-adminlte-card id="detalleCompra" title="Detalle de compra" theme="pink" icon="fas fa-tshirt" class="elevation-3" maximizable>
         <div class="card-body">
             <x-datatable :columns="$columnsProducts" :data="$dataProducts" id="PurchasDetailTable" />
         </div>
+    </x-adminlte-card>
+
+    <x-adminlte-card title="Lista de compras" theme="pink" icon="fas fa-tshirt" class="elevation-3" maximizable>
+        <x-datatable :columns=$columns :data=$data id="PurchasTable" />
     </x-adminlte-card>
 
 @endsection
@@ -35,8 +35,8 @@
         var csrfToken = '{{ csrf_token() }}';
 
         $(function() {
-
             var table = $('#PurchasTable').DataTable({
+
                 columns: [{
                         data: 'id',
                         name: 'id',
@@ -67,6 +67,10 @@
                         name: 'proveedor',
                     },
                     {
+                        data: 'origen',
+                        name: 'origen',
+                    },
+                    {
                         data: 'total',
                         name: 'total',
                     },
@@ -90,8 +94,6 @@
                         },
                     },
                 ],
-
-
                 // Configuración adicional del DataTable
                 timeout: 5000, // Tiempo de espera en milisegundos (5 segundos)
                 lengthMenu: [
@@ -136,16 +138,6 @@
                         text: '<i class="fa fa-print"></i>',
                         className: 'btn btn-sm btn-default',
                     },
-                    // {
-                    //     text: '<i class="fa fa-plus"></i> Registrar Producto',
-                    //     className: 'btn btn-sm btn-primary bg-danger mx-1',
-                    //     action: () => openRegisterModal(),
-                    // },
-                    // {
-                    //     text: '<i class="fa fa-plus"></i> Cargar Productos',
-                    //     className: 'btn btn-sm btn-primary bg-danger mx-1',
-                    //     action: () => openRegisterExcelModal(),
-                    // },
                 ],
                 responsive: true,
                 paging: true,
@@ -154,6 +146,12 @@
                 select: {
                     style: 'multi',
                     selector: 'td:first-child'
+                },
+                rowCallback: function(row, data) {
+                    $(row).on('click', function() {
+                        console.log(data.id);
+                        loadPurchaseDetails(data.id);
+                    });
                 },
             });
 
@@ -206,17 +204,12 @@
 
                 return '<nobr>' + btnEdit + btnDelete + '</nobr>';
             }
+            // Obtener el elemento por su id
+            var detalleCompra = document.getElementById('detalleCompra');
+            // Para agregar el atributo hidden
+            detalleCompra.setAttribute('hidden', '');
 
-            refreshPurchsesDataTable();
-
-            setInterval(refreshPurchsesDataTable, 5000);
-        });
-    </script>
-    <script>
-        var purchasesdetail_DataRoute = '{{ route('purchasesdetails.data') }}';
-
-        $(function() {
-            var table = $('#PurchasDetailTable').DataTable({
+            var tableDetails = $('#PurchasDetailTable').DataTable({
                 columns: [{
                         data: 'id',
                         name: 'id',
@@ -235,12 +228,8 @@
                         name: 'precio',
                     },
                     {
-                        data: 'subtotal',
-                        name: 'subtotal',
-                    },
-                    {
-                        data: 'total',
-                        name: 'total',
+                        data: 'sub total',
+                        name: 'sub total',
                     },
                     {
                         data: 'creado en',
@@ -258,7 +247,7 @@
                         orderable: false,
                         searchable: false,
                         render: function(data, type, row) {
-                            return generateButtons(row);
+                            return generateButtonsDetails(row);
                         },
                     },
                 ],
@@ -308,16 +297,6 @@
                         text: '<i class="fa fa-print"></i>',
                         className: 'btn btn-sm btn-default',
                     },
-                    // {
-                    //     text: '<i class="fa fa-plus"></i> Registrar Producto',
-                    //     className: 'btn btn-sm btn-primary bg-danger mx-1',
-                    //     action: () => openRegisterModal(),
-                    // },
-                    // {
-                    //     text: '<i class="fa fa-plus"></i> Cargar Productos',
-                    //     className: 'btn btn-sm btn-primary bg-danger mx-1',
-                    //     action: () => openRegisterExcelModal(),
-                    // },
                 ],
                 responsive: true,
                 paging: true,
@@ -327,15 +306,20 @@
                     style: 'multi',
                     selector: 'td:first-child'
                 },
+
             });
 
-            function initializeDataTable(data) {
-                table.clear().rows.add(data).draw();
+            function initializeDataTableDetails(data) {
+                tableDetails.clear().rows.add(data).draw();
+                // Para quitar el atributo hidden
+                detalleCompra.removeAttribute('hidden');
             }
 
-            function refreshPurchsesDataTable() {
+            function loadPurchaseDetails(purchaseId) {
+                // Realizar solicitud AJAX para obtener los detalles de la compra
                 $.ajax({
-                    url: purchasesdetail_DataRoute,
+                    // Ruta para obtener los detalles de una compra específica
+                    url: '{{ route('purchases_id.data', ['id' => ':id']) }}'.replace(':id', purchaseId),
                     type: 'POST',
                     dataType: 'json',
                     headers: {
@@ -343,15 +327,13 @@
                     },
                     success: function(response) {
                         if (response.data) {
-                            // console.log('Datos encontrados: \n ' + response.data);
-                            initializeDataTable(response.data);
+                            initializeDataTableDetails(response.data);
                         } else {
-                            console.log('No se encontraron datos de Componentes.');
+                            console.log('No se encontraron detalles de compra.');
                         }
                     },
                     error: function(xhr, textStatus, error) {
                         var errorContainer = $('#error-message');
-
                         if (xhr.status === 403) {
                             errorContainer.text('Acceso denegado').show();
                         } else {
@@ -361,12 +343,13 @@
                         setTimeout(function() {
                             errorContainer.hide();
                         }, 3000); // 3000 milisegundos = 5 segundos
-
+                        // Para agregar el atributo hidden
+                        detalleCompra.setAttribute('hidden', '');
                     }
                 });
             }
 
-            function generateButtons(row) {
+            function generateButtonsDetails(row) {
                 var btnEdit =
                     '<button class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit" onclick="openEditModal(this)" data-product=\'' +
                     JSON.stringify(row) +
@@ -378,6 +361,7 @@
 
                 return '<nobr>' + btnEdit + btnDelete + '</nobr>';
             }
+
 
             refreshPurchsesDataTable();
 

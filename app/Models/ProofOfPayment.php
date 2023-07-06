@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProofOfPayment extends Model
 {
     use HasFactory;
+    protected $table = 'proof_of_payments';
     protected $fillable = [
         'name',
         'state',

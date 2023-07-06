@@ -33,21 +33,53 @@ class PurchasController extends Controller
         }
     }
 
-
     private function transformPurchas($purchases)
     {
         return $purchases->map(function ($purchas) {
+
             return [
                 'id' => $purchas->id,
                 'comprobante' => optional($purchas->proofofpayment)->name,
                 'n° de comprobante' => $purchas->voucher_number,
-                'empleado' => optional($purchas->employee)->name . " " . optional( $purchas->employee)->last_name,
+                'empleado' => optional($purchas->employee)->name . " " . optional($purchas->employee)->last_name,
                 'cod compra' => $purchas->purchase_code,
                 'fecha de compra' => $purchas->purchase_date,
                 'proveedor' => optional($purchas->provider)->provider,
+                'origen' => $purchas->origin,
                 'total' => $purchas->total,
                 'creado en' => optional($purchas->created_at)->toDateTimeString(),
                 'actualizado en' => optional($purchas->updated_at)->toDateTimeString(),
+            ];
+        });
+    }
+
+    public function getDataById(Request $request, $id)
+    {
+        try {
+            if ($request->ajax()) {
+                $purchase = Purchas::where('id', $id)->get();
+                $data = $this->transformPurchasById($purchase);
+                return response()->json(['data' => $data, 'data_loaded' => true], Response::HTTP_OK);
+            } else {
+                throw new \Exception('Invalid request.');
+            }
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+
+    private function transformPurchasById($purchase)
+    {
+        return $purchase[0]->purchasesDetails->map(function ($purchasesdetail) {
+            return [
+                'id' => $purchasesdetail->id,
+                'productos' => optional($purchasesdetail->product)->desc, //DETAIL
+                'cantidad' => optional($purchasesdetail)->quantity, //DETAIL
+                'precio' => optional($purchasesdetail->product)->purchase_price, //DETAIL
+                'sub total' => $purchasesdetail->subtotal, //DETAIL
+                'creado en' => optional($purchasesdetail->created_at)->toDateTimeString(),
+                'actualizado en' => optional($purchasesdetail->updated_at)->toDateTimeString(),
             ];
         });
     }
@@ -63,7 +95,7 @@ class PurchasController extends Controller
 
 
         //USAME PARA VER LOS ERRORES
-        //throw new \Exception('Contenido de formData: ' . json_encode($formData));
+        //throw new \Exception('Contenido de formData: ' . json_encode($formData[6]));
 
         $fpurchas = Carbon::createFromFormat('d/m/Y', $formData[5]['value'])->format('Y-m-d');
 
@@ -73,7 +105,7 @@ class PurchasController extends Controller
             'provider_id' => ($formData[3]['value']),
             'purchase_code' => ($formData[4]['value']),
             'purchase_date' => $fpurchas,
-            'proof_of_payments_id' => ($formData[6]['value']),
+            'proof_of_payment_id' => ($formData[6]['value']),
             'voucher_number' => ($formData[7]['value']),
             'total' => $total,
         ]);

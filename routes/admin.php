@@ -79,6 +79,7 @@ Route::middleware([
 
     Route::get('/compras', [PurchasController::class, 'index'])->name('purchases');
     Route::post('/compras/data/', [PurchasController::class, 'getData'])->name('purchases.data');
+    Route::post('/compras/data/{id}', [PurchasController::class, 'getDataById'])->name('purchases_id.data');
     Route::post('/compras', [PurchasController::class, 'store'])->name('purchases.store');
     Route::put('/compras/{id}', [PurchasController::class, 'update'])->name('purchases.update');
     Route::delete('/compras/{id}', [PurchasController::class, 'destroy'])->name('purchases.destroy');
@@ -88,7 +89,6 @@ Route::middleware([
      */
 
     Route::get('/detalle-de-compras', [PurchasesDetailController::class, 'index'])->name('purchasesdetails');
-    Route::post('/detalle-de-compras/data',[PurchasesDetailController::class, 'getData'])->name('purchasesdetails.data');
 
     /**
      * El código define las rutas para un controlador de sales en una aplicación Laravel
@@ -96,6 +96,7 @@ Route::middleware([
 
     Route::get('/ventas', [SaleController::class, 'index'])->name('sales');
     Route::post('/ventas/data', [SaleController::class, 'getData'])->name('sales.data');
+    Route::post('/ventas/data/{id}', [SaleController::class, 'getDataById'])->name('sales_id.data');
     Route::post('/ventas', [SaleController::class, 'store'])->name('sales.store');
     Route::put('/ventas/{id}', [SaleController::class, 'update'])->name('sales.update');
     Route::delete('/ventas/{id}', [SaleController::class, 'destroy'])->name('sales.destroy');

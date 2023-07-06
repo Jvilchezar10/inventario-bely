@@ -1,6 +1,4 @@
-@props(['columns', 'data', 'id'])
-
-<div class="table-responsive">
+<div class="">
     <table id="{{ $id }}" class="table" style="width:100%">
         <thead>
             <tr>

@@ -24,9 +24,9 @@ class Sale extends Model
         'updated_at',
     ];
 
-    public function proofofpayment() : BelongsTo
+    public function proofofpayment(): BelongsTo
     {
-        return $this->belongsTo(ProofOfPayment::class);
+        return $this->belongsTo(ProofOfPayment::class, 'proof_of_payment_id');
     }
 
     public function employee() : BelongsTo
@@ -37,5 +37,9 @@ class Sale extends Model
     public function client()
     {
         return $this->belongsTo(Client::class);
+    }
+    public function salesDetails()
+    {
+        return $this->hasMany(SalesDetail::class, 'sale_id');
     }
 }

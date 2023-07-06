@@ -14,21 +14,8 @@ class SaleController extends Controller
     public function index()
     {
         $saleId = 0;
-        $columns = [
-            'id',
-            'comprobante',
-            'n° de comprobante',
-            'empleado',
-            'cod venta',
-            'fecha de venta',
-            'cliente',
-            'total',
-            'creado en',
-            'actualizado en',
-            'opciones'
-        ];
-        $data = [];
-        return view('admin.sale', compact('saleId', 'columns', 'data'));
+
+        return view('admin.sale', compact('saleId'));
     }
 
     public function getData(Request $request)
@@ -46,6 +33,53 @@ class SaleController extends Controller
         }
     }
 
+    private function transformSales($sales)
+    {
+        return $sales->map(function ($sale) {
+            return [
+                'id' => $sale->id,
+                'comprobante' => optional($sale->proofofpayment)->name,
+                'n° de comprobante' => $sale->voucher_number,
+                'empleado' => optional($sale->employee)->name . " " . optional($sale->employee)->last_name,
+                'cod venta' => $sale->sales_code,
+                'fecha de venta' => $sale->sales_date,
+                'cliente' => optional($sale->client)->full_name,
+                'total' => $sale->total,
+                'creado en' => optional($sale->created_at)->toDateTimeString(),
+                'actualizado en' => optional($sale->updated_at)->toDateTimeString(),
+            ];
+        });
+    }
+    public function getDataById(Request $request, $id)
+    {
+        try {
+            if ($request->ajax()) {
+                $sale = Sale::where('id', $id)->get();
+                $data = $this->transformPurchasById($sale);
+                return response()->json(['data' => $data, 'data_loaded' => true], Response::HTTP_OK);
+            } else {
+                throw new \Exception('Invalid request.');
+            }
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    private function transformPurchasById($sale)
+    {
+        return $sale[0]->salesDetails->map(function ($salesdetail) {
+            return [
+                'id' => $salesdetail->id,
+                'productos' => optional($salesdetail->product)->desc, //DETAIL
+                'cantidad' => optional($salesdetail)->quantity, //DETAIL
+                'precio' => optional($salesdetail->product)->sale_price, //DETAIL
+                'sub total' => $salesdetail->subtotal, //DETAIL
+                'creado en' => optional($salesdetail->created_at)->toDateTimeString(),
+                'actualizado en' => optional($salesdetail->updated_at)->toDateTimeString(),
+            ];
+        });
+    }
+
     public function store(Request $request)
     {
         $combinedData = $request->json()->all();
@@ -54,7 +88,7 @@ class SaleController extends Controller
         $formData = $combinedData['formData'];
         $total = $combinedData['total'];
 
-        //throw new \Exception('Contenido de formData: ' . json_encode($tableData));
+        throw new \Exception('Contenido de formData: ' . json_encode($formData));
 
         $fsale = Carbon::createFromFormat('d/m/Y', $formData[4]['value'])->format('Y-m-d');
 
@@ -87,7 +121,7 @@ class SaleController extends Controller
                 }
             }
 
-            $modifiedRow['sale_id'] = $saleId; // Agregar purchaseId a cada fila modificada
+            $modifiedRow['sale_id'] = $saleId; // Agregar $saleeId a cada fila modificada
 
             return $modifiedRow;
         }, $tableData);

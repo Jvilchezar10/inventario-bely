@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 class Employee extends Model
 {
     use HasFactory;
+    protected $table = 'employees';
+
     protected $fillable = [
         'cod_emp',
         'name',
@@ -25,4 +27,3 @@ class Employee extends Model
         return Schema::getColumnListing((new self())->getTable());
     }
 }
-

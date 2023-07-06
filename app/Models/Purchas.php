@@ -12,9 +12,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Purchas extends Model
 {
     use HasFactory;
-    protected $table='purchases';
+    protected $table = 'purchases';
+
     protected $fillable = [
-        'proof_of_payments_id',
+        'proof_of_payment_id',
         'voucher_number',
         'employee_id',
         'purchase_code',
@@ -26,17 +27,17 @@ class Purchas extends Model
         'updated_at',
     ];
 
-    public function proofofpayment() : BelongsTo
+    public function proofofpayment(): BelongsTo
     {
-        return $this->belongsTo(ProofOfPayment::class);
+        return $this->belongsTo(ProofOfPayment::class, 'proof_of_payment_id');
     }
 
-    public function employee() : BelongsTo
+    public function employee(): BelongsTo
     {
         return $this->belongsTo(Employee::class);
     }
 
-    public function provider() : BelongsTo
+    public function provider(): BelongsTo
     {
         return $this->belongsTo(Provider::class);
     }

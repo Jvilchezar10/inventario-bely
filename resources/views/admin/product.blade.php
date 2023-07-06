@@ -97,10 +97,10 @@
             'type' => 'long_text',
         ],
         [
-            'name' => 'e_descripcion',
-            'label' => 'Descripción',
-            'placeholder' => 'Ingrese la descripción del producto',
-            'type' => 'long_text',
+            'name' => 'e_color',
+            'label' => 'Color',
+            'placeholder' => 'Ingrese el color del producto',
+            'type' => 'input',
         ],
         [
             'name' => 'e_talla',

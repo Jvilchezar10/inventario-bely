@@ -584,6 +584,7 @@ return [
         'DatatablesPlugins' => [
             'active' => true,
             'files' => [
+                // BUTTONS
                 [
                     'type' => 'js',
                     'asset' => true,
@@ -607,8 +608,15 @@ return [
                 [
                     'type' => 'js',
                     'asset' => true,
+                    'location' => 'vendor/datatables-plugins/buttons/js/buttons.colVis.min.js',
+                ],
+                // jszip
+                [
+                    'type' => 'js',
+                    'asset' => true,
                     'location' => 'vendor/datatables-plugins/jszip/jszip.min.js',
                 ],
+                // pdfmake
                 [
                     'type' => 'js',
                     'asset' => true,
@@ -619,6 +627,71 @@ return [
                     'asset' => true,
                     'location' => 'vendor/datatables-plugins/pdfmake/vfs_fonts.js',
                 ],
+                // AUTOFILL
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/autofill/js/dataTables.autoFill.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/autofill/js/autoFill.bootstrap4.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/autofill/css/autoFill.bootstrap4.min.css',
+                ],
+                // RESPONSIVE
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/responsive/js/dataTables.responsive.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/responsive/js/responsive.bootstrap4.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/responsive/css/responsive.bootstrap4.min.css',
+                ],
+                // SELECT
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/select/js/dataTables.select.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/select/js/select.bootstrap4.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/select/css/select.bootstrap4.min.css',
+                ],
+                // COLREORDER
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/colreorder/js/dataTables.colReorder.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/colreorder/js/colReorder.bootstrap4.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/colreorder/css/colReorder.bootstrap4.min.css',
+                ],
+                // CSS
                 [
                     'type' => 'css',
                     'asset' => true,

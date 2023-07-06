@@ -12,6 +12,7 @@ class PurchasesDetail extends Model
 {
     use HasFactory;
     protected $table='purchases_details';
+
     protected $fillable = [
         'purchase_id',
         'product_id',
