@@ -20,8 +20,8 @@ return new class extends Migration
             $table->decimal('subtotal', 8, 2);
             $table->timestamps();
 
-            $table->foreign('sale_id')->references('id')->on('sales');
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('sale_id')->references('id')->on('sales')->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }
 

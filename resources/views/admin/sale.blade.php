@@ -11,6 +11,12 @@
             {{ $message }}
         </div>
     @endif
+    @if (session('mensaje'))
+    <div class="alert alert-danger">
+        {{ session('mensaje') }}
+    </div>
+@endif
+
     @php
         $columnsProducts = ['id', 'producto', 'precio', 'cantidad', 'subtotal', '', ''];
         $dataProducts = [];

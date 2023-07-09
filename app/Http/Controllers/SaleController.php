@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\SalesDetail;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
+use Session;
 
 class SaleController extends Controller
 {
@@ -88,7 +89,7 @@ class SaleController extends Controller
         $formData = $combinedData['formData'];
         $total = $combinedData['total'];
 
-        throw new \Exception('Contenido de formData: ' . json_encode($formData));
+        //throw new \Exception('Contenido de formData: ' . json_encode($formData));
 
         $fsale = Carbon::createFromFormat('d/m/Y', $formData[4]['value'])->format('Y-m-d');
 
@@ -121,7 +122,7 @@ class SaleController extends Controller
                 }
             }
 
-            $modifiedRow['sale_id'] = $saleId; // Agregar $saleeId a cada fila modificada
+            $modifiedRow['sale_id'] = $saleId;
 
             return $modifiedRow;
         }, $tableData);
@@ -131,6 +132,11 @@ class SaleController extends Controller
             $product = Product::find($value['product_id']);
             $product->stock -= $value['quantity'];
             $product->save();
+
+            if ($product->stock < 1) {
+                // Guardar el mensaje en la sesión
+                session()->flash('mensaje', 'El stock del producto ' . $product->nombre . ' es menor a 1.');
+            }
         }
 
         SalesDetail::insert($tableDataWithModifiedKeys);
