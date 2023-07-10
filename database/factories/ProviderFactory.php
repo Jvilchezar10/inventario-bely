@@ -23,8 +23,8 @@ class ProviderFactory extends Factory
     {
         return [
             'provider' => $this->faker->company,
-            'DNI' => $this->faker->randomNumber(8),
-            'RUC' => $this->faker->randomNumber(11),
+            'DNI' => $this->faker->numberBetween(00000001, 99999999),
+            'RUC' => $this->faker->numberBetween(10000000000, 99999999999),
             'phone' => $this->faker->numerify('9########'),
             'contact' => $this->faker->name,
             'contact_phone' => $this->faker->numerify('9########'),

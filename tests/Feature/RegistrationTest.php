@@ -20,7 +20,7 @@ class RegistrationTest extends TestCase
             return;
         }
 
-        $response = $this->get('inventario/register');
+        $response = $this->get('/register');
 
         $response->assertStatus(200);
     }

@@ -28,7 +28,7 @@ class ClientTest extends TestCase
         $this->user = User::factory()->create();
         $this->actingAs($this->user);
     }
-        /**
+    /**
      * Prueba la función index().
      */
     public function test_cliente_screen_can_be_rendered(): void
@@ -39,52 +39,56 @@ class ClientTest extends TestCase
         $response->assertViewIs('admin.client');
         $response->assertViewHas(['clientId', 'columns', 'data']);
     }
-     /**
+    /**
      * Test the getData method of ClientController.
      *
      * @return void
      */
     public function test_client_get_data()
     {
-        $clientes = Client::factory()->create(5);
+        $clientes = Client::factory()->count(5)->create();
 
         $response = $this->postJson(route('clients.data'), [
-            'id' => null,
-            'nombre completo' => null,
-            'DNI' => null,
-            'número de celular' => null,
-            'creado en' => null,
-            'actualizado en' => null,
-            'opciones' => null,
+            'id',
+            'nombre completo',
+            'DNI',
+            'número de celular',
+            'creado en',
+            'actualizado en',
         ], ['X-CSRF-TOKEN' => csrf_token()]);
 
         $response->assertStatus(200);
         $response->assertJsonCount($clientes->count(), 'data');
     }
 
-    // public function test_client_Search()
-    // {
-    //     $client = Client::factory()->create();
+    public function test_client_Search()
+    {
+        $client = Client::factory()->count(5)->create();
+        $term = $client->first()->full_name;
 
-    //     $response = $this->postJson('/clientes/search', ['cli' => $client->full_name]);
-    //     $response->assertStatus(200);
-    //     $response->assertJsonCount(1);
-    //     // Agrega aquí más aserciones según sea necesario
-    // }
+        $response = $this->postJson('/inventario/clientes/search', ['cli' => $term], ['X-CSRF-TOKEN' => csrf_token()]);
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            '*' => [
+                'id',
+                'text',
+            ],
+        ]);
+    }
 
-    // public function test_client_Store()
-    // {
-    //     $clientData = [
-    //         'i_name' => 'John Doe',
-    //         'i_DNI' => '12345678',
-    //         'i_phone' => '123456789',
-    //     ];
+    public function test_client_Store()
+    {
+        $clientData = [
+            'i_name' => 'John Doe',
+            'i_DNI' => '12345678',
+            'i_phone' => '123456789',
+        ];
 
-    //     $response = $this->postJson('/clientes', $clientData);
-    //     $response->assertStatus(200);
-    //     $response->assertJson(['message' => 'Proveedor creada con éxito']);
-    //     // Agrega aquí más aserciones según sea necesario
-    // }
+        $response = $this->postJson('/inventario/clientes', $clientData);
+        $response->assertStatus(200);
+        $response->assertJson(['message' => 'Proveedor creada con éxito']);
+        // Agrega aquí más aserciones según sea necesario
+    }
 
     // public function test_client_Update()
     // {

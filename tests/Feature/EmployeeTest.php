@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -28,13 +29,28 @@ class EmployeeTest extends TestCase
             /**
      * Prueba la función index().
      */
-    public function test_empleado_screen_can_be_rendered(): void
+    public function test_employee_screen_can_be_rendered(): void
     {
         $response = $this->get('/inventario/empleados', ['X-CSRF-TOKEN' => csrf_token()]);
         $response->assertStatus(200);
 
         $response->assertViewIs('admin.employee');
         $response->assertViewHas(['employeeId', 'columns', 'data']);
+    }
+
+    public function test_employee_Search()
+    {
+        $employee = Employee::factory()->count(5)->create();
+        $term = $employee->first()->name;
+
+        $response = $this->postJson('/inventario/empleados/search', ['emp' => $term], ['X-CSRF-TOKEN' => csrf_token()]);
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            '*' => [
+                'id',
+                'text',
+            ],
+        ]);
     }
 
 }

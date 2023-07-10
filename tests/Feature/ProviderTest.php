@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Provider;
 use App\Models\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -35,5 +36,20 @@ class ProviderTest extends TestCase
 
         $response->assertViewIs('admin.provider');
         $response->assertViewHas(['providerId', 'columns', 'data']);
+    }
+
+    public function test_provider_Search()
+    {
+        $provider = Provider::factory()->count(5)->create();
+        $term = $provider->first()->provider;
+
+        $response = $this->postJson('/inventario/proveedores/search', ['prov' => $term], ['X-CSRF-TOKEN' => csrf_token()]);
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            '*' => [
+                'id',
+                'text',
+            ],
+        ]);
     }
 }
