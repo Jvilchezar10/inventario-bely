@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 
@@ -30,12 +31,84 @@ class ClientTest extends TestCase
         /**
      * Prueba la función index().
      */
-    public function test_cargo_screen_can_be_rendered(): void
+    public function test_cliente_screen_can_be_rendered(): void
     {
-        $response = $this->get('/inventario/cargos', ['X-CSRF-TOKEN' => csrf_token()]);
+        $response = $this->get('/inventario/clientes', ['X-CSRF-TOKEN' => csrf_token()]);
         $response->assertStatus(200);
 
         $response->assertViewIs('admin.client');
         $response->assertViewHas(['clientId', 'columns', 'data']);
     }
+     /**
+     * Test the getData method of ClientController.
+     *
+     * @return void
+     */
+    public function test_client_get_data()
+    {
+        $clientes = Client::factory()->create(5);
+
+        $response = $this->postJson(route('clients.data'), [
+            'id' => null,
+            'nombre completo' => null,
+            'DNI' => null,
+            'número de celular' => null,
+            'creado en' => null,
+            'actualizado en' => null,
+            'opciones' => null,
+        ], ['X-CSRF-TOKEN' => csrf_token()]);
+
+        $response->assertStatus(200);
+        $response->assertJsonCount($clientes->count(), 'data');
+    }
+
+    // public function test_client_Search()
+    // {
+    //     $client = Client::factory()->create();
+
+    //     $response = $this->postJson('/clientes/search', ['cli' => $client->full_name]);
+    //     $response->assertStatus(200);
+    //     $response->assertJsonCount(1);
+    //     // Agrega aquí más aserciones según sea necesario
+    // }
+
+    // public function test_client_Store()
+    // {
+    //     $clientData = [
+    //         'i_name' => 'John Doe',
+    //         'i_DNI' => '12345678',
+    //         'i_phone' => '123456789',
+    //     ];
+
+    //     $response = $this->postJson('/clientes', $clientData);
+    //     $response->assertStatus(200);
+    //     $response->assertJson(['message' => 'Proveedor creada con éxito']);
+    //     // Agrega aquí más aserciones según sea necesario
+    // }
+
+    // public function test_client_Update()
+    // {
+    //     $client =  Client::factory()->create();
+
+    //     $updatedData = [
+    //         'e_name' => 'Updated Name',
+    //         'e_DNI' => '87654321',
+    //         'e_phone' => '987654321',
+    //     ];
+
+    //     $response = $this->putJson('/clientes/' . $client->id, $updatedData);
+    //     $response->assertStatus(200);
+    //     $response->assertJson(['message' => 'Proveedor actualizado con éxito']);
+    //     // Agrega aquí más aserciones según sea necesario
+    // }
+
+    // public function test_client_Destroy()
+    // {
+    //     $client =  Client::factory()->create();
+
+    //     $response = $this->deleteJson('/clientes/' . $client->id);
+    //     $response->assertStatus(200);
+    //     $response->assertJson(['message' => 'Proveedor eliminado con éxito']);
+    //     // Agrega aquí más aserciones según sea necesario
+    // }
 }
