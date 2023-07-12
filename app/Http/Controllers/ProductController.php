@@ -9,6 +9,15 @@ use App\Imports\ProductsImport;
 
 class ProductController extends Controller
 {
+    function __construct()
+    {
+        // Middleware para los permisos
+        $this->middleware('permission:product-list|product-create|product-edit|product-delete', ['only' => ['index', 'store']]);
+        $this->middleware('permission:product-create', ['only' => ['store']]);
+        $this->middleware('permission:product-edit', ['only' => ['update']]);
+        $this->middleware('permission:product-delete', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $productId = 0;

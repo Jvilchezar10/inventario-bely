@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 
-class CategoryTest extends TestCase
+class SaleDetailTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
@@ -28,12 +28,12 @@ class CategoryTest extends TestCase
             /**
      * Prueba la función index().
      */
-    public function test_categoria_screen_can_be_rendered(): void
+    public function test_detalle_ventas_screen_can_be_rendered(): void
     {
-        $response = $this->get('/inventario/categorias', ['X-CSRF-TOKEN' => csrf_token()]);
+        $response = $this->get('/inventario/detalle-de-ventas', ['X-CSRF-TOKEN' => csrf_token()]);
         $response->assertStatus(200);
 
-        $response->assertViewIs('admin.category');
-        $response->assertViewHas(['categoryId', 'columns', 'data']);
+        $response->assertViewIs('admin.salesdetail');
+        $response->assertViewHas(['saledetailId', 'columns', 'data']);
     }
 }

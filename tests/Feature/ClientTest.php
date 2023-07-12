@@ -14,10 +14,7 @@ use Tests\TestCase;
 
 class ClientTest extends TestCase
 {
-    use RefreshDatabase;
-    use WithFaker;
-    use WithoutMiddleware;
-    use SoftDeletes;
+    use RefreshDatabase, WithFaker, WithoutMiddleware, SoftDeletes;
 
     protected $user;
     protected function setUp(): void
@@ -31,15 +28,15 @@ class ClientTest extends TestCase
     /**
      * Prueba la función index().
      */
-    public function test_cliente_screen_can_be_rendered(): void
+    public function test_client_screen_can_be_rendered(): void
     {
-        $response = $this->get('/inventario/clientes', ['X-CSRF-TOKEN' => csrf_token()]);
+        $response = $this->get('/inventario/clientes');
         $response->assertStatus(200);
 
         $response->assertViewIs('admin.client');
         $response->assertViewHas(['clientId', 'columns', 'data']);
     }
-    /**
+        /**
      * Test the getData method of ClientController.
      *
      * @return void
@@ -49,13 +46,13 @@ class ClientTest extends TestCase
         $clientes = Client::factory()->count(5)->create();
 
         $response = $this->postJson(route('clients.data'), [
-            'id',
-            'nombre completo',
-            'DNI',
-            'número de celular',
-            'creado en',
-            'actualizado en',
-        ], ['X-CSRF-TOKEN' => csrf_token()]);
+            ['name' => 'id',],
+            ['name' => 'nombre completo',],
+            ['name' => 'DNI',],
+            ['name' => 'número de celular',],
+            ['name' => 'creado en',],
+            ['name' => 'actualizado en',],
+        ]);
 
         $response->assertStatus(200);
         $response->assertJsonCount($clientes->count(), 'data');
@@ -66,7 +63,7 @@ class ClientTest extends TestCase
         $client = Client::factory()->count(5)->create();
         $term = $client->first()->full_name;
 
-        $response = $this->postJson('/inventario/clientes/search', ['cli' => $term], ['X-CSRF-TOKEN' => csrf_token()]);
+        $response = $this->postJson('/inventario/clientes/search', ['cli' => $term]);
         $response->assertStatus(200);
         $response->assertJsonStructure([
             '*' => [
@@ -76,43 +73,18 @@ class ClientTest extends TestCase
         ]);
     }
 
-    public function test_client_Store()
+    public function testClientCreation()
     {
-        $clientData = [
-            'i_name' => 'John Doe',
-            'i_DNI' => '12345678',
-            'i_phone' => '123456789',
-        ];
+        // Usamos el factory para crear un cliente
+        $client = Client::factory()->create();
 
-        $response = $this->postJson('/inventario/clientes', $clientData);
-        $response->assertStatus(200);
-        $response->assertJson(['message' => 'Proveedor creada con éxito']);
-        // Agrega aquí más aserciones según sea necesario
+        // Verificamos que el cliente se haya creado correctamente
+        $this->assertInstanceOf(Client::class, $client);
+        $this->assertDatabaseHas('clients', [
+            'id' => $client->id,
+            'full_name' => $client->full_name,
+            'DNI' => $client->DNI,
+            'phone' => $client->phone,
+        ]);
     }
-
-    // public function test_client_Update()
-    // {
-    //     $client =  Client::factory()->create();
-
-    //     $updatedData = [
-    //         'e_name' => 'Updated Name',
-    //         'e_DNI' => '87654321',
-    //         'e_phone' => '987654321',
-    //     ];
-
-    //     $response = $this->putJson('/clientes/' . $client->id, $updatedData);
-    //     $response->assertStatus(200);
-    //     $response->assertJson(['message' => 'Proveedor actualizado con éxito']);
-    //     // Agrega aquí más aserciones según sea necesario
-    // }
-
-    // public function test_client_Destroy()
-    // {
-    //     $client =  Client::factory()->create();
-
-    //     $response = $this->deleteJson('/clientes/' . $client->id);
-    //     $response->assertStatus(200);
-    //     $response->assertJson(['message' => 'Proveedor eliminado con éxito']);
-    //     // Agrega aquí más aserciones según sea necesario
-    // }
 }

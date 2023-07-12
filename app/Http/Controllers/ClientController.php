@@ -9,6 +9,15 @@ use App\Models\Client;
 
 class ClientController extends Controller
 {
+    function __construct()
+    {
+        // Middleware para los permisos
+        $this->middleware('permission:client-list|client-create|client-edit|client-delete', ['only' => ['index', 'store']]);
+        $this->middleware('permission:client-create', ['only' => ['store']]);
+        $this->middleware('permission:client-edit', ['only' => ['update']]);
+        $this->middleware('permission:client-delete', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $clientId = 0;
@@ -80,13 +89,12 @@ class ClientController extends Controller
 
     public function store(Request $request)
     {
-
         $validatedData = $request->validate([
             'i_name' => 'required',
             'i_DNI' => 'required|numeric|max:8',
             'i_phone' => 'required|numeric|max:9',
         ]);
-        // $client = Client::create($validatedData);
+
         $client = Client::create([
             'full_name' => $validatedData['i_name'],
             'DNI' => $validatedData['i_DNI'],

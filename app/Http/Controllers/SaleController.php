@@ -12,6 +12,15 @@ use Session;
 
 class SaleController extends Controller
 {
+    function __construct()
+    {
+        // Middleware para los permisos
+        $this->middleware('permission:sale-list|sale-create|sale-edit|sale-delete', ['only' => ['index', 'store']]);
+        $this->middleware('permission:sale-create', ['only' => ['store']]);
+        $this->middleware('permission:sale-edit', ['only' => ['update']]);
+        $this->middleware('permission:sale-delete', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $saleId = 0;

@@ -9,6 +9,15 @@ use Illuminate\Http\Response;
 
 class EmployeeController extends Controller
 {
+    function __construct()
+    {
+        // Middleware para los permisos
+        $this->middleware('permission:employee-list|employee-create|employee-edit|employee-delete', ['only' => ['index', 'store']]);
+        $this->middleware('permission:employee-create', ['only' => ['store']]);
+        $this->middleware('permission:employee-edit', ['only' => ['update']]);
+        $this->middleware('permission:employee-delete', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $employeeId = 0;

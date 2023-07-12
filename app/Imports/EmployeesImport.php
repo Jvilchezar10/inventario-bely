@@ -21,18 +21,20 @@ class EmployeesImport
             foreach ($sheet->getRowIterator() as $row) {
                 $rowIndex++;
 
+                $cells = $row->getCells();
+
                 // Ignorar la primera fila si contiene encabezados
                 if ($rowIndex === 1) {
                     continue;
                 }
 
                 // Obtener los valores de las celdas
-                $cod_emp = $row->getCellAtIndex(0)->getValue();
-                $name = $row->getCellAtIndex(1)->getValue();
-                $last_name = $row->getCellAtIndex(2)->getValue();
-                $phone = $row->getCellAtIndex(3)->getValue();
-                $email = $row->getCellAtIndex(4)->getValue();
-                $state = trim($row->getCellAtIndex(5)->getValue());
+                $cod_emp = $cells[0]->getValue();
+                $name = trim($cells[1]->getValue());
+                $last_name = isset($cells[2]) ? trim($cells[2]->getValue()) : null;
+                $phone = isset($cells[3]) ? $cells[3]->getValue() : null;
+                $email = isset($cells[4]) ? $cells[4]->getValue() : null;
+                $state = isset($cells[5]) ? trim($cells[5]->getValue()) : null;
 
                 $estadoOptions = [
                     ['value' => 'vigente'],
@@ -108,6 +110,11 @@ class EmployeesImport
 
         // Validar el formato del correo electrónico
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+
+        // Validar que $name y $last_name contengan al menos un caracter que no sea un espacio en blanco
+        if (!preg_match('/\S/', $name) || !preg_match('/\S/', $last_name)) {
             return false;
         }
 

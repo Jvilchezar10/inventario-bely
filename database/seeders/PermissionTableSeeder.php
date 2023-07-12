@@ -34,6 +34,11 @@ class PermissionTableSeeder extends Seeder
             'purchas-edit',
             'purchas-delete',
 
+            'purchasesDetail-list',
+            'purchasesDetail-create',
+            'purchasesDetail-edit',
+            'purchasesDetail-delete',
+
             'client-list',
             'client-create',
             'client-edit',

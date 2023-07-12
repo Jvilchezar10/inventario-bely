@@ -11,6 +11,15 @@ use Illuminate\Http\Response;
 
 class PurchasController extends Controller
 {
+    function __construct()
+    {
+        // Middleware para los permisos
+        $this->middleware('permission:purchas-list|purchas-create|purchas-edit|purchas-delete', ['only' => ['index', 'store']]);
+        $this->middleware('permission:purchas-create', ['only' => ['store']]);
+        $this->middleware('permission:purchas-edit', ['only' => ['update']]);
+        $this->middleware('permission:purchas-delete', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $purchasId = 0;

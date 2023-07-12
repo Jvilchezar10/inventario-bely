@@ -16,37 +16,6 @@ class UserController extends Controller
 {
     public function index(Request $request): View
     {
-        // $roles_has_models = DB::table('model_has_roles')->get()->toArray();
-        // $roles = DB::table('roles')->get()->toArray();
-        // $userId = [1];
-
-        // $role_id = array_filter($roles_has_models, function ($model) use ($userId) {
-        //     return in_array($model->model_id, $userId);
-        // });
-
-        // $role_id_value = reset($role_id)->role_id;
-
-        // $role = array_filter($roles, function ($rol) use ($role_id_value) {
-        //     return in_array($rol->id, [$role_id_value]);
-        // });
-
-        // dd($role);
-        //  $users = User::all();
-
-        // // dd($users[1]->employee);
-        // $userRoles = $users[1]->roles->all();
-        // $roles_id = '';
-        // $roles = '';
-
-        // //dd($userRoles);
-
-        // foreach ($userRoles as $value) {
-        //     $roles_id .= $value->id . ', ';
-        //     $roles .= $value->name . ',';
-        // }
-
-        // dd($roles, $roles_id);
-
         return view('auth.register');
     }
 
