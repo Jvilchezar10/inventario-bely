@@ -49,6 +49,11 @@ class PermissionTableSeeder extends Seeder
             'sale-edit',
             'sale-delete',
 
+            'salesDetail-list',
+            'salesDetail-create',
+            'salesDetail-edit',
+            'salesDetail-delete',
+
             'proofofpayment-list',
             'proofofpayment-create',
             'proofofpayment-edit',

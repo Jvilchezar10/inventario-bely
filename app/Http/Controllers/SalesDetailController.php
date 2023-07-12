@@ -4,6 +4,15 @@ namespace App\Http\Controllers;
 
 class SalesDetailController extends Controller
 {
+    function __construct()
+    {
+        // Middleware para los permisos
+        $this->middleware('permission:salesDetail-list|salesDetail-create|salesDetail-edit|salesDetail-delete', ['only' => ['index', 'store']]);
+        $this->middleware('permission:salesDetail-create', ['only' => ['store']]);
+        $this->middleware('permission:salesDetail-edit', ['only' => ['update']]);
+        $this->middleware('permission:salesDetail-delete', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $saledetailId = 0;
