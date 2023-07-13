@@ -106,7 +106,6 @@ Route::middleware([
 
     Route::get('/detalle-de-ventas', [SalesDetailController::class, 'index'])->name('salesdetail');
 
-
     /**
      * El código define las rutas para un controlador de proofofpayment en una aplicación Laravel
      */

@@ -98,7 +98,7 @@
                 ],
                 [
                     'label' => 'Anular',
-                    'onClick' => 'fallo()',
+                    'onClick' => 'anular()',
                     'class' => 'danger',
                     'typeB' => 'button',
                     'type' => 'submit',
@@ -133,6 +133,30 @@
         document.getElementById("form_purchasdetail").addEventListener("submit", function(event) {
             event.preventDefault(); // Detiene el envío del formulario predeterminado
         });
+
+        function anular() {
+            // Restablecer los campos del formulario a sus valores predeterminados
+            $('#form_purchasdetail').trigger('reset');
+
+            // Limpiar la tabla de productos
+            var productsTable = $('#productsTable').DataTable();
+            productsTable.clear().draw();
+
+            // Restablecer el total a cero
+            total = 0;
+            $('#totalAmount').text(total.toFixed(2));
+
+            // Mostrar mensaje de éxito
+            showCustomToast({
+                title: 'Anulación',
+                body: 'Se han limpiado todas las entradas.',
+                class: 'bg-info',
+                icon: 'fas fa-info-circle',
+                close: false,
+                autohide: true,
+                delay: 5000
+            });
+        }
 
         function registerPurchase() {
             // Obtener los datos del formulario

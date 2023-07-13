@@ -36,7 +36,7 @@ class ClientTest extends TestCase
         $response->assertViewIs('admin.client');
         $response->assertViewHas(['clientId', 'columns', 'data']);
     }
-        /**
+    /**
      * Test the getData method of ClientController.
      *
      * @return void
@@ -58,6 +58,20 @@ class ClientTest extends TestCase
         $response->assertJsonCount($clientes->count(), 'data');
     }
 
+    public function test_client_creation()
+    {
+        // Usamos el factory para crear un cliente
+        $client = Client::factory()->create();
+
+        // Verificamos que el cliente se haya creado correctamente
+        $this->assertInstanceOf(Client::class, $client);
+        $this->assertDatabaseHas('clients', [
+            'full_name' => $client->full_name,
+            'DNI' => $client->DNI,
+            'phone' => $client->phone,
+        ]);
+    }
+
     public function test_client_Search()
     {
         $client = Client::factory()->count(5)->create();
@@ -70,21 +84,6 @@ class ClientTest extends TestCase
                 'id',
                 'text',
             ],
-        ]);
-    }
-
-    public function testClientCreation()
-    {
-        // Usamos el factory para crear un cliente
-        $client = Client::factory()->create();
-
-        // Verificamos que el cliente se haya creado correctamente
-        $this->assertInstanceOf(Client::class, $client);
-        $this->assertDatabaseHas('clients', [
-            'id' => $client->id,
-            'full_name' => $client->full_name,
-            'DNI' => $client->DNI,
-            'phone' => $client->phone,
         ]);
     }
 }

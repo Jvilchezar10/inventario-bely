@@ -31,18 +31,19 @@ class ProductTest extends TestCase
      */
     public function test_producto_screen_can_be_rendered(): void
     {
-        $response = $this->get('/inventario/productos', ['X-CSRF-TOKEN' => csrf_token()]);
+        $response = $this->get('/inventario/productos');
+        $response->assertStatus(200);
 
         $response->assertViewIs('admin.product');
-        $response->assertViewHas(['productId', 'columns', 'data']);
+        $response->assertViewHas(['productId', 'columns','data']);
     }
 
-    public function testproducto_Search()
+    public function test_producto_search()
     {
         $employee = Product::factory()->count(5)->create();
         $term = $employee->first()->name;
 
-        $response = $this->postJson('/inventario/productos/search', ['pro' => $term], ['X-CSRF-TOKEN' => csrf_token()]);
+        $response = $this->postJson('/inventario/productos/search', ['pro' => $term]);
         $response->assertStatus(200);
         $response->assertJsonStructure([
             '*' => [
@@ -52,12 +53,12 @@ class ProductTest extends TestCase
         ]);
     }
 
-    public function test_producto_ventas_Search()
+    public function test_producto_ventas_search()
     {
         $employee = Product::factory()->count(5)->create();
         $term = $employee->first()->name;
 
-        $response = $this->postJson('/inventario/productos/searchsales', ['pro' => $term], ['X-CSRF-TOKEN' => csrf_token()]);
+        $response = $this->postJson('/inventario/productos/searchsales', ['pro' => $term]);
         $response->assertStatus(200);
         $response->assertJsonStructure([
             '*' => [

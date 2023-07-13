@@ -255,12 +255,12 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => '#',
+    'dashboard_url' => 'inventario/',
     'logout_url' => 'inventario/logout',
-    'login_url' => 'login',
-    'register_url' => 'register',
-    'password_reset_url' => 'password/reset',
-    'password_email_url' => 'password/email',
+    'login_url' => 'inventario/login',
+    'register_url' => 'inventario/register',
+    'password_reset_url' => 'inventario/password/reset',
+    'password_email_url' => 'inventario/password/email',
     'profile_url' => true,
 
     /*

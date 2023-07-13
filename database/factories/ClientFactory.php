@@ -12,7 +12,7 @@ class ClientFactory extends Factory
     public function definition()
     {
         return [
-            'id' => $this->faker->randomDigit,
+            'id' => $this->faker->unique()->randomDigit,
             'full_name' => $this->faker->name,
             'DNI' => $this->faker->randomNumber(8),
             'phone' => $this->faker->randomNumber(9),

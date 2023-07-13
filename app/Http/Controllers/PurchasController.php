@@ -61,7 +61,7 @@ class PurchasController extends Controller
             ];
         });
     }
-
+    
     public function getDataById(Request $request, $id)
     {
         try {
