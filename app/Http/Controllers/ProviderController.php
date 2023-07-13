@@ -42,8 +42,8 @@ class ProviderController extends Controller
     {
         try {
             if ($request->ajax()) {
-                     if (!Auth::user()->can('provider-list')) {
-                     abort(403, 'Permisos denegados');
+                if (!Auth::user()->can('provider-list')) {
+                    abort(403, 'Permisos denegados');
                     throw new \Exception('No tienes permiso para listar proveedores.');
                 }
 
@@ -126,7 +126,6 @@ class ProviderController extends Controller
         ]);
 
         return response()->json(['message' => 'Proveedor creada con éxito', 'provider' => $provider]);
-
     }
 
     public function update(Request $request, $id)
@@ -145,13 +144,14 @@ class ProviderController extends Controller
         ]);
         // $provider = Provider::create($validatedData);
         $provider = Provider::findOrFail($id);
-        $provider->provider = $validatedData['e_provider'];
-        $provider->DNI = $validatedData['e_DNI'];
-        $provider->RUC = $validatedData['e_RUC'];
-        $provider->phone = $validatedData['e_phone'];
-        $provider->contact = $validatedData['e_contact'];
-        $provider->contact_phone = $validatedData['e_contact_phone'];
-        $provider->save();
+        $provider->update([
+            'provider' => $validatedData['e_provider'],
+            'DNI' => $validatedData['e_DNI'],
+            'RUC' => $validatedData['e_RUC'],
+            'phone' => $validatedData['e_phone'],
+            'contact' => $validatedData['e_contact'],
+            'contact_phone' => $validatedData['e_contact_phone'],
+        ]);
 
 
         return response()->json(['message' => 'Proveedor actualizado con éxito', 'provider' => $provider]);
@@ -187,7 +187,7 @@ class ProviderController extends Controller
             return redirect()->back()->with('success', 'La importación del archivo Excel se realizó correctamente.');
         } else {
             // Redireccionar o mostrar un mensaje de error
-            return redirect()->back()->with('error', 'Ocurrió un error durante la importación del archivo Excel.');
+            return redirect()->back()->with(['error', 'Ocurrió un error durante la importación del archivo Excel.']);
         }
     }
 }

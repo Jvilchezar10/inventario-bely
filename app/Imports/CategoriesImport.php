@@ -90,71 +90,61 @@ class CategoriesImport
         $rowIndex = 0; // Variable para el índice de la fila
         $errorMessages = [];
 
-        try {
-            foreach ($reader->getSheetIterator() as $sheet) {
-                foreach ($sheet->getRowIterator() as $row) {
-                    $rowIndex++;
 
-                    $cells = $row->getCells();
+        foreach ($reader->getSheetIterator() as $sheet) {
+            foreach ($sheet->getRowIterator() as $row) {
+                $rowIndex++;
 
-                    // Ignorar la primera fila si contiene encabezados
-                    if ($rowIndex === 1) {
-                        continue;
-                    }
+                $cells = $row->getCells();
 
-                    try {
-                        // Obtener los valores de las celdas
-                        $id = $cells[0]->getValue();
-                        $name = $cells[1]->getValue();
-                        $state = trim($row->getCellAtIndex(2)->getValue());
+                // Ignorar la primera fila si contiene encabezados
+                if ($rowIndex === 1) {
+                    continue;
+                }
 
-                        // Agregar tus validaciones aquí
-                        if (empty($id) || empty($name) || empty($state)) {
-                            throw new Exception("Registro incompleto en la fila $rowIndex");
-                        }
+                // Obtener los valores de las celdas
+                $id = $this->validateCellValue($cells[0]->getValue());
+                $name = $this->validateCellValue(trim($cells[1]->getValue()));
+                $state = $this->validateCellValue(trim(($cells[2])->getValue()));
 
-                        $existingCategory = Category::where('id', $id)->first();
-                        if ($existingCategory) {
-                            continue; // Saltar los datos existentes
-                        }
+                // Agregar tus validaciones aquí
+                if (empty($id) || empty($name) || empty($state)) {
+                    throw new Exception("Registro incompleto en la fila $rowIndex");
+                }
 
-                        $estadoOptions = [
-                            ['value' => 'vigente'],
-                            ['value' => 'descontinuado']
-                        ];
+                $existingCategory = Category::where('id', $id)->first();
+                if ($existingCategory) {
+                    continue; // Saltar los datos existentes
+                }
 
-                        $estadoValue = null;
-                        foreach ($estadoOptions as $option) {
-                            if ($option['value'] === $state) {
-                                $estadoValue = $option['value'];
-                                break;
-                            }
-                        }
+                $estadoOptions = [
+                    ['value' => 'vigente'],
+                    ['value' => 'descontinuado']
+                ];
 
-                        $category = new Category([
-                            'id' => $id,
-                            'name' => $name,
-                            'state' => $estadoValue,
-                        ]);
-                        $category->save();
-                    } catch (Exception $e) {
-                        $errorMessages[] = "Error en la fila $rowIndex: " . $e->getMessage();
+                $estadoValue = null;
+                foreach ($estadoOptions as $option) {
+                    if ($option['value'] === $state) {
+                        $estadoValue = $option['value'];
+                        break;
                     }
                 }
+
+                $category = new Category([
+                    'id' => $id,
+                    'name' => $name,
+                    'state' => $estadoValue,
+                ]);
+                $category->save();
             }
-        } catch (Exception $e) {
-            $reader->close(); // Cerrar el lector de Excel en caso de error
-            throw $e; // Relanzar la excepción original
         }
-
-        // Cerrar el lector de Excel
-        $reader->close();
-
-        if (!empty($errorMessages)) {
-            // Mostrar los mensajes de error en la vista
-            return redirect()->back()->with('errors', $errorMessages);
-        }
+        $reader->close(); // Cerrar el lector de Excel en caso de error
 
         return true;
+    }
+
+    private function validateCellValue($value)
+    {
+        return !empty($value) ? $value : null;
     }
 }

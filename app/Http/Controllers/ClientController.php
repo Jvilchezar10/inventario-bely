@@ -150,7 +150,7 @@ class ClientController extends Controller
             return redirect()->back()->with('success', 'La importación del archivo Excel se realizó correctamente.');
         } else {
             // Redireccionar o mostrar un mensaje de error
-            return redirect()->back()->with('error', 'Ocurrió un error durante la importación del archivo Excel.');
+            return redirect()->back()->with(['error', 'Ocurrió un error durante la importación del archivo Excel.']);
         }
     }
 }

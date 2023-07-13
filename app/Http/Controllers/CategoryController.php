@@ -149,29 +149,6 @@ class CategoryController extends Controller
         return response()->json(['message' => 'Categoría eliminada con éxito']);
     }
 
-    // public function import(Request $request)
-    // {
-    //     $request->validate([
-    //         'excel_file' => 'required|mimes:xlsx,xls',
-    //     ]);
-
-    //     // Obtener la ruta temporal del archivo cargado
-    //     $filePath = $request->file('excel_file')->getRealPath();
-
-    //     // Instanciar la clase de importación y llamar al método import
-    //     $categoriesImport = new CategoriesImport();
-    //     $imported = $categoriesImport->import($filePath);
-
-
-
-    //     if ($imported) {
-    //         // Redireccionar o mostrar un mensaje de éxito
-    //         return redirect()->back()->with('success', 'La importación del archivo Excel se realizó correctamente.');
-    //     } else {
-    //         // Redireccionar o mostrar un mensaje de error
-    //         return redirect()->back()->with('error', 'Ocurrió un error durante la importación del archivo Excel.');
-    //     }
-    // }
     public function import(Request $request)
     {
         $request->validate([
@@ -191,10 +168,10 @@ class CategoryController extends Controller
                 return redirect()->back()->with('success', 'La importación del archivo Excel se realizó correctamente.');
             } else {
                 // Redireccionar o mostrar un mensaje de error
-                return redirect()->back()->with('error', 'No se importaron registros del archivo Excel.');
+                return redirect()->back()->with(['error', 'No se importaron registros del archivo Excel.']);
             }
         } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Ocurrió un error durante la importación del archivo Excel: ' . $e->getMessage());
+            return redirect()->back()->with(['error', 'Ocurrió un error durante la importación del archivo Excel: ' . $e->getMessage()]);
         }
     }
 }

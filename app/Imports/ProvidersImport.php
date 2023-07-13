@@ -28,12 +28,12 @@ class ProvidersImport
                 }
 
                 // Obtener los valores de las celdas
-                $provider = $cells[0]->getValue();
-                $DNI = $cells[1]->getValue();
-                $RUC = $cells[2]->getValue();
-                $phone = $cells[3]->getValue();
-                $contact = $cells[4]->getValue();
-                $contact_phone = $cells[5]->getValue();
+                $provider = $this->validateCellValue(trim(($cells[0]->getValue())));
+                $DNI = $this->validateDNI($cells[1]->getValue());
+                $RUC = $this->validateRUC($cells[2]->getValue());
+                $phone = $this->validatePhone($cells[3]->getValue());
+                $contact = $this->validateCellValue(trim($cells[4]->getValue()));
+                $contact_phone = $this->validatePhone($cells[5]->getValue());
 
                 $provider = new Provider([
                     'provider' => $provider,
@@ -51,5 +51,37 @@ class ProvidersImport
         $reader->close();
 
         return true;
+    }
+
+    private function validateCellValue($value)
+    {
+        return !empty($value) ? $value : null;
+    }
+
+    private function validateDNI($value)
+    {
+        if (preg_match('/^\d{8}$/', $value)) {
+            return $value;
+        } else {
+            return null;
+        }
+    }
+
+    private function validateRUC($value)
+    {
+        if (preg_match('/^\d{11}$/', $value)) {
+            return $value;
+        } else {
+            return null;
+        }
+    }
+
+    private function validatePhone($value)
+    {
+        if (preg_match('/^\d{9}$/', $value)) {
+            return $value;
+        } else {
+            return null;
+        }
     }
 }
