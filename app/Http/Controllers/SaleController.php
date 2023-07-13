@@ -152,4 +152,12 @@ class SaleController extends Controller
 
         return response()->json(['message' => 'Datos creados con éxito']);
     }
+
+    public function destroy($id)
+    {
+        $purchas = Sale::findOrFail($id);
+        $purchas->delete();
+
+        return response()->json(['message' => 'Venta eliminada con éxito']);
+    }
 }

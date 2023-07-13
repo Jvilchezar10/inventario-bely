@@ -17,7 +17,8 @@
         $dataProducts = [];
     @endphp
 
-    <x-adminlte-card id="detalleCompra" title="Detalle de compra" theme="pink" icon="fas fa-tshirt" class="elevation-3" maximizable>
+    <x-adminlte-card id="detalleCompra" title="Detalle de compra" theme="pink" icon="fas fa-tshirt" class="elevation-3"
+        maximizable collapsible>
         <div class="card-body">
             <x-datatable :columns="$columnsProducts" :data="$dataProducts" id="PurchasDetailTable" />
         </div>
@@ -27,12 +28,59 @@
         <x-datatable :columns=$columns :data=$data id="PurchasTable" />
     </x-adminlte-card>
 
+    <x-delete-modal title='Eliminar Compra' size='md' modalId='deletePurchasModal' formId="destroyPurchasForm"
+        quetion='¿Está seguro que desea eliminar la compra?' :field="['name' => 'd_id']" onClick="deletePurchas()" />
+
 @endsection
 
 @section('js')
     <script>
         var purchases_DataRoute = '{{ route('purchases.data') }}';
         var csrfToken = '{{ csrf_token() }}';
+    </script>
+    <script src="{{ asset('js/toast.js') }}"></script>
+    <script>
+        document.getElementById("destroyPurchasForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Detiene el envío del formulario predeterminado
+        });
+
+        function deletePurchas() {
+            var id = $('#deletePurchasModal input[name="d_id"]').val();
+            // Cuando el usuario confirme la eliminación, realizar una solicitud AJAX para borrar la compra
+            $.ajax({
+                url: '{{ route('purchases.destroy', ['id' => ':id']) }}'.replace(':id', id),
+                type: 'DELETE',
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+                success: function(response) {
+                    // Aquí puedes mostrar un mensaje de éxito o realizar alguna acción adicional después de borrar la compra
+                    console.log('Compra borrada exitosamente');
+                    // Por ejemplo, podrías recargar la tabla de compras para reflejar los cambios
+                    showCustomToast({
+                        title: 'Elimación exitosa',
+                        body: 'Compra eliminada con éxito.',
+                        class: 'bg-success',
+                        icon: 'fas fa-check-circle',
+                        close: false,
+                        autohide: true,
+                        delay: 5000
+                    });
+                    //
+                    $('#deletePurchasModal').modal('hide');
+                },
+                error: function(xhr, textStatus, error) {
+                    console.log('Error al eliminar la compra: ' + error);
+                }
+            });
+        }
+
+        function openDeleteModal(id) {
+            $('#deletePurchasModal input[name="d_id"]').val(id);
+            // abrir modal
+            $('#deletePurchasModal').modal('show');
+        }
 
         $(function() {
             var table = $('#PurchasTable').DataTable({
@@ -252,7 +300,6 @@
                     },
                 ],
 
-
                 // Configuración adicional del DataTable
                 timeout: 5000, // Tiempo de espera en milisegundos (5 segundos)
                 lengthMenu: [
@@ -350,16 +397,16 @@
             }
 
             function generateButtonsDetails(row) {
-                var btnEdit =
-                    '<button class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit" onclick="openEditModal(this)" data-product=\'' +
-                    JSON.stringify(row) +
-                    '\'><i class="fa fa-lg fa-fw fa-pen"></i></button> ';
+                // var btnEdit =
+                //     '<button class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit" onclick="openEditModal(this)" data-product=\'' +
+                //     JSON.stringify(row) +
+                //     '\'><i class="fa fa-lg fa-fw fa-pen"></i></button> ';
                 var btnDelete =
                     '<button class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete" onclick="openDeleteModal(' +
                     row.id +
                     ')"><i class="fa fa-lg fa-fw fa-trash"></i></button> ';
 
-                return '<nobr>' + btnEdit + btnDelete + '</nobr>';
+                return '<nobr>' /*+ btnEdit */ + btnDelete + '</nobr>';
             }
 
 

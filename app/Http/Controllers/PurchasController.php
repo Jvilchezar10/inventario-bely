@@ -61,7 +61,7 @@ class PurchasController extends Controller
             ];
         });
     }
-    
+
     public function getDataById(Request $request, $id)
     {
         try {
@@ -158,5 +158,13 @@ class PurchasController extends Controller
         PurchasesDetail::insert($tableDataWithModifiedKeys);
 
         return response()->json(['message' => 'Datos creados con éxito']);
+    }
+
+    public function destroy($id)
+    {
+        $purchas = Purchas::findOrFail($id);
+        $purchas->delete();
+
+        return response()->json(['message' => 'Compra eliminada con éxito']);
     }
 }
