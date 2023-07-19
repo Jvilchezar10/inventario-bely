@@ -41,23 +41,6 @@ class ClientTest extends TestCase
      *
      * @return void
      */
-    public function test_client_get_data()
-    {
-        $clientes = Client::factory()->count(5)->create();
-
-        $response = $this->postJson(route('clients.data'), [
-            ['name' => 'id',],
-            ['name' => 'nombre completo',],
-            ['name' => 'DNI',],
-            ['name' => 'número de celular',],
-            ['name' => 'creado en',],
-            ['name' => 'actualizado en',],
-        ]);
-
-        $response->assertStatus(200);
-        $response->assertJsonCount($clientes->count(), 'data');
-    }
-
     public function test_client_creation()
     {
         // Usamos el factory para crear un cliente

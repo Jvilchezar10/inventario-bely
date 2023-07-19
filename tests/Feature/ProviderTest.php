@@ -31,11 +31,28 @@ class ProviderTest extends TestCase
      */
     public function test_proveedor_screen_can_be_rendered(): void
     {
-        $response = $this->get('/inventario/proveedores', ['X-CSRF-TOKEN' => csrf_token()]);
+        $response = $this->get('/inventario/proveedores');
         $response->assertStatus(200);
 
         $response->assertViewIs('admin.provider');
         $response->assertViewHas(['providerId', 'columns', 'data']);
+    }
+
+    public function test_provider_creation()
+    {
+        // Usamos el factory para crear un providere
+        $provider = Provider::factory()->create();
+
+        // Verificamos que el providere se haya creado correctamente
+        $this->assertInstanceOf(Provider::class, $provider);
+        $this->assertDatabaseHas('providers', [
+            'provider' => $provider->provider,
+            'DNI' => $provider->DNI,
+            'RUC' => $provider->RUC,
+            'phone' => $provider->phone,
+            'contact' => $provider->contact,
+            'contact_phone' => $provider->contact_phone
+        ]);
     }
 
     public function test_provider_Search()
@@ -43,7 +60,7 @@ class ProviderTest extends TestCase
         $provider = Provider::factory()->count(5)->create();
         $term = $provider->first()->provider;
 
-        $response = $this->postJson('/inventario/proveedores/search', ['prov' => $term], ['X-CSRF-TOKEN' => csrf_token()]);
+        $response = $this->postJson('/inventario/proveedores/search', ['prov' => $term]);
         $response->assertStatus(200);
         $response->assertJsonStructure([
             '*' => [

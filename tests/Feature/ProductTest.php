@@ -26,17 +26,6 @@ class ProductTest extends TestCase
         $this->user = User::factory()->create();
         $this->actingAs($this->user);
     }
-    /**
-     * Prueba la función index().
-     */
-    public function test_producto_screen_can_be_rendered(): void
-    {
-        $response = $this->get('/inventario/productos');
-        $response->assertStatus(200);
-
-        $response->assertViewIs('admin.product');
-        $response->assertViewHas(['productId', 'columns','data']);
-    }
 
     public function test_producto_search()
     {

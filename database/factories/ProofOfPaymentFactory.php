@@ -22,6 +22,7 @@ class ProofOfPaymentFactory extends Factory
     public function definition()
     {
         return [
+            'id' => $this->faker->unique()->randomDigit,
             'name' => $this->faker->word,
             'state' => $this->faker->randomElement(['descontinuado', 'vigente']),
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),

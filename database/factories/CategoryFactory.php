@@ -22,6 +22,7 @@ class CategoryFactory extends Factory
     public function definition()
     {
         return [
+            'id' => $this->faker->unique()->randomDigit,
             'name' => $this->faker->word,
             'state' => $this->faker->randomElement(['descontinuado', 'vigente']),
         ];

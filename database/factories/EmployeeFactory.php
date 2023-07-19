@@ -22,6 +22,7 @@ class EmployeeFactory extends Factory
     public function definition()
     {
         return [
+            'id' => $this->faker->unique()->randomDigit,
             'cod_emp' => $this->faker->unique()->numerify('EMP####'),
             'name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,

@@ -22,6 +22,7 @@ class ProviderFactory extends Factory
     public function definition()
     {
         return [
+            'id' => $this->faker->unique()->randomDigit,
             'provider' => $this->faker->company,
             'DNI' => $this->faker->numberBetween(00000001, 99999999),
             'RUC' => $this->faker->numberBetween(10000000000, 99999999999),

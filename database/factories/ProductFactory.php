@@ -23,6 +23,7 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
+            'id' => $this->faker->unique()->randomDigit,
             'cod_product' => $this->faker->unique()->numerify('PRO####'),
             'category_id' => function () {
                 return Category::factory()->create()->id;
