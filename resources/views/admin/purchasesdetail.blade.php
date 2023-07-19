@@ -67,6 +67,7 @@
                         autohide: true,
                         delay: 5000
                     });
+                    //
                     $('#deletePurchasModal').modal('hide');
                 },
                 error: function(xhr, textStatus, error) {
